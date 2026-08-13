@@ -10,7 +10,8 @@ export const fetchCartItems = createAsyncThunk(
         const mappedData = items.map(item => ({
             ...item,
             // Prioritize the unique cart item ID as the state ID to prevent key collisions
-            id: item.id || item.product_id || item.variant_id || item.product_uuid || item.uuid,
+            id: item.cart_item_id || item.id || item.product_id || item.variant_id || item.product_uuid || item.uuid,
+            cart_item_id: item.cart_item_id || item.id,
             product_id: item.product_id,
             variant_id: item.variant_id,
             variant_name: item.variant_name,
@@ -38,10 +39,11 @@ export const addToCartAsync = createAsyncThunk(
       const quantity = payload.quantity || payload.qnty || productObj.quantity || productObj.qnty || 1;
       const productId = productObj.product_uuid || productObj.uuid || productObj.id;
       const variantId = payload.variant_id || productObj.variant_id || (productObj.activeVariant ? productObj.activeVariant.id : null);
+      const message = payload.message || payload.gift_message || productObj.message || productObj.gift_message || null;
 
-      const response = await userService.addToCart(productId, quantity, variantId);
+      const response = await userService.addToCart(productId, quantity, variantId, message);
       if (response.success) {
-        dispatch(addCart({ ...productObj, qnty: quantity }));
+        dispatch(addCart({ ...productObj, qnty: quantity, message, gift_message: message }));
         dispatch(fetchCartItems());
         return response;
       } else {
@@ -71,7 +73,11 @@ export const updateCartQuantityAsync = createAsyncThunk(
       dispatch(decareseQunty(productId));
     }
  
-    await userService.updateCart(productId, qnty);
+    if (qnty <= 0) {
+      await userService.removeFromCart(productId);
+    } else {
+      await userService.updateCart(productId, qnty);
+    }
     dispatch(fetchCartItems());
   }
 );

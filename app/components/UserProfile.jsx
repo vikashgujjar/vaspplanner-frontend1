@@ -45,6 +45,20 @@ import {
   EyeOff
 } from "lucide-react";
 
+const getOrderItemImage = (img) => {
+  if (!img || img === "null" || img === "undefined") return "/placeholder.png";
+  if (typeof img === "string") {
+    if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/placeholder") || img.startsWith("data:")) {
+      return img;
+    }
+    const backendBase = process.env.NEXT_PUBLIC_API_BASE_URL
+      ? process.env.NEXT_PUBLIC_API_BASE_URL.replace(/\/api.*$/, '')
+      : "http://127.0.0.1:8000";
+    return `${backendBase}/${img.replace(/^\/+/, '')}`;
+  }
+  return "/placeholder.png";
+};
+
 export default function UserProfile() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -322,8 +336,20 @@ export default function UserProfile() {
               <div key={order.uuid || order.id || index} className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-xl hover:shadow-gray-200/50 transition-all">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Package size={28} className="text-gray-600" />
+                    <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0">
+                      {order.items?.[0]?.product_image ? (
+                        <img
+                          src={getOrderItemImage(order.items[0].product_image)}
+                          alt={order.items[0].product_name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/placeholder.png";
+                          }}
+                        />
+                      ) : (
+                        <Package size={28} className="text-gray-600" />
+                      )}
                     </div>
                     <div>
                       <h6 className="font-bold text-gray-900">{order.items?.[0]?.product_name || "Order #" + order.order_number}</h6>
@@ -926,8 +952,16 @@ export default function UserProfile() {
                   </h4>
                   {selectedOrder.items?.map((item, idx) => (
                     <div key={idx} className="flex gap-4 p-3 border border-gray-100 rounded-2xl">
-                      <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
-                        <img src={item.product_image} alt={item.product_name} className="w-full h-full object-cover" />
+                      <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center">
+                        <img
+                          src={getOrderItemImage(item.product_image)}
+                          alt={item.product_name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/placeholder.png";
+                          }}
+                        />
                       </div>
                       <div className="flex-1">
                         <h5 className="font-bold text-gray-900 text-sm">{item.product_name}</h5>

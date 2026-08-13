@@ -38,7 +38,9 @@ import {
   ExternalLink,
   MapPin,
   AlertCircle,
-  HelpCircle
+  HelpCircle,
+  Palette,
+  Check
 } from "lucide-react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -82,6 +84,62 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
   ];
 
   const productVariants = singleProduct?.variants || [];
+
+  // Balloon Color Selection Data & State
+  const BALLOON_COLOR_PALETTES = [
+    { id: "pastel-pink-white", name: "Pastel Pink & White", colors: ["#F472B6", "#FFFFFF"], badge: "Most Popular" },
+    { id: "royal-blue-silver", name: "Royal Blue & Silver", colors: ["#1D4ED8", "#94A3B8"], badge: "Trending" },
+    { id: "metallic-gold-black", name: "Gold & Glossy Black", colors: ["#EAB308", "#0F172A"], badge: "VIP Luxury" },
+    { id: "rose-gold-blush", name: "Rose Gold & Blush", colors: ["#FB7185", "#FEF08A"], badge: "Romantic" },
+    { id: "sage-green-gold", name: "Sage Green & Gold", colors: ["#84CC16", "#FACC15"], badge: "Aesthetic" },
+    { id: "lavender-violet", name: "Lavender & Purple", colors: ["#C084FC", "#7E22CE"], badge: "Dreamy" },
+    { id: "romantic-red-white", name: "Red & White", colors: ["#DC2626", "#FFFFFF"], badge: "Anniversary" },
+    { id: "rainbow-mix", name: "Rainbow Mix", colors: ["#EF4444", "#F59E0B", "#10B981", "#3B82F6"], badge: "Party" },
+    { id: "custom", name: "Custom Color Mix", colors: ["#EC4899", "#8B5CF6", "#3B82F6"], badge: "Your Choice" }
+  ];
+
+  const INDIVIDUAL_BALLOON_COLORS = [
+    { name: "Metallic Gold", hex: "#EAB308" },
+    { name: "Rose Gold", hex: "#FB7185" },
+    { name: "Chrome Silver", hex: "#94A3B8" },
+    { name: "Pastel Pink", hex: "#F472B6" },
+    { name: "Royal Blue", hex: "#1D4ED8" },
+    { name: "Pure White", hex: "#FFFFFF", border: true },
+    { name: "Crimson Red", hex: "#DC2626" },
+    { name: "Sage Green", hex: "#84CC16" },
+    { name: "Lavender", hex: "#C084FC" },
+    { name: "Glossy Black", hex: "#0F172A" },
+    { name: "Sunny Yellow", hex: "#FACC15" },
+    { name: "Baby Blue", hex: "#60A5FA" },
+  ];
+
+  const [selectedBalloonPalette, setSelectedBalloonPalette] = useState("pastel-pink-white");
+  const [selectedCustomColors, setSelectedCustomColors] = useState(["Pastel Pink", "Pure White"]);
+  const [customBalloonNote, setCustomBalloonNote] = useState("");
+
+  const toggleCustomColor = (colorName) => {
+    setSelectedCustomColors(prev => {
+      if (prev.includes(colorName)) {
+        return prev.length > 1 ? prev.filter(c => c !== colorName) : prev;
+      } else {
+        if (prev.length >= 4) {
+          toast.info("You can choose up to 4 balloon colors");
+          return prev;
+        }
+        return [...prev, colorName];
+      }
+    });
+  };
+
+  const getBalloonColorSummary = () => {
+    if (selectedBalloonPalette === "custom") {
+      const colorsStr = selectedCustomColors.length > 0 ? selectedCustomColors.join(" + ") : "Custom Combination";
+      return customBalloonNote ? `${colorsStr} (${customBalloonNote})` : colorsStr;
+    }
+    const found = BALLOON_COLOR_PALETTES.find(p => p.id === selectedBalloonPalette);
+    const paletteName = found ? found.name : selectedBalloonPalette;
+    return customBalloonNote ? `${paletteName} (Note: ${customBalloonNote})` : paletteName;
+  };
 
   const isDecorationProduct =
     (singleProduct?.title?.toLowerCase()?.includes("decoration") || singleProduct?.title?.toLowerCase()?.includes("premium")) ||
@@ -630,6 +688,130 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
                 </div>
               )}
 
+              {/* Balloon Color Customization Section */}
+              <div className="bg-gradient-to-br from-violet-50/60 via-white to-pink-50/40 p-4 sm:p-5 rounded-2xl border border-violet-100/80 shadow-xs space-y-3.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-xl bg-violet-600/10 text-violet-700 flex items-center justify-center">
+                      <Palette size={18} />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-gray-900 tracking-wide">
+                        Choose Balloon Color Theme
+                      </h3>
+                      <p className="text-[11px] text-gray-500">
+                        Selected: <span className="font-bold text-violet-700">{getBalloonColorSummary()}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 bg-violet-100 text-violet-700 rounded-full">
+                    Customizable
+                  </span>
+                </div>
+
+                {/* Preset Themes Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {BALLOON_COLOR_PALETTES.map((palette) => {
+                    const isSelected = selectedBalloonPalette === palette.id;
+                    return (
+                      <button
+                        key={palette.id}
+                        type="button"
+                        onClick={() => setSelectedBalloonPalette(palette.id)}
+                        className={`relative text-left p-2.5 rounded-xl border-2 transition-all flex flex-col justify-between gap-1.5 cursor-pointer ${
+                          isSelected
+                            ? "bg-violet-50/90 border-violet-600 shadow-sm shadow-violet-500/10 ring-1 ring-violet-600"
+                            : "bg-white border-gray-200 hover:border-violet-200 hover:bg-gray-50/60"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          {/* Color Circles */}
+                          <div className="flex items-center -space-x-1.5">
+                            {palette.colors.map((c, i) => (
+                              <div
+                                key={i}
+                                className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-white shadow-xs flex-shrink-0"
+                                style={{ backgroundColor: c }}
+                              />
+                            ))}
+                          </div>
+                          {isSelected && (
+                            <div className="w-3.5 h-3.5 rounded-full bg-violet-600 text-white flex items-center justify-center">
+                              <Check size={10} strokeWidth={3} />
+                            </div>
+                          )}
+                        </div>
+
+                        <div>
+                          <p className={`text-[11px] sm:text-xs font-bold leading-tight ${isSelected ? 'text-violet-900' : 'text-gray-800'}`}>
+                            {palette.name}
+                          </p>
+                          {palette.badge && (
+                            <span className="text-[9px] font-medium text-gray-400 block mt-0.5">
+                              {palette.badge}
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Custom Color Multi-Select (if Custom selected) */}
+                {selectedBalloonPalette === "custom" && (
+                  <div className="pt-2 border-t border-violet-100 space-y-2 animate-in fade-in duration-200">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-gray-700">
+                        Pick up to 4 Balloon Colors:
+                      </label>
+                      <span className="text-[10px] text-gray-400">
+                        {selectedCustomColors.length} selected
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5">
+                      {INDIVIDUAL_BALLOON_COLORS.map((col) => {
+                        const isPicked = selectedCustomColors.includes(col.name);
+                        return (
+                          <button
+                            key={col.name}
+                            type="button"
+                            onClick={() => toggleCustomColor(col.name)}
+                            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all border cursor-pointer ${
+                              isPicked
+                                ? "bg-violet-600 text-white border-violet-600 shadow-xs"
+                                : "bg-white text-gray-700 border-gray-200 hover:border-violet-300"
+                            }`}
+                          >
+                            <span
+                              className={`w-3 h-3 rounded-full ${col.border ? 'border border-gray-300' : ''}`}
+                              style={{ backgroundColor: col.hex }}
+                            />
+                            <span>{col.name}</span>
+                            {isPicked && <Check size={11} strokeWidth={3} />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Specific Instructions / Custom Color Note */}
+                <div className="pt-1">
+                  <label className="block text-[11px] font-semibold text-gray-600 mb-1">
+                    Specific Balloon Color Request / Instructions (Optional):
+                  </label>
+                  <input
+                    type="text"
+                    value={customBalloonNote}
+                    onChange={(e) => setCustomBalloonNote(e.target.value)}
+                    placeholder="e.g. 50% Pastel Pink, 50% White, with Golden Chrome highlights"
+                    maxLength={150}
+                    className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none bg-white placeholder:text-gray-400 transition-all"
+                  />
+                </div>
+              </div>
+
               {/* Quantity & Add to Cart */}
               <div className="flex flex-col sm:flex-row gap-3 pt-3">
                 <div className="flex items-center bg-gray-100 rounded-xl px-4 py-2.5">
@@ -650,6 +832,7 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
 
                 <button
                   onClick={() => {
+                    const balloonSummary = getBalloonColorSummary();
                     if (!isLoggedIn) {
                       toast.info("Please login to continue adding item to cart", { icon: "🔐" });
                       savePendingCartAction({
@@ -660,13 +843,16 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
                           variant_name: activeVariant ? (activeVariant.name || activeVariant.label) : null,
                           price: unitPrice,
                           originalPrice: unitOriginalPrice,
+                          message: `Balloon Colors: ${balloonSummary}`,
+                          gift_message: `Balloon Colors: ${balloonSummary}`,
                           qnty: qnty
                         },
                         quantity: qnty,
                         variantId: activeVariant ? (activeVariant.id || activeVariant.uuid) : null,
                         options: {
                           pincode: pincode,
-                          city: detectedCity
+                          city: detectedCity,
+                          balloon_colors: balloonSummary
                         },
                         redirectUrl: window.location.pathname
                       });
@@ -687,6 +873,8 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
                         price: unitPrice,
                         variant_id: activeVariant?.id || activeVariant?.uuid,
                         variant_name: activeVariant?.name || activeVariant?.label,
+                        message: `Balloon Colors: ${balloonSummary}`,
+                        gift_message: `Balloon Colors: ${balloonSummary}`,
                         qnty
                       })).unwrap()
                         .then(() => toast.success("🎉 Added to cart successfully!"))
@@ -703,6 +891,7 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
                 </button>
                 <button
                   onClick={async () => {
+                    const balloonSummary = getBalloonColorSummary();
                     if (!isLoggedIn) {
                       toast.info("Please login to complete your purchase", { icon: "🔐" });
                       setIsAuthModalOpen(true);
@@ -715,6 +904,8 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
                       price: unitPrice,
                       variant_id: activeVariant?.id || activeVariant?.uuid,
                       variant_name: activeVariant?.name || activeVariant?.label,
+                      message: `Balloon Colors: ${balloonSummary}`,
+                      gift_message: `Balloon Colors: ${balloonSummary}`,
                       qnty
                     };
 

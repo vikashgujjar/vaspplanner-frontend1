@@ -35,12 +35,18 @@ export const userService = {
         }
     },
 
-    addToCart: async (productId, quantity = 1, variantId = null) => {
+    addToCart: async (productId, quantity = 1, variantId = null, message = null) => {
         try {
             const response = await fetch(`${API_BASE_URL}/cart`, {
                 method: 'POST',
                 headers: getHeader(),
-                body: JSON.stringify({ product_id: productId, quantity, variant_id: variantId })
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity,
+                    variant_id: variantId,
+                    message: message,
+                    gift_message: message
+                })
             });
             return await response.json();
         } catch (error) {

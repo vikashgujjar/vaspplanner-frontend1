@@ -266,7 +266,14 @@ export default function CartPage() {
                                                         {/* Quantity */}
                                                         <div className="flex items-center bg-gray-100 rounded-xl p-1.5">
                                                             <button
-                                                                onClick={() => dispatch(updateCartQuantityAsync({ productId: item.id, qnty: item.qnty - 1, type: 'decrement' }))}
+                                                                onClick={() => {
+                                                                    if (item.qnty <= 1) {
+                                                                        dispatch(removeFromCartAsync(item.id));
+                                                                        toast.error("Removed from cart!", { icon: "🗑️" });
+                                                                    } else {
+                                                                        dispatch(updateCartQuantityAsync({ productId: item.id, qnty: item.qnty - 1, type: 'decrement' }));
+                                                                    }
+                                                                }}
                                                                 className="w-9 h-9 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-violet-50 hover:text-violet-600 transition-all active:scale-90"
                                                             >
                                                                 <Minus size={14} />

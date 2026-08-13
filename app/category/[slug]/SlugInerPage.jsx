@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
 import Filter from "./Filter";
 import BottomFilter from "./BottomFilter";
 import { fetchProductsByCategory, fetchCategories, fetchCategoryFilters } from "../../services/productService";
@@ -26,7 +27,8 @@ import {
   Flame,
   Award,
   Loader2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  ShoppingBag
 } from "lucide-react";
 
 export default function SlugInerPage({
@@ -64,6 +66,10 @@ export default function SlugInerPage({
 
   const isFirstRender = useRef(true);
   const prevSlug = useRef(slug);
+
+  const cartList = useSelector((state) => state.cart?.cartItem || []);
+  const cartTotalAmount = cartList.reduce((sum, item) => sum + ((parseFloat(item.price) || 0) * (parseInt(item.qnty) || 1)), 0);
+  const cartTotalCount = cartList.reduce((sum, item) => sum + (parseInt(item.qnty) || 1), 0);
 
   const pageFromUrl = parseInt(searchParams.get("page")) || 1;
   const perPageFromUrl = parseInt(searchParams.get("per_page")) || 10;
@@ -376,14 +382,52 @@ export default function SlugInerPage({
                     <div className="w-16 h-16 border-4 border-violet-100 border-t-violet-600 rounded-full animate-spin"></div>
                     <Loader2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-violet-600" size={24} />
                   </div>
-                  <p className="mt-6 text-gray-500 font-medium animate-pulse">Fetching amazing gifts...</p>
+                  <p className="mt-6 text-gray-500 font-medium animate-pulse">Fetching amazing gifts & setups...</p>
                 </div>
               ) : sortedProducts.length > 0 ? (
-                <div className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1"}`}>
-                  {sortedProducts.map((product, index) => (
-                    <ProductAyurvedCard key={product.id || index} product={product} showViewMore={false} />
-                  ))}
-                </div>
+                <>
+                  <div className={`grid gap-6 ${viewMode === "grid" ? (sortedProducts.length === 1 ? "grid-cols-1 sm:grid-cols-2 max-w-xl" : sortedProducts.length === 2 ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4") : "grid-cols-1"}`}>
+                    {sortedProducts.map((product, index) => (
+                      <ProductAyurvedCard key={product.id || index} product={product} showViewMore={false} />
+                    ))}
+                  </div>
+
+                  {/* Explore Trending Categories if results are small */}
+                  {sortedProducts.length <= 3 && (
+                    <div className="mt-12 p-6 bg-gradient-to-br from-violet-50/60 to-purple-50/60 border border-violet-100 rounded-3xl">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-9 h-9 rounded-xl bg-violet-600 text-white flex items-center justify-center shadow-md">
+                          <Sparkles size={18} />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-900 text-base">Explore More Popular Collections</h4>
+                          <p className="text-gray-500 text-xs">Discover trending decorations and gifts curated for you</p>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2.5">
+                        {[
+                          { name: 'Birthday Specials', slug: 'birthday', emoji: '🎂' },
+                          { name: 'Baby Welcome', slug: 'welcome-baby-balloon', emoji: '👶' },
+                          { name: 'Haldi Ceremonies', slug: 'haldi', emoji: '🌼' },
+                          { name: 'Romantic Anniversary', slug: 'anniversary', emoji: '💍' },
+                          { name: 'Corporate Events', slug: 'corporate-decoration', emoji: '🏢' },
+                          { name: 'Artisanal Cakes', slug: 'cake-collection', emoji: '🍰' },
+                          { name: 'Festival Celebrations', slug: 'festival', emoji: '✨' },
+                        ].map((cat, idx) => (
+                          <Link
+                            key={idx}
+                            href={`/category/${cat.slug}`}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-violet-600 text-gray-700 hover:text-white rounded-xl text-xs font-semibold shadow-sm border border-gray-200/80 hover:border-violet-600 transition-all group"
+                          >
+                            <span>{cat.emoji}</span>
+                            <span>{cat.name}</span>
+                            <ArrowRight size={13} className="text-gray-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100 italic text-gray-400">
                   <Package size={48} className="mb-4 opacity-20" />
@@ -449,6 +493,32 @@ export default function SlugInerPage({
         ]}
         stats={categoryInfo?.stats}
       />
+
+      {/* Floating Sticky Go to Checkout Bar when products in cart */}
+      {cartList.length > 0 && (
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-lg bg-gray-900/95 backdrop-blur-md text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl shadow-gray-950/50 border border-white/15 flex items-center justify-between animate-in fade-in slide-in-from-bottom-5 duration-300">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/30 flex-shrink-0">
+              <ShoppingBag size={20} className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-300 font-medium">
+                {cartTotalCount} {cartTotalCount === 1 ? 'item' : 'items'} in Cart
+              </p>
+              <p className="text-base font-extrabold text-white">
+                ₹{cartTotalAmount.toLocaleString()}
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/checkout"
+            className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-xs sm:text-sm font-bold rounded-xl flex items-center gap-1.5 shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
+          >
+            <span>Go to Checkout</span>
+            <ArrowRight size={16} />
+          </Link>
+        </div>
+      )}
 
     </div>
   );

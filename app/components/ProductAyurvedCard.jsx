@@ -8,6 +8,9 @@ import {
   Sparkles,
   ShoppingBag,
   Trash2,
+  Plus,
+  Minus,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addWishAsync, removeWishAsync } from "../store/wishListSlice";
-import { addToCartAsync, removeFromCartAsync } from "../store/cartSlice";
+import { addToCartAsync, removeFromCartAsync, updateCartQuantityAsync } from "../store/cartSlice";
 import { savePendingCartAction } from "../utils/pendingCart";
 import AuthModal from "./AuthModal";
 
@@ -54,6 +57,30 @@ export default function ProductAyurvedCard({ product }) {
   const cartList = useSelector((state) => state.cart.cartItem);
   const dispatch = useDispatch();
 
+  const getCartItem = (productId) => {
+    return cartList?.find((item) =>
+      String(item.id) === String(productId) ||
+      String(item.product_id) === String(productId) ||
+      String(item.variant_id) === String(productId) ||
+      String(item.uuid) === String(productId) ||
+      String(item.product_uuid) === String(productId) ||
+      (product?.uuid && (
+        String(item.id) === String(product.uuid) ||
+        String(item.product_id) === String(product.uuid) ||
+        String(item.uuid) === String(product.uuid) ||
+        String(item.product_uuid) === String(product.uuid)
+      )) ||
+      (product?.id && (
+        String(item.id) === String(product.id) ||
+        String(item.product_id) === String(product.id) ||
+        String(item.uuid) === String(product.id)
+      ))
+    );
+  };
+
+  const currentCartItem = getCartItem(id);
+  const cartQuantity = currentCartItem ? (currentCartItem.qnty || currentCartItem.quantity || 1) : 0;
+
   const isWishList = (productId) => {
     return wishList?.some((elm) =>
       String(elm.id) === String(productId) ||
@@ -70,18 +97,66 @@ export default function ProductAyurvedCard({ product }) {
   };
 
   const isInCart = (productId) => {
-    return cartList?.some((item) =>
-      String(item.id) === String(productId) ||
-      String(item.product_id) === String(productId) ||
-      String(item.variant_id) === String(productId) ||
-      String(item.uuid) === String(productId) ||
-      String(item.product_uuid) === String(productId) ||
-      (product?.uuid && (
-        String(item.id) === String(product.uuid) ||
-        String(item.product_id) === String(product.uuid) ||
-        String(item.uuid) === String(product.uuid)
-      ))
-    );
+    return cartQuantity > 0;
+  };
+
+  const handleAddToCart = (e) => {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+    if (!isLoggedIn) {
+      toast.info("Please login to continue adding item to cart", { icon: "🔐" });
+      savePendingCartAction({
+        product: { ...product, qnty: 1 },
+        quantity: 1,
+        redirectUrl: window.location.pathname
+      });
+      router.push("/user/login");
+      return;
+    }
+
+    const isOutOfStock = product?._rawData?.stock_status === 'out_of_stock' || product?._rawData?.stock === 0;
+    if (isOutOfStock) {
+      toast.warning("Sorry, this item is currently out of stock", { icon: "🚫" });
+      return;
+    }
+
+    dispatch(addToCartAsync({ ...product, qnty: 1 }))
+      .unwrap()
+      .then(() => {
+        toast.success("Added to cart", { icon: "🛍️" });
+      })
+      .catch((error) => {
+        toast.error(typeof error === 'string' ? error : "Failed to add to cart");
+      });
+  };
+
+  const handleIncrement = (e) => {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+    const targetCartId = currentCartItem?.id || currentCartItem?.product_id || id;
+    const newQnty = cartQuantity + 1;
+    dispatch(updateCartQuantityAsync({
+      productId: targetCartId,
+      qnty: newQnty,
+      type: 'increment'
+    }));
+  };
+
+  const handleDecrement = (e) => {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+    const targetCartId = currentCartItem?.id || currentCartItem?.product_id || id;
+    const newQnty = cartQuantity - 1;
+    if (newQnty <= 0) {
+      dispatch(removeFromCartAsync(targetCartId));
+      toast.info("Removed from cart", { icon: "🗑️" });
+    } else {
+      dispatch(updateCartQuantityAsync({
+        productId: targetCartId,
+        qnty: newQnty,
+        type: 'decrement'
+      }));
+    }
   };
 
   const handleWishListToogle = (prod) => {
@@ -388,7 +463,14 @@ export default function ProductAyurvedCard({ product }) {
               {/* Title */}
               <h3
                 title={heading || name || title}
-                className="font-semibold text-sm md:text-base text-gray-800 line-clamp-2 group-hover/title:line-clamp-none leading-snug mb-0 md:mb-4 flex-1 transition-all duration-300"
+                className="font-semibold text-xs md:text-sm text-gray-800 line-clamp-2 md:group-hover/title:line-clamp-none leading-snug mb-1 md:mb-2 min-h-[2.4rem] transition-all duration-200"
+                style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: isHovered ? 'unset' : 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: isHovered ? 'visible' : 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
               >
                 {heading || name || title}
               </h3>
@@ -416,52 +498,58 @@ export default function ProductAyurvedCard({ product }) {
                 )}
               </div>
 
-              <button
-                onClick={() => {
-                  if (!isLoggedIn) {
-                    toast.info("Please login to continue adding item to cart", { icon: "🔐" });
-                    savePendingCartAction({
-                      product: { ...product, qnty: 1 },
-                      quantity: 1,
-                      redirectUrl: window.location.pathname
-                    });
-                    router.push("/user/login");
-                    return;
-                  }
-
-                  if (isInCart(id)) {
-                    dispatch(removeFromCartAsync(id));
-                    toast.error("Removed from cart", {
-                      icon: "🗑️",
-                      style: { borderRadius: "12px" }
-                    });
-                  } else {
-                    const isOutOfStock = product?._rawData?.stock_status === 'out_of_stock' || product?._rawData?.stock === 0;
-                    if (isOutOfStock) {
-                      toast.warning("Sorry, this item is currently out of stock", { icon: "🚫" });
-                      return;
-                    }
-                    dispatch(addToCartAsync({ ...product, qnty: 1 }))
-                      .unwrap()
-                      .then(() => {
-                        toast.success("Added to cart", { icon: "🛍️" });
-                      })
-                      .catch((error) => {
-                        toast.error(typeof error === 'string' ? error : "Failed to add to cart");
-                      });
-                  }
-                }}
-                className={`cart-btn p-3 md:p-3.5 rounded-xl shadow-md text-white transition-all duration-300 ${mounted && isInCart(id)
-                  ? "bg-red-500 hover:bg-red-600"
-                  : (product?._rawData?.stock_status === 'out_of_stock' || product?._rawData?.stock === 0)
-                    ? "bg-gray-400 cursor-not-allowed grayscale"
-                    : "bg-emerald-600 hover:bg-emerald-700"
+              {/* Quantity Stepper (+ -) or Add to Cart Button */}
+              {mounted && cartQuantity > 0 ? (
+                <div 
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                  className="inline-flex items-center bg-emerald-50 border-2 border-emerald-500 rounded-xl overflow-hidden shadow-sm"
+                >
+                  <button
+                    onClick={handleDecrement}
+                    className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center text-emerald-800 hover:bg-emerald-200 transition-colors font-bold active:scale-90"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span className="w-7 md:w-8 text-center text-xs md:text-sm font-black text-emerald-900 select-none">
+                    {cartQuantity}
+                  </span>
+                  <button
+                    onClick={handleIncrement}
+                    className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center text-emerald-800 hover:bg-emerald-200 transition-colors font-bold active:scale-90"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={handleAddToCart}
+                  disabled={product?._rawData?.stock_status === 'out_of_stock' || product?._rawData?.stock === 0}
+                  className={`cart-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl shadow-md text-white text-xs md:text-sm font-bold transition-all duration-300 flex items-center gap-1.5 active:scale-95 ${
+                    (product?._rawData?.stock_status === 'out_of_stock' || product?._rawData?.stock === 0)
+                      ? "bg-gray-400 cursor-not-allowed grayscale"
+                      : "bg-emerald-600 hover:bg-emerald-700 hover:shadow-emerald-600/30"
                   }`}
-                aria-label={mounted && isInCart(id) ? "Remove from cart" : "Add to cart"}
-              >
-                {mounted && isInCart(id) ? <Trash2 size={20} /> : <ShoppingBag size={20} />}
-              </button>
+                  aria-label="Add to cart"
+                >
+                  <ShoppingBag size={16} />
+                  <span>Add</span>
+                </button>
+              )}
             </div>
+
+            {/* Go to Checkout Button when quantity > 0 */}
+            {mounted && cartQuantity > 0 && (
+              <Link
+                href="/checkout"
+                onClick={(e) => e.stopPropagation()}
+                className="w-full mt-3 py-2 px-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white text-xs md:text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-violet-500/25 transition-all group active:scale-98"
+              >
+                <span>Go to Checkout</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            )}
           </div>
 
           {/* Natural/Bakery Badge */}

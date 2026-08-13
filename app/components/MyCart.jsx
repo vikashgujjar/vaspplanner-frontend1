@@ -241,7 +241,13 @@ export default function MyCart({ cart, setCart }) {
                         {/* Quantity Controls */}
                         <div className="flex items-center gap-2 bg-gray-50 px-1 md:px-3 py-1 md:py-2 rounded-lg border border-gray-200">
                           <button
-                            onClick={() => dispatch(updateCartQuantityAsync({ productId: elm.id, qnty: elm.qnty - 1, type: 'decrement' }))}
+                            onClick={() => {
+                              if (elm.qnty <= 1) {
+                                dispatch(removeFromCartAsync(elm.id));
+                              } else {
+                                dispatch(updateCartQuantityAsync({ productId: elm.id, qnty: elm.qnty - 1, type: 'decrement' }));
+                              }
+                            }}
                             className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md bg-white border border-gray-300 text-gray-600 hover:bg-green-50 hover:text-green-600 hover:border-green-500 transition-all"
                           >
                             <Minus size={14} />
