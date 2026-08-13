@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { executePendingCartAction } from "../utils/pendingCart";
 import {
   Mail,
   Lock,
@@ -17,11 +19,13 @@ import {
   Star
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { parseServerErrors, FieldError } from "../utils/serverValidation";
  
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function LoginPage() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [apiErrors, setApiErrors] = useState({});
   const [phone, setPhone] = useState("");
@@ -34,6 +38,14 @@ export default function LoginPage() {
       router.replace("/user/profile");
     }
   }, [router]);
+
+  const handlePostLoginCartSync = async () => {
+    window.dispatchEvent(new Event("auth-change"));
+    const handled = await executePendingCartAction(dispatch, router);
+    if (!handled) {
+      router.replace("/user/profile");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,18 +74,11 @@ export default function LoginPage() {
         localStorage.setItem("cartNeedsSync", "true");
         localStorage.setItem("wishlistNeedsSync", "true");
 
-        // Redirect to profile or home
-        setTimeout(() => {
-          window.location.href = "/user/profile";
-        }, 2000);
+        await handlePostLoginCartSync();
       } else {
-        if (result.errors) {
-          setApiErrors(result.errors);
-          const firstError = Object.values(result.errors).flat()[0];
-          toast.error(firstError || "Login failed");
-        } else {
-          toast.error(result.message || "Login failed");
-        }
+        const { fieldErrors, summaryMessage } = parseServerErrors(result);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Login failed");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -85,7 +90,9 @@ export default function LoginPage() {
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
+    setApiErrors({});
     if (phone.length < 10) {
+      setApiErrors({ phone: "Please enter a valid 10-digit phone number" });
       toast.error("Please enter a valid phone number");
       return;
     }
@@ -93,7 +100,7 @@ export default function LoginPage() {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/send-otp`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ phone }),
       });
       const result = await response.json();
@@ -101,7 +108,9 @@ export default function LoginPage() {
         toast.success(result.message || "OTP sent successfully!");
         setOtpSent(true);
       } else {
-        toast.error(result.message || "Failed to send OTP");
+        const { fieldErrors, summaryMessage } = parseServerErrors(result);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Failed to send OTP");
       }
     } catch (error) {
       toast.error("An error occurred. Please try again.");
@@ -112,7 +121,9 @@ export default function LoginPage() {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
+    setApiErrors({});
     if (!otp) {
+      setApiErrors({ otp: "Please enter the OTP" });
       toast.error("Please enter the OTP");
       return;
     }
@@ -120,7 +131,7 @@ export default function LoginPage() {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ phone, otp }),
       });
       const result = await response.json();
@@ -130,12 +141,15 @@ export default function LoginPage() {
         localStorage.setItem("userData", JSON.stringify(result.data.user));
         localStorage.setItem("cartNeedsSync", "true");
         localStorage.setItem("wishlistNeedsSync", "true");
-        window.dispatchEvent(new Event("auth-change"));
-        router.replace("/user/profile");
+        
+        await handlePostLoginCartSync();
       } else {
-        toast.error(result.message || "Invalid OTP");
+        const { fieldErrors, summaryMessage } = parseServerErrors(result);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Invalid OTP. Please try again.");
       }
     } catch (error) {
+      console.error("OTP verification error:", error);
       toast.error("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -255,10 +269,11 @@ export default function LoginPage() {
                           value={phone}
                           onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                           required
-                          className="w-full pl-14 pr-4 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+                          className={`w-full pl-14 pr-4 py-3.5 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all ${(apiErrors.phone || apiErrors.mobile) ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-violet-500'}`}
                           placeholder="9876543210"
                         />
                       </div>
+                      <FieldError error={apiErrors.phone || apiErrors.mobile} />
                     </div>
                     <button
                       type="submit"
@@ -282,9 +297,10 @@ export default function LoginPage() {
                         onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
                         required
                         autoFocus
-                        className="w-full text-center text-3xl tracking-[1em] font-black py-4 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+                        className={`w-full text-center text-3xl tracking-[1em] font-black py-4 bg-gray-50 border-2 rounded-2xl focus:outline-none focus:bg-white transition-all ${apiErrors.otp ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-violet-500'}`}
                         placeholder="••••••"
                       />
+                      <FieldError error={apiErrors.otp} className="justify-center" />
                     </div>
                     <button
                       type="submit"

@@ -8,6 +8,7 @@ import { removeFromCartAsync, clearCart } from "../store/cartSlice";
 import { toast } from "react-toastify";
 import { userService } from "../services/userService";
 import { locationService } from "../services/locationService";
+import { parseServerErrors, FieldError } from "../utils/serverValidation";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import {
@@ -42,7 +43,20 @@ import AuthModal from "./AuthModal";
 export default function CheckOut() {
   const dispatch = useDispatch();
   const [shipDifference, setShipDifference] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState("cod");
+  const [selectedPayment, setSelectedPayment] = useState("razorpay");
+
+  useEffect(() => {
+    // Load Razorpay checkout SDK script
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState("");
@@ -498,23 +512,97 @@ export default function CheckOut() {
 
     try {
       const response = await userService.checkout(orderData);
-      if (response.success) {
+      if (response.success && response.data) {
+        const createdOrder = response.data.order || response.data;
+        const targetOrderId = createdOrder.id || createdOrder.uuid || createdOrder.order_number;
+
+        // If online payment via Razorpay selected
+        if (selectedPayment === "razorpay" || selectedPayment === "card" || selectedPayment === "upi" || selectedPayment === "bank") {
+          const razorpayRes = await userService.createRazorpayOrder(targetOrderId);
+
+          if (razorpayRes.success && razorpayRes.data) {
+            const rData = razorpayRes.data;
+
+            if (typeof window === "undefined" || !window.Razorpay) {
+              toast.error("Razorpay Payment Gateway script is loading. Please try again in a moment.");
+              setIsSubmitting(false);
+              return;
+            }
+
+            const options = {
+              key: rData.key,
+              amount: rData.amount,
+              currency: rData.currency || "INR",
+              name: "VASP Planner",
+              description: `Order Payment ${rData.test_mode ? "(Test Mode ₹1)" : ""}`,
+              order_id: rData.razorpay_order_id,
+              prefill: {
+                name: `${formData.firstName} ${formData.lastName}`,
+                email: formData.email,
+                contact: formData.phone
+              },
+              theme: { color: "#7c3aed" },
+              handler: async function (paymentResponse) {
+                try {
+                  const verifyRes = await userService.verifyRazorpayPayment({
+                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                    razorpay_order_id: paymentResponse.razorpay_order_id,
+                    razorpay_signature: paymentResponse.razorpay_signature,
+                    order_id: targetOrderId
+                  });
+
+                  if (verifyRes.success) {
+                    setIsOrderCompleted(true);
+                    toast.success(rData.test_mode ? "🎉 Test Payment (₹1) successful & order confirmed!" : "🎉 Payment successful & order confirmed!");
+                    dispatch(clearCart());
+                    router.push("/user/profile?tab=orders");
+                  } else {
+                    toast.error(verifyRes.message || "Payment verification failed.");
+                  }
+                } catch (err) {
+                  console.error("Signature verification error:", err);
+                  toast.error("Error verifying payment signature.");
+                } finally {
+                  setIsSubmitting(false);
+                }
+              },
+              modal: {
+                ondismiss: function () {
+                  toast.info("Payment popup closed. You can complete payment anytime.");
+                  setIsSubmitting(false);
+                }
+              }
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.on('payment.failed', function (resp) {
+              toast.error(resp.error?.description || "Payment failed. Please try again.");
+              setIsSubmitting(false);
+            });
+            rzp.open();
+            return;
+          } else {
+            toast.error(razorpayRes.message || "Failed to initiate online payment.");
+            setIsSubmitting(false);
+            return;
+          }
+        }
+
+        // Standard Cash on Delivery flow
         setIsOrderCompleted(true);
         toast.success("Order placed successfully!");
         dispatch(clearCart());
-        router.push("/user/profile");
-      } else if (response.errors) {
-        setApiErrors(response.errors);
-        toast.error("Please fix the validation errors");
-        // Scroll to the first error
-        window.scrollTo({ top: 300, behavior: 'smooth' });
+        router.push("/user/profile?tab=orders");
       } else {
-        toast.error(response.message || "Checkout failed. Please try again.");
+        const { fieldErrors, summaryMessage } = parseServerErrors(response);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Please fix the validation errors");
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("Something went wrong. Please try again later.");
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -555,10 +643,8 @@ export default function CheckOut() {
   };
 
   const paymentMethods = [
+    { id: "razorpay", label: "Online Payment (Razorpay)", icon: CreditCard, description: "UPI, Cards, NetBanking, Wallets (Test Mode ₹1)", emoji: "⚡" },
     { id: "cod", label: "Cash on Delivery", icon: Banknote, description: "Pay when you receive", emoji: "💵" },
-    { id: "card", label: "Credit/Debit Card", icon: CreditCard, description: "Visa, Mastercard, Rupay", emoji: "💳" },
-    { id: "upi", label: "UPI Payment", icon: Wallet, description: "Google Pay, PhonePe, Paytm", emoji: "📱" },
-    { id: "bank", label: "Net Banking", icon: Building2, description: "All major banks", emoji: "🏦" },
   ];
 
   return (

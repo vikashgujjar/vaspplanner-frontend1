@@ -107,14 +107,59 @@ export const userService = {
 
     removeFromWishlist: async (productId) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/wishlist/remove`, {
+            const response = await fetch(`${API_BASE_URL}/wishlist/${productId}`, {
+                method: 'DELETE',
+                headers: getHeader()
+            });
+            const data = await response.json();
+            if (data.success) return data;
+            
+            // Fallback to POST /wishlist/remove if DELETE endpoint is handled differently
+            const altResponse = await fetch(`${API_BASE_URL}/wishlist/remove`, {
                 method: 'POST',
                 headers: getHeader(),
                 body: JSON.stringify({ product_id: productId })
             });
-            return await response.json();
+            return await altResponse.json();
         } catch (error) {
             console.error('Error removing from wishlist:', error);
+            return { success: false };
+        }
+    },
+
+    clearWishlist: async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/all-wishlist`, {
+                method: 'DELETE',
+                headers: getHeader()
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error clearing wishlist:', error);
+            return { success: false };
+        }
+    },
+
+    getFaqs: async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/faqs`, {
+                headers: getHeader()
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching FAQs:', error);
+            return { success: false };
+        }
+    },
+
+    getContactInfo: async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/contact-info`, {
+                headers: getHeader()
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching contact info:', error);
             return { success: false };
         }
     },
@@ -130,6 +175,45 @@ export const userService = {
         } catch (error) {
             console.error('Error fetching profile:', error);
             return { success: false };
+        }
+    },
+
+    updateProfile: async (formDataPayload) => {
+        try {
+            const token = typeof window !== 'undefined' ? localStorage.getItem('userToken') : null;
+            const sessionId = typeof window !== 'undefined' ? getSessionId() : null;
+            const headers = {
+                'Accept': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+                ...(sessionId ? { 'X-Session-Id': sessionId } : {})
+            };
+            const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+                method: 'POST',
+                headers,
+                body: formDataPayload
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            return { success: false, message: 'Network error while updating profile' };
+        }
+    },
+
+    changePassword: async (pwdData) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/change-password`, {
+                method: 'POST',
+                headers: getHeader(),
+                body: JSON.stringify({
+                    current_password: pwdData.current_password,
+                    new_password: pwdData.new_password,
+                    new_password_confirmation: pwdData.new_password_confirmation
+                })
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error changing password:', error);
+            return { success: false, message: 'Network error while changing password' };
         }
     },
 
@@ -318,6 +402,34 @@ export const userService = {
         } catch (error) {
             console.error('Error updating address:', error);
             return { success: false };
+        }
+    },
+
+    createRazorpayOrder: async (orderId) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/payment/razorpay/create-order`, {
+                method: 'POST',
+                headers: getHeader(),
+                body: JSON.stringify({ order_id: orderId })
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error creating Razorpay order:', error);
+            return { success: false, message: error.message };
+        }
+    },
+
+    verifyRazorpayPayment: async (paymentData) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/payment/razorpay/verify`, {
+                method: 'POST',
+                headers: getHeader(),
+                body: JSON.stringify(paymentData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error verifying Razorpay payment:', error);
+            return { success: false, message: error.message };
         }
     }
 };

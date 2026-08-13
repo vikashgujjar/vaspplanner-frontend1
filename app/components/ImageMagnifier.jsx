@@ -5,6 +5,10 @@ export default function ImageMagnifier({ activeImg }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
+  const imgSrc = activeImg && typeof activeImg === "string" && activeImg.trim() !== "" 
+    ? activeImg 
+    : "/placeholder.png";
+
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
     
@@ -31,14 +35,14 @@ export default function ImageMagnifier({ activeImg }) {
     >
       <img 
         className={`w-full h-full transition-opacity duration-300 ${zoom ? 'opacity-0' : 'opacity-100'} object-contain`} 
-        src={activeImg} 
+        src={imgSrc} 
         alt="Product" 
       />
       {zoom && (
         <div
           className="absolute inset-0 bg-no-repeat pointer-events-none"
           style={{
-            backgroundImage: `url(${activeImg})`,
+            backgroundImage: `url(${imgSrc})`,
             backgroundSize: "200%", // Zoom level
             backgroundPosition: `${position.x}% ${position.y}%`,
             backgroundColor: "white"

@@ -32,15 +32,16 @@ export const fetchCartItems = createAsyncThunk(
 
 export const addToCartAsync = createAsyncThunk(
   "cart/addToCart",
-  async (product, { dispatch, rejectWithValue }) => {
+  async (payload, { dispatch, rejectWithValue }) => {
     try {
-      // Use the actual product ID/UUID and variant ID in the API call
-      const productId = product.product_uuid || product.uuid || product.id;
-      const variantId = product.variant_id || (product.activeVariant ? product.activeVariant.id : null);
-      
-      const response = await userService.addToCart(productId, product.qnty || 1, variantId);
+      const productObj = payload.product ? payload.product : payload;
+      const quantity = payload.quantity || payload.qnty || productObj.quantity || productObj.qnty || 1;
+      const productId = productObj.product_uuid || productObj.uuid || productObj.id;
+      const variantId = payload.variant_id || productObj.variant_id || (productObj.activeVariant ? productObj.activeVariant.id : null);
+
+      const response = await userService.addToCart(productId, quantity, variantId);
       if (response.success) {
-        dispatch(addCart(product));
+        dispatch(addCart({ ...productObj, qnty: quantity }));
         dispatch(fetchCartItems());
         return response;
       } else {

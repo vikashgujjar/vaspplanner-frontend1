@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { executePendingCartAction } from "../utils/pendingCart";
 import {
   User,
   Mail,
@@ -23,6 +26,8 @@ import { toast } from "react-toastify";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function SignUp() {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -93,9 +98,12 @@ export default function SignUp() {
         localStorage.setItem("userData", JSON.stringify(result.data.user));
         localStorage.setItem("cartNeedsSync", "true");
         localStorage.setItem("wishlistNeedsSync", "true");
-        setTimeout(() => {
-          window.location.href = "/user/login";
-        }, 2000);
+        window.dispatchEvent(new Event("auth-change"));
+
+        const handled = await executePendingCartAction(dispatch, router);
+        if (!handled) {
+          router.replace("/user/profile");
+        }
       } else {
         if (result.errors) {
           setApiErrors(result.errors);

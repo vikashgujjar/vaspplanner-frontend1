@@ -1,70 +1,109 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import PolicyLayout from "./PolicyLayout";
-import { HelpCircle, ChevronDown, ChevronUp, Search, MessageCircle, Phone, Mail } from "lucide-react";
+import { HelpCircle, ChevronDown, ChevronUp, Search, MessageCircle, Phone, Mail, Loader2 } from "lucide-react";
+import { userService } from "../services/userService";
+
+const FALLBACK_FAQS = [
+  {
+    category: "Ordering",
+    questions: [
+      {
+        q: "How do I place an order on VASP Planner?",
+        a: "Simply browse our collection, select your desired gift, flower, or cake, add it to the cart, and proceed to checkout. You'll need to provide delivery details and complete the payment to confirm your order."
+      },
+      {
+        q: "Can I customize a cake or gift hamper?",
+        a: "Yes! We offer various customization options for cakes (flavors, messages) and hampers. For specific requests not visible on the site, please contact our support team."
+      },
+      {
+        q: "How can I track my order?",
+        a: "You can track your order using the 'Track Order' page by entering your order ID and email/phone number. You'll also receive real-time updates via SMS and email."
+      }
+    ]
+  },
+  {
+    category: "Delivery",
+    questions: [
+      {
+        q: "Do you offer same-day delivery?",
+        a: "Yes, we offer same-day delivery for select items like fresh flowers and cakes in major cities, provided the order is placed before our daily cutoff time (usually 6:00 PM)."
+      },
+      {
+        q: "What areas do you deliver to?",
+        a: "We currently deliver to Bangalore, Hisar, Chandigarh, Panchkula, Mohali, Kharar, and Zirakpur. We are constantly expanding our service areas."
+      },
+      {
+        q: "Do you deliver at midnight?",
+        a: "Yes, we have a specialized midnight delivery service for birthdays and anniversaries. Please select the 'Midnight Delivery' slot during checkout."
+      }
+    ]
+  },
+  {
+    category: "Payments & Refunds",
+    questions: [
+      {
+        q: "What payment methods do you accept?",
+        a: "We accept all major credit/debit cards, UPI, Net Banking, and popular mobile wallets like Paytm and Amazon Pay."
+      },
+      {
+        q: "What is your refund policy?",
+        a: "Refunds are processed for defective non-perishable items reported within 24 hours. For fresh items like cakes and flowers, refunds are only issued if the product was severely damaged or incorrect at delivery."
+      }
+    ]
+  }
+];
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState("0-0");
   const [searchTerm, setSearchTerm] = useState("");
+  const [faqCategories, setFaqCategories] = useState([]);
+  const [contactInfo, setContactInfo] = useState({
+    email: "support@vaspplanner.com",
+    phone: "+91 1800-123-4567",
+    whatsapp: "+91 9876543210",
+    support_hours: "Mon - Sat: 9:00 AM - 8:00 PM"
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
-  const faqs = [
-    {
-      category: "Ordering",
-      questions: [
-        {
-          q: "How do I place an order on VASP Planner?",
-          a: "Simply browse our collection, select your desired gift, flower, or cake, add it to the cart, and proceed to checkout. You'll need to provide delivery details and complete the payment to confirm your order."
-        },
-        {
-          q: "Can I customize a cake or gift hamper?",
-          a: "Yes! We offer various customization options for cakes (flavors, messages) and hampers. For specific requests not visible on the site, please contact our support team."
-        },
-        {
-          q: "How can I track my order?",
-          a: "You can track your order using the 'Track Order' page by entering your order ID and email/phone number. You'll also receive real-time updates via SMS and email."
+  useEffect(() => {
+    async function loadFaqs() {
+      setIsLoading(true);
+      try {
+        const res = await userService.getFaqs();
+        if (res?.success && res?.categories?.length > 0) {
+          setFaqCategories(res.categories);
+        } else {
+          setFaqCategories(FALLBACK_FAQS);
         }
-      ]
-    },
-    {
-      category: "Delivery",
-      questions: [
-        {
-          q: "Do you offer same-day delivery?",
-          a: "Yes, we offer same-day delivery for select items like fresh flowers and cakes in major cities, provided the order is placed before our daily cutoff time (usually 6:00 PM)."
-        },
-        {
-          q: "What areas do you deliver to?",
-          a: "We currently deliver to Bangalore, Hisar, Chandigarh, Panchkula, Mohali, Kharar, and Zirakpur. We are constantly expanding our service areas."
-        },
-        {
-          q: "Do you deliver at midnight?",
-          a: "Yes, we have a specialized midnight delivery service for birthdays and anniversaries. Please select the 'Midnight Delivery' slot during checkout."
+        if (res?.contact_info) {
+          setContactInfo(res.contact_info);
         }
-      ]
-    },
-    {
-      category: "Payments & Refunds",
-      questions: [
-        {
-          q: "What payment methods do you accept?",
-          a: "We accept all major credit/debit cards, UPI, Net Banking, and popular mobile wallets like Paytm and Amazon Pay."
-        },
-        {
-          q: "What is your refund policy?",
-          a: "Refunds are processed for defective non-perishable items reported within 24 hours. For fresh items like cakes and flowers, refunds are only issued if the product was severely damaged or incorrect at delivery."
-        }
-      ]
+      } catch (err) {
+        console.error("Failed to load dynamic FAQs:", err);
+        setFaqCategories(FALLBACK_FAQS);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  ];
+    loadFaqs();
+  }, []);
 
-  const filteredFaqs = faqs.map(cat => ({
+  const activeFaqs = faqCategories.length > 0 ? faqCategories : FALLBACK_FAQS;
+
+  const filteredFaqs = activeFaqs.map(cat => ({
     ...cat,
-    questions: cat.questions.filter(q =>
-      q.q.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      q.a.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  })).filter(cat => cat.questions.length > 0);
+    category: cat.category || cat.name,
+    questions: (cat.questions || cat.faqs || []).filter(q => {
+      const qText = q.q || q.question || "";
+      const aText = q.a || q.answer || "";
+      return (
+        qText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        aText.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    })
+  })).filter(cat => cat.questions && cat.questions.length > 0);
 
   return (
     <PolicyLayout
@@ -141,16 +180,17 @@ export default function FAQ() {
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent" />
           <div className="relative z-10 grid lg:grid-cols-2 gap-8 items-center text-center lg:text-left">
             <div>
-              <h3 className="text-3xl font-black text-white mb-4 uppercase tracking-wide">Still have <span className="text-amber-400">Questions?</span></h3>
-              <p className="text-gray-400">Can't find the answer you're looking for? Please chat to our friendly team.</p>
+              <h3 className="text-3xl font-black text-white mb-3 uppercase tracking-wide">Still have <span className="text-amber-400">Questions?</span></h3>
+              <p className="text-gray-400 text-sm mb-4">Email: <a href={`mailto:${contactInfo.email}`} className="text-amber-400 font-bold hover:underline">{contactInfo.email}</a> • Call: <a href={`tel:${contactInfo.phone}`} className="text-amber-400 font-bold hover:underline">{contactInfo.phone}</a></p>
+              <p className="text-xs text-gray-500">{contactInfo.support_hours}</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-end">
-              <Link href="/support" className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-amber-400 transition-colors text-nowrap flex items-center justify-center gap-2">
-                <MessageCircle size={18} /> Chat to Support
-              </Link>
-              <Link href="/contact-us" className="px-8  text-nowrap py-4 bg-white/10 text-white border border-white/20 font-bold rounded-xl hover:bg-white/20 transition-colors flex items-center justify-center gap-2">
-                Contact Us
-              </Link>
+              <a href={`mailto:${contactInfo.email}`} className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-amber-400 transition-colors text-nowrap flex items-center justify-center gap-2">
+                <Mail size={18} /> Email Us
+              </a>
+              <a href={`tel:${contactInfo.phone}`} className="px-8 text-nowrap py-4 bg-white/10 text-white border border-white/20 font-bold rounded-xl hover:bg-white/20 transition-colors flex items-center justify-center gap-2">
+                <Phone size={18} /> Call Support
+              </a>
             </div>
           </div>
         </div>

@@ -1,13 +1,60 @@
-import { FaRegHeart, FaStarHalfAlt } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa";
+"use client";
+import React, { useState, useEffect } from "react";
+import { FaRegHeart, FaStarHalfAlt, FaHeart } from "react-icons/fa";
 import Link from "next/link";
 import { FaRegStar, FaStar } from "react-icons/fa6";
 import { CiStar } from "react-icons/ci";
 import { FaRegStarHalfStroke } from "react-icons/fa6";
 import { IoHeartCircle } from "react-icons/io5";
 import { IoMdEye } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addWishAsync, removeWishAsync } from "../store/wishListSlice";
+import AuthModal from "./AuthModal";
 
 const ProductCard = ({ product, bg }) => {
+  const dispatch = useDispatch();
+  const wishList = useSelector((state) => state.wish.wishlist);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsLoggedIn(!!localStorage.getItem("userToken"));
+    };
+    checkAuth();
+    window.addEventListener("auth-change", checkAuth);
+    return () => window.removeEventListener("auth-change", checkAuth);
+  }, []);
+
+  const targetId = product?.id || product?.uuid || product?.product_id;
+  const isWishlisted = wishList?.some((item) =>
+    String(item.id) === String(targetId) ||
+    String(item.uuid) === String(targetId) ||
+    String(item.product_id) === String(targetId) ||
+    String(item.product_uuid) === String(targetId)
+  );
+
+  const handleWishlistToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!product) return;
+
+    if (!isLoggedIn) {
+      toast.info("Please login to manage your wishlist", { icon: "🔐" });
+      setIsAuthModalOpen(true);
+      return;
+    }
+
+    if (isWishlisted) {
+      dispatch(removeWishAsync(targetId));
+      toast.error("Removed from wishlist", { icon: "💔" });
+    } else {
+      dispatch(addWishAsync(product));
+      toast.success("Added to wishlist", { icon: "💚" });
+    }
+  };
+
   const {
     id,
     name,
@@ -20,27 +67,7 @@ const ProductCard = ({ product, bg }) => {
     title,
     tag,
     discount,
-  } = product;
-
-  // id: 2,
-  // toggle: false,
-  // name: "Diamond Ring",
-  // price: 38,
-  // originalPrice: 50,
-  // discount: "50",
-  // img1: "/img/dimondProdcut/2.webp",
-  // img2: "/img/dimondProdcut/3.webp",
-  // categorie: "Rings",
-  // title: "Diamond Ring Crafted with Precision, Offering a Luxurious Look",
-  // price: 38500,
-  // tag: "Best Seller",
-  // classic: false,
-  // inerimgList: [
-  //   "/img/dimondProdcut/2.webp",
-  //   "/img/dimondProdcut/3.webp",
-  //   "/img/dimondProdcut/4.webp",
-  // ],
-  // createdAt: "2024-05-01",
+  } = product || {};
 
   const rating = 5;
   const fullStars = Math.floor(rating);
@@ -48,11 +75,14 @@ const ProductCard = ({ product, bg }) => {
   const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
   return (
     <>
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       <div className="group h-[500px] transition-shadow duration-500 ease-in-out overflow-hidden relative">
         <div className="relative h-[300px] transition-all duration-500 ease-in-out">
-          <div className="discount h-12 text-xs text-center flex items-center justify-center text-black w-12 absolute z-10 left-5 top-4 bg-white rounded-full">
-            {discount}%
-          </div>
+          {discount && (
+            <div className="discount h-12 text-xs text-center flex items-center justify-center text-black w-12 absolute z-10 left-5 top-4 bg-white rounded-full">
+              {discount}%
+            </div>
+          )}
 
           <img
             src={img1}
@@ -62,14 +92,18 @@ const ProductCard = ({ product, bg }) => {
 
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out">
             <img
-              src={img2}
+              src={img2 || img1}
               alt={name}
               className="w-full h-full object-cover transition-opacity duration-500 ease-in-out"
             />
             <div className="absolute inset-0 translate-x-8 group-hover:translate-x-0 duration-500 ease-in-out transition-transform flex flex-col gap-y-4 items-end py-4 px-2 text-black text-lg">
-              <div className="p-2 bg-white hover:text-amber-700 rounded-full w-fit transition-all duration-300">
-                <FaRegHeart />
-              </div>
+              <button
+                type="button"
+                onClick={handleWishlistToggle}
+                className="p-2 bg-white hover:text-amber-700 rounded-full w-fit transition-all duration-300 shadow-md cursor-pointer"
+              >
+                {isWishlisted ? <FaHeart className="text-rose-500" /> : <FaRegHeart />}
+              </button>
               <div className="p-2 bg-white hover:text-amber-700 rounded-full w-fit transition-all duration-300">
                 <IoMdEye />
               </div>

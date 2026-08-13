@@ -11,13 +11,16 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addWishAsync, removeWishAsync } from "../store/wishListSlice";
 import { addToCartAsync, removeFromCartAsync } from "../store/cartSlice";
+import { savePendingCartAction } from "../utils/pendingCart";
 import AuthModal from "./AuthModal";
 
 export default function ProductAyurvedCard({ product }) {
+  const router = useRouter();
   const {
     id,
     img,
@@ -52,7 +55,18 @@ export default function ProductAyurvedCard({ product }) {
   const dispatch = useDispatch();
 
   const isWishList = (productId) => {
-    return wishList?.find((elm) => String(elm.id) === String(productId));
+    return wishList?.some((elm) =>
+      String(elm.id) === String(productId) ||
+      String(elm.uuid) === String(productId) ||
+      String(elm.product_id) === String(productId) ||
+      String(elm.product_uuid) === String(productId) ||
+      (product?.uuid && (
+        String(elm.id) === String(product.uuid) ||
+        String(elm.uuid) === String(product.uuid) ||
+        String(elm.product_id) === String(product.uuid) ||
+        String(elm.product_uuid) === String(product.uuid)
+      ))
+    );
   };
 
   const isInCart = (productId) => {
@@ -70,8 +84,8 @@ export default function ProductAyurvedCard({ product }) {
     );
   };
 
-  const handleWishListToogle = (product) => {
-    if (!product) return;
+  const handleWishListToogle = (prod) => {
+    if (!prod) return;
 
     if (!isLoggedIn) {
       toast.info("Please login to manage your wishlist", { icon: "🔐" });
@@ -79,14 +93,15 @@ export default function ProductAyurvedCard({ product }) {
       return;
     }
 
-    if (isWishList(product.id)) {
-      dispatch(removeWishAsync(product.id));
+    const targetId = prod.id || prod.uuid || prod.product_id;
+    if (isWishList(targetId)) {
+      dispatch(removeWishAsync(targetId));
       toast.error("Removed from wishlist", {
         icon: "💔",
         style: { borderRadius: "12px" },
       });
     } else {
-      dispatch(addWishAsync(product));
+      dispatch(addWishAsync(prod));
       toast.success("Added to wishlist", {
         icon: "💚",
         style: { borderRadius: "12px" },
@@ -404,8 +419,13 @@ export default function ProductAyurvedCard({ product }) {
               <button
                 onClick={() => {
                   if (!isLoggedIn) {
-                    toast.info("Please login to add items to your cart", { icon: "🔐" });
-                    setIsAuthModalOpen(true);
+                    toast.info("Please login to continue adding item to cart", { icon: "🔐" });
+                    savePendingCartAction({
+                      product: { ...product, qnty: 1 },
+                      quantity: 1,
+                      redirectUrl: window.location.pathname
+                    });
+                    router.push("/user/login");
                     return;
                   }
 

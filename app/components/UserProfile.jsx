@@ -1,14 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import CompleteProfileForm from "./CompleteProfileForm";
 import { useSelector, useDispatch } from "react-redux";
-import { clearWishlist, removeWish, fetchWishlistItems } from "../store/wishListSlice";
+import { clearWishlist, clearWishlistAsync, removeWish, fetchWishlistItems } from "../store/wishListSlice";
 import { userService } from "../services/userService";
 import ProductAyurvedCard from "./ProductAyurvedCard";
 import Link from "next/link";
 import EditProfileForm from "./EditProfileForm";
 import { toast } from "react-toastify";
+import { parseServerErrors, FieldError } from "../utils/serverValidation";
 import { X, ExternalLink, AlertTriangle, RotateCcw, XCircle } from "lucide-react";
 import {
   User,
@@ -45,6 +46,8 @@ import {
 } from "lucide-react";
 
 export default function UserProfile() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentTab, setCurrentTab] = useState("My Profile");
   const dispatch = useDispatch();
   const wishList = useSelector((state) => state.wish.wishlist);
@@ -58,7 +61,28 @@ export default function UserProfile() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [isActionLoading, setIsActionLoading] = useState(false);
-  const router = useRouter();
+
+  useEffect(() => {
+    const tabParam = searchParams?.get("tab");
+    if (tabParam) {
+      const lower = tabParam.toLowerCase();
+      if (lower === "orders" || lower === "my orders" || lower === "my-orders") {
+        setCurrentTab("My Orders");
+      } else if (lower === "wishlist" || lower === "my wishlist" || lower === "my-wishlist") {
+        setCurrentTab("My Wishlist");
+      } else if (lower === "password" || lower === "change password") {
+        setCurrentTab("Change Password");
+      } else if (lower === "help" || lower === "help center") {
+        setCurrentTab("Help Center");
+      } else if (lower === "profile" || lower === "my profile") {
+        setCurrentTab("My Profile");
+      }
+    }
+    const orderId = searchParams?.get("order_id") || searchParams?.get("uuid");
+    if (orderId) {
+      fetchOrderDetails(orderId);
+    }
+  }, [searchParams]);
 
   const fetchOrderDetails = async (uuid) => {
     if (!uuid) {
@@ -375,7 +399,7 @@ export default function UserProfile() {
           </span>
           {wishList.length > 0 && (
             <button
-              onClick={() => dispatch(clearWishlist())}
+              onClick={() => dispatch(clearWishlistAsync())}
               className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 font-semibold rounded-xl hover:bg-red-100 transition-colors"
             >
               <Trash2 size={16} />
@@ -430,11 +454,45 @@ export default function UserProfile() {
 
   // ==================== HELP CENTER TAB ====================
   const HelpCenter = () => {
-    const faqs = [
-      { question: "How do I track my order?", answer: "You can track your order from the My Orders section in real-time." },
-      { question: "What is your delivery policy?", answer: "Orders placed before 6 PM are eligible for same-day delivery in select cities." },
-      { question: "How do I earn reward coins?", answer: "You earn coins on every purchase. 1 coin = ₹1 and can be redeemed on future orders." },
-    ];
+    const [dynamicFaqs, setDynamicFaqs] = useState([]);
+    const [contactDetails, setContactDetails] = useState({
+      email: "support@vaspplanner.com",
+      phone: "+91 1800-123-4567",
+      live_chat: "Available 24/7",
+    });
+    const [isLoadingFaqs, setIsLoadingFaqs] = useState(true);
+
+    useEffect(() => {
+      async function loadHelpData() {
+        try {
+          const [faqsRes, contactRes] = await Promise.all([
+            userService.getFaqs(),
+            userService.getContactInfo()
+          ]);
+
+          if (faqsRes?.success && faqsRes?.data?.length > 0) {
+            setDynamicFaqs(faqsRes.data);
+          } else {
+            setDynamicFaqs([
+              { question: "How do I track my order?", answer: "You can track your order from the My Orders section in real-time." },
+              { question: "What is your delivery policy?", answer: "Orders placed before 6 PM are eligible for same-day delivery in select cities." },
+              { question: "How do I earn reward coins?", answer: "You earn coins on every purchase. 1 coin = ₹1 and can be redeemed on future orders." },
+            ]);
+          }
+
+          if (contactRes?.success && contactRes?.data) {
+            setContactDetails(contactRes.data);
+          } else if (faqsRes?.contact_info) {
+            setContactDetails(faqsRes.contact_info);
+          }
+        } catch (err) {
+          console.error("Error loading help center data:", err);
+        } finally {
+          setIsLoadingFaqs(false);
+        }
+      }
+      loadHelpData();
+    }, []);
 
     return (
       <div className="space-y-6">
@@ -444,9 +502,9 @@ export default function UserProfile() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { icon: Mail, title: "Email Support", desc: "support@vaspplanner.com", action: "Send Email", gradient: "from-violet-500 to-purple-600", bg: "from-violet-50 to-purple-50" },
-            { icon: Phone, title: "Phone Support", desc: "+91 1800-123-4567", action: "Call Now", gradient: "from-blue-500 to-indigo-600", bg: "from-blue-50 to-indigo-50" },
-            { icon: MessageCircle, title: "Live Chat", desc: "Available 24/7", action: "Start Chat", gradient: "from-emerald-500 to-teal-600", bg: "from-emerald-50 to-teal-50" },
+            { icon: Mail, title: "Email Support", desc: contactDetails.email, action: "Send Email", href: `mailto:${contactDetails.email}`, gradient: "from-violet-500 to-purple-600", bg: "from-violet-50 to-purple-50" },
+            { icon: Phone, title: "Phone Support", desc: contactDetails.phone, action: "Call Now", href: `tel:${contactDetails.phone}`, gradient: "from-blue-500 to-indigo-600", bg: "from-blue-50 to-indigo-50" },
+            { icon: MessageCircle, title: "Live Chat", desc: contactDetails.live_chat || "Available 24/7", action: "Start Chat", href: "/support", gradient: "from-emerald-500 to-teal-600", bg: "from-emerald-50 to-teal-50" },
           ].map((item, index) => (
             <div key={index} className={`bg-gradient-to-br ${item.bg} rounded-2xl p-6 border border-gray-100 text-center`}>
               <div className={`w-14 h-14 bg-gradient-to-br ${item.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
@@ -454,9 +512,9 @@ export default function UserProfile() {
               </div>
               <h6 className="font-bold text-gray-900 mb-1">{item.title}</h6>
               <p className="text-sm text-gray-500 mb-4">{item.desc}</p>
-              <button className="text-sm font-semibold text-violet-600 hover:text-violet-700 transition-colors">
+              <a href={item.href} className="inline-block text-sm font-semibold text-violet-600 hover:text-violet-700 transition-colors">
                 {item.action} →
-              </button>
+              </a>
             </div>
           ))}
         </div>
@@ -466,13 +524,13 @@ export default function UserProfile() {
             Frequently Asked Questions
           </h6>
           <div className="space-y-3">
-            {faqs.map((faq, index) => (
+            {dynamicFaqs.map((faq, index) => (
               <details key={index} className="group bg-gray-50 rounded-xl overflow-hidden">
                 <summary className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <span className="font-semibold text-gray-800">{faq.question}</span>
+                  <span className="font-semibold text-gray-800">{faq.question || faq.q}</span>
                   <ChevronRight size={18} className="text-gray-400 group-open:rotate-90 transition-transform" />
                 </summary>
-                <p className="px-4 pb-4 text-sm text-gray-600">{faq.answer}</p>
+                <p className="px-4 pb-4 text-sm text-gray-600">{faq.answer || faq.a}</p>
               </details>
             ))}
           </div>
@@ -483,6 +541,7 @@ export default function UserProfile() {
 
   // ==================== CHANGE PASSWORD TAB ====================
   const ChangePassword = () => {
+    const [pwdErrors, setPwdErrors] = useState({});
     const [pwdData, setPwdData] = useState({
       current_password: "",
       new_password: "",
@@ -497,8 +556,10 @@ export default function UserProfile() {
 
     const handlePwdChange = async (e) => {
       e.preventDefault();
+      setPwdErrors({});
 
       if (pwdData.new_password !== pwdData.new_password_confirmation) {
+        setPwdErrors({ new_password_confirmation: "New password and confirm password do not match!" });
         toast.error("New password and confirm password do not match!");
         return;
       }
@@ -510,12 +571,9 @@ export default function UserProfile() {
           toast.success(res.message || "Password changed successfully.");
           setPwdData({ current_password: "", new_password: "", new_password_confirmation: "" });
         } else {
-          // Handle backend validation errors
-          if (res.errors) {
-            Object.values(res.errors).flat().forEach(err => toast.error(err));
-          } else {
-            toast.error(res.message || "Failed to change password.");
-          }
+          const { fieldErrors, summaryMessage } = parseServerErrors(res);
+          setPwdErrors(fieldErrors);
+          toast.error(summaryMessage || "Failed to change password.");
         }
       } catch (error) {
         console.error("Change password error:", error);
@@ -541,7 +599,7 @@ export default function UserProfile() {
                   required
                   value={pwdData.current_password}
                   onChange={(e) => setPwdData({ ...pwdData, current_password: e.target.value })}
-                  className="w-full px-4 pr-12 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+                  className={`w-full px-4 pr-12 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all ${pwdErrors.current_password ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                   placeholder="Enter current password"
                 />
                 <button
@@ -552,6 +610,7 @@ export default function UserProfile() {
                   {showPasswords.current ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              <FieldError error={pwdErrors.current_password} />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">New Password</label>
@@ -561,7 +620,7 @@ export default function UserProfile() {
                   required
                   value={pwdData.new_password}
                   onChange={(e) => setPwdData({ ...pwdData, new_password: e.target.value })}
-                  className="w-full px-4 pr-12 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+                  className={`w-full px-4 pr-12 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all ${pwdErrors.new_password ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                   placeholder="Enter new password"
                 />
                 <button
@@ -572,6 +631,7 @@ export default function UserProfile() {
                   {showPasswords.new ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              <FieldError error={pwdErrors.new_password} />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm New Password</label>
@@ -581,7 +641,7 @@ export default function UserProfile() {
                   required
                   value={pwdData.new_password_confirmation}
                   onChange={(e) => setPwdData({ ...pwdData, new_password_confirmation: e.target.value })}
-                  className="w-full px-4 pr-12 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+                  className={`w-full px-4 pr-12 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all ${pwdErrors.new_password_confirmation ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                   placeholder="Confirm new password"
                 />
                 <button
@@ -592,6 +652,7 @@ export default function UserProfile() {
                   {showPasswords.confirm ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              <FieldError error={pwdErrors.new_password_confirmation} />
             </div>
             <button
               type="submit"

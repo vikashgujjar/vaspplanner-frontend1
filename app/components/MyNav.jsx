@@ -20,7 +20,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchHomeLayout, searchProducts } from "../services/productService";
+import { fetchHomeLayout, searchProducts, getCachedSearchResult, preloadProductSearchIndex } from "../services/productService";
 import { setError, setLocation, setPincode, setStatus } from "../store/locationSlice";
 
 export default function PremiumHeader({ initialLayoutData }) {
@@ -243,6 +243,7 @@ export default function PremiumHeader({ initialLayoutData }) {
     }
 
     window.addEventListener("scroll", handleScroll)
+    preloadProductSearchIndex();
 
     return () => {
       window.removeEventListener("scroll", handleScroll)
@@ -252,24 +253,78 @@ export default function PremiumHeader({ initialLayoutData }) {
   const visibleCategories = navCategories.slice(0, 8);
   const moreCategories = navCategories.slice(8);
 
-  useEffect(() => {
-    if (!searchQuery.trim()) {
+  const abortControllerRef = useRef(null);
+
+  const executeSearch = async (query) => {
+    const trimmed = query.trim();
+    if (!trimmed) {
       setSearchResults([]);
       setSearchCategories([]);
       setIsSearching(false);
       return;
     }
 
-    const timer = setTimeout(async () => {
-      setIsSearching(true);
-      const results = await searchProducts(searchQuery);
-      setSearchResults(results.products || []);
-      setSearchCategories(results.categories || []);
-      setIsSearching(false);
-    }, 500);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
 
-    return () => clearTimeout(timer);
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    try {
+      const results = await searchProducts(trimmed, '', controller.signal);
+      if (results) {
+        setSearchResults(results.products || []);
+        setSearchCategories(results.categories || []);
+      }
+    } catch (err) {
+      // Ignore AbortError
+    } finally {
+      if (abortControllerRef.current === controller) {
+        setIsSearching(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const trimmed = searchQuery.trim();
+    if (!trimmed) {
+      setSearchResults([]);
+      setSearchCategories([]);
+      setIsSearching(false);
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      return;
+    }
+
+    // 1. Instant 0ms response if cached or local index match available
+    const cached = getCachedSearchResult(trimmed);
+    if (cached) {
+      setSearchResults(cached.products || []);
+      setSearchCategories(cached.categories || []);
+      if (!cached.isPartial) {
+        setIsSearching(false);
+        return;
+      }
+    }
+
+    setIsSearching(true);
+    const timer = setTimeout(() => {
+      executeSearch(trimmed);
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [searchQuery]);
+
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setSearchFocused(true);
+    executeSearch(searchQuery);
+  };
 
   const popularProducts = searchResults.slice(0, 4);
 
@@ -295,6 +350,8 @@ export default function PremiumHeader({ initialLayoutData }) {
           <img
             src={product.image}
             alt={product.title}
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
             onError={(e) => {
               e.target.src = "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=500&auto=format&fit=crop";
@@ -352,9 +409,9 @@ export default function PremiumHeader({ initialLayoutData }) {
               <Sparkles className="text-amber-400 ml-auto" size={16} />
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {navCategories.slice(0, 6).map((cat) => (
+              {navCategories.slice(0, 6).map((cat, idx) => (
                 <Link
-                  key={cat.uuid || cat.id}
+                  key={cat.uuid || cat.id || cat.slug || `top-cat-${idx}`}
                   href={`/category/${cat.slug}`}
                   onClick={() => {
                     setSearchFocused(false);
@@ -372,14 +429,26 @@ export default function PremiumHeader({ initialLayoutData }) {
           </div>
         )}
 
-        {isSearching && (
-          <div className="p-12 text-center">
-            <div className="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-400 text-sm">Searching for products...</p>
+        {isSearching && searchResults.length === 0 && (
+          <div className="p-5 space-y-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Searching...</span>
+              <div className="w-4 h-4 border-2 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+            </div>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/5 animate-pulse">
+                <div className="w-14 h-14 bg-white/10 rounded-lg flex-shrink-0"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="w-3/4 h-3.5 bg-white/10 rounded"></div>
+                  <div className="w-1/2 h-3 bg-white/10 rounded"></div>
+                </div>
+                <div className="w-12 h-4 bg-white/10 rounded"></div>
+              </div>
+            ))}
           </div>
         )}
 
-        {showSearchResults && !isSearching && (
+        {showSearchResults && (!isSearching || searchResults.length > 0) && (
           <div className="p-5">
             {searchCategories.length > 0 && (
               <div className="mb-6">
@@ -388,9 +457,9 @@ export default function PremiumHeader({ initialLayoutData }) {
                   Found in Categories
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {searchCategories.map((cat) => (
+                  {searchCategories.map((cat, idx) => (
                     <Link
-                      key={cat.uuid || cat.id}
+                      key={cat.uuid || cat.id || cat.slug || `search-cat-${idx}`}
                       href={`/category/${cat.slug}`}
                       onClick={() => {
                         setSearchFocused(false);
@@ -408,11 +477,12 @@ export default function PremiumHeader({ initialLayoutData }) {
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
               <Search size={14} />
               Products ({searchResults.length})
+              {isSearching && <span className="text-[10px] text-amber-400 ml-auto lowercase">updating...</span>}
             </h3>
             <ul className="space-y-1">
               {searchResults.length > 0 ? (
-                searchResults.slice(0, 8).map((product) => (
-                  <li key={product.id}>
+                searchResults.slice(0, 8).map((product, idx) => (
+                  <li key={product.id || product.uuid || `prod-${idx}`}>
                     <ProductSearchItem
                       product={product}
                       onClick={() => {
@@ -694,7 +764,7 @@ export default function PremiumHeader({ initialLayoutData }) {
 
             {/* Search Bar - Desktop */}
             <div ref={searchRef} className="hidden md:flex flex-1 max-w-xl mx-6 relative">
-              <div className="relative w-full">
+              <form onSubmit={handleSearchSubmit} className="relative w-full">
                 <input
                   type="text"
                   placeholder="Search for gifts, cakes, flowers..."
@@ -706,17 +776,22 @@ export default function PremiumHeader({ initialLayoutData }) {
                 <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
                   {searchQuery && (
                     <button
+                      type="button"
                       onClick={() => setSearchQuery("")}
                       className="text-gray-500 hover:text-white p-1.5 hover:bg-white/10 rounded-lg transition-all"
                     >
                       <X size={16} />
                     </button>
                   )}
-                  <div className="w-9 h-9 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center cursor-pointer hover:from-amber-500 hover:to-amber-700 transition-all shadow-lg shadow-amber-500/20">
+                  <button
+                    type="submit"
+                    aria-label="Search"
+                    className="w-9 h-9 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center cursor-pointer hover:from-amber-500 hover:to-amber-700 transition-all shadow-lg shadow-amber-500/20"
+                  >
                     <Search className="text-black" size={16} />
-                  </div>
+                  </button>
                 </div>
-              </div>
+              </form>
               <SearchDropdown />
             </div>
 
@@ -853,19 +928,25 @@ export default function PremiumHeader({ initialLayoutData }) {
           {/* Mobile Search Bar - Expandable */}
           <div className={`md:hidden overflow-hidden transition-all duration-300 ${mobileSearchOpen ? "max-h-[500px] pb-4" : "max-h-0"}`}>
             <div className="relative w-full" ref={searchRefMobile}>
-              <input
-                type="text"
-                placeholder="Search for gifts, cakes, flowers..."
-                value={searchQuery}
-                onFocus={() => setSearchFocused(true)}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full py-3 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/50 text-sm text-white placeholder:text-gray-500"
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                <div className="w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center">
-                  <Search className="text-black" size={14} />
+              <form onSubmit={handleSearchSubmit} className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Search for gifts, cakes, flowers..."
+                  value={searchQuery}
+                  onFocus={() => setSearchFocused(true)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full py-3 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/50 text-sm text-white placeholder:text-gray-500"
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <button
+                    type="submit"
+                    aria-label="Search"
+                    className="w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center cursor-pointer hover:from-amber-500 hover:to-amber-700 transition-all"
+                  >
+                    <Search className="text-black" size={14} />
+                  </button>
                 </div>
-              </div>
+              </form>
               <SearchDropdown />
             </div>
           </div>

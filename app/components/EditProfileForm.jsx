@@ -1,14 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FiUser, FiMail, FiPhone, FiMapPin, FiCamera, FiSave } from "react-icons/fi";
 import { BadgeCheck, Check, MapPin, Sparkles } from "lucide-react";
 import { toast } from "react-toastify";
 import { userService } from "../services/userService";
-import { useEffect } from "react";
 import { locationService } from "../services/locationService";
+import { parseServerErrors, FieldError } from "../utils/serverValidation";
 
 export default function EditProfileForm({ setShowEditProfile, currentUserData }) {
+    const [apiErrors, setApiErrors] = useState({});
     const [formData, setFormData] = useState({
         firstName: currentUserData?.first_name || currentUserData?.name?.split(" ")[0] || "",
         lastName: currentUserData?.last_name || currentUserData?.name?.split(" ").slice(1).join(" ") || "",
@@ -272,6 +273,7 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setApiErrors({});
 
         const formDataPayload = new FormData();
         formDataPayload.append('first_name', formData.firstName);
@@ -305,7 +307,9 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                     window.location.reload();
                 }, 1500);
             } else {
-                toast.error(res.message || "Failed to update profile");
+                const { fieldErrors, summaryMessage } = parseServerErrors(res);
+                setApiErrors(fieldErrors);
+                toast.error(summaryMessage || "Failed to update profile");
             }
         } catch (error) {
             console.error("Update profile error:", error);
@@ -373,17 +377,18 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                                 </div>
                                 Personal Information
                             </h6>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-2">First Name <span className="text-red-500">*</span></label>
                                     <input
                                         name="firstName"
                                         type="text"
                                         required
-                                        className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm"
+                                        className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all shadow-sm ${apiErrors.first_name ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                                         value={formData.firstName}
                                         onChange={handleChange}
                                     />
+                                    <FieldError error={apiErrors.first_name} />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Last Name <span className="text-red-500">*</span></label>
@@ -391,17 +396,18 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                                         name="lastName"
                                         type="text"
                                         required
-                                        className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm"
+                                        className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all shadow-sm ${apiErrors.last_name ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                                         value={formData.lastName}
                                         onChange={handleChange}
                                     />
+                                    <FieldError error={apiErrors.last_name} />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Gender <span className="text-red-500">*</span></label>
                                     <select
                                         name="gender"
                                         required
-                                        className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm"
+                                        className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all shadow-sm ${apiErrors.gender ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                                         value={formData.gender}
                                         onChange={handleChange}
                                     >
@@ -409,6 +415,7 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                                         <option value="Female">Female</option>
                                         <option value="Other">Other</option>
                                     </select>
+                                    <FieldError error={apiErrors.gender} />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Date of Birth <span className="text-red-500">*</span></label>
@@ -416,20 +423,22 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                                         name="dob"
                                         type="date"
                                         required
-                                        className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm"
+                                        className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all shadow-sm ${apiErrors.dob ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                                         value={formData.dob}
                                         onChange={handleChange}
                                     />
+                                    <FieldError error={apiErrors.dob} />
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Anniversary Date (Optional)</label>
                                     <input
                                         name="anniversary"
                                         type="date"
-                                        className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm"
+                                        className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all shadow-sm ${apiErrors.anniversary ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                                         value={formData.anniversary}
                                         onChange={handleChange}
                                     />
+                                    <FieldError error={apiErrors.anniversary} />
                                 </div>
                             </div>
                         </div>
@@ -448,7 +457,7 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                                         <label className="block text-sm font-bold text-gray-400 mb-2 flex items-center justify-between">
                                             Email Address (Read Only)
                                             <span className="flex items-center gap-1 text-emerald-600 text-[10px] uppercase font-bold tracking-wider">
-                                                <BadgeCheck size={12} /> Verified
+                                                <BadgeCheck size={14} /> Verified
                                             </span>
                                         </label>
                                         <input
@@ -461,7 +470,7 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                                     </div>
                                 )}
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-400 mb-2">Account Role (Read Only)</label>
+                                    <label className="block text-sm font-bold text-gray-400 mb-2">Role</label>
                                     <input
                                         name="role"
                                         type="text"
@@ -476,10 +485,11 @@ export default function EditProfileForm({ setShowEditProfile, currentUserData })
                                         name="phone"
                                         type="tel"
                                         required
-                                        className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all shadow-sm"
+                                        className={`w-full px-4 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all shadow-sm ${(apiErrors.phone || apiErrors.mobile) ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                                         value={formData.phone}
                                         onChange={handleChange}
                                     />
+                                    <FieldError error={apiErrors.phone || apiErrors.mobile} />
                                 </div>
                             </div>
                         </div>

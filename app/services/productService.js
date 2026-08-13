@@ -376,36 +376,158 @@ export const fetchAllProductSlugs = async () => {
         return [];
     }
 };
-export const searchProducts = async (query, scope = '') => {
+const searchCache = new Map();
+let preloadedCatalogIndex = null;
+let isPreloadingCatalog = false;
+
+export const preloadProductSearchIndex = async () => {
+    if (preloadedCatalogIndex || isPreloadingCatalog) return preloadedCatalogIndex;
+    isPreloadingCatalog = true;
     try {
+        const response = await fetch(`${API_BASE_URL}/products?per_page=200`, { next: { revalidate: 300 } });
+        const data = await response.json();
+        if (data.success && data.data) {
+            const rawList = Array.isArray(data.data) ? data.data : (data.data.products || data.data.data || []);
+            preloadedCatalogIndex = rawList.map(item => {
+                const titleStr = item.name || item.title || '';
+                const catStr = Array.isArray(item.categories) ? item.categories.map(c => c.name || c).join(', ') : (item.category || '');
+                return {
+                    id: item.uuid || item.id,
+                    title: titleStr,
+                    slug: item.slug || '',
+                    image: item.image || item.img || item.image_url || '/img/placeholder.webp',
+                    price: item.effective_price || item.sale_price || item.price || 0,
+                    originalPrice: item.base_price || item.originalPrice || 0,
+                    category: catStr,
+                    rating: item.avg_rating || item.rating || 4.8,
+                    reviews: item.review_count || item.reviews || 12,
+                    searchableText: `${titleStr} ${item.slug || ''} ${catStr}`.toLowerCase()
+                };
+            });
+        }
+    } catch (e) {
+        console.error("Search catalog index preload error:", e);
+    } finally {
+        isPreloadingCatalog = false;
+    }
+    return preloadedCatalogIndex;
+};
+
+export const searchProductsLocal = (query) => {
+    const trimmed = (query || '').trim().toLowerCase();
+    if (!trimmed || !preloadedCatalogIndex || preloadedCatalogIndex.length === 0) return [];
+
+    const matches = [];
+    for (let i = 0; i < preloadedCatalogIndex.length; i++) {
+        const p = preloadedCatalogIndex[i];
+        const titleLower = p.title.toLowerCase();
+        const catLower = (p.category || '').toLowerCase();
+
+        let score = 0;
+        if (titleLower.startsWith(trimmed)) {
+            score = 100 - Math.min(titleLower.length, 50);
+        } else if (catLower.startsWith(trimmed)) {
+            score = 80 - Math.min(catLower.length, 50);
+        } else if (titleLower.includes(` ${trimmed}`) || titleLower.includes(`-${trimmed}`)) {
+            score = 60;
+        } else if (p.searchableText.includes(trimmed)) {
+            score = 40;
+        }
+
+        if (score > 0) {
+            matches.push({ product: p, score });
+        }
+    }
+
+    matches.sort((a, b) => b.score - a.score);
+    return matches.slice(0, 12).map(m => m.product);
+};
+
+export const getCachedSearchResult = (query, scope = '') => {
+    const trimmed = (query || '').trim().toLowerCase();
+    if (!trimmed) return null;
+
+    const cacheKey = `${trimmed}_${scope}`;
+    if (searchCache.has(cacheKey)) {
+        return searchCache.get(cacheKey);
+    }
+
+    // Check local catalog index for instant 0ms result
+    const localMatches = searchProductsLocal(trimmed);
+    if (localMatches.length > 0) {
+        return { products: localMatches, categories: [], isPartial: true };
+    }
+
+    for (const [key, value] of searchCache.entries()) {
+        const [q] = key.split('_');
+        if (q && trimmed.length > q.length && trimmed.startsWith(q) && value && value.products) {
+            const filteredProducts = value.products.filter(p => 
+                p.title?.toLowerCase().includes(trimmed) || 
+                (p.category && typeof p.category === 'string' && p.category.toLowerCase().includes(trimmed))
+            );
+            if (filteredProducts.length > 0) {
+                return { products: filteredProducts, categories: value.categories, isPartial: true };
+            }
+        }
+    }
+    return null;
+};
+
+export const searchProducts = async (query, scope = '', signal = null) => {
+    try {
+        const trimmed = (query || '').trim().toLowerCase();
+        const cacheKey = `${trimmed}_${scope}`;
+
+        if (!trimmed && !scope) {
+            return { products: [], categories: [] };
+        }
+
+        if (searchCache.has(cacheKey)) {
+            return searchCache.get(cacheKey);
+        }
+
         const url = new URL(`${API_BASE_URL}/search`);
         if (query) url.searchParams.append('q', query);
         if (scope) url.searchParams.append('scope', scope);
 
-        const response = await fetch(url.toString(), { next: { revalidate: 60 } });
+        const fetchOptions = { next: { revalidate: 60 } };
+        if (signal) fetchOptions.signal = signal;
+
+        const response = await fetch(url.toString(), fetchOptions);
         const data = await response.json();
 
         if (data.success && data.data) {
-            return {
+            const result = {
                 products: (data.data.products || []).map(item => ({
                     id: item.uuid || item.id,
-                    title: item.name,
+                    title: item.name || item.title,
                     slug: item.slug,
-                    image: item.image,
-                    price: item.effective_price || item.sale_price,
+                    image: item.image || item.img,
+                    price: item.effective_price || item.sale_price || item.price,
+                    originalPrice: item.base_price,
                     category: item.category,
                     rating: item.avg_rating,
-                    reviews: item.review_count || 0
+                    reviews: item.review_count || item.reviews || 0
                 })),
                 categories: data.data.categories || []
             };
+
+            if (searchCache.size > 100) {
+                const firstKey = searchCache.keys().next().value;
+                searchCache.delete(firstKey);
+            }
+            searchCache.set(cacheKey, result);
+
+            return result;
         }
         return { products: [], categories: [] };
     } catch (error) {
+        if (error.name === 'AbortError') throw error;
         console.error("Error searching products:", error);
         return { products: [], categories: [] };
     }
 };
+
 
 export const fetchFeaturedCategoryGrid = async () => {
     try {

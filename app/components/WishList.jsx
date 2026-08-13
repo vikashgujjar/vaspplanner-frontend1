@@ -18,11 +18,13 @@ import {
 } from "lucide-react";
 import ProductAyurvedCard from "./ProductAyurvedCard";
 import { useSelector, useDispatch } from "react-redux";
-import { clearWishlist, removeWish } from "../store/wishListSlice";
+import { clearWishlist, clearWishlistAsync, removeWish } from "../store/wishListSlice";
 import { addToCartAsync } from "../store/cartSlice";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
+
+import { savePendingCartAction } from "../utils/pendingCart";
 
 export default function WishList() {
   const dispatch = useDispatch();
@@ -36,6 +38,18 @@ export default function WishList() {
 
   const handleAddAllToCart = async () => {
     if (wishList.length === 0) return;
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('userToken') : null;
+    if (!token) {
+      toast.info("Please login to add items to your cart", { icon: "🔐" });
+      savePendingCartAction({
+        product: wishList[0],
+        quantity: 1,
+        redirectUrl: "/wishlist"
+      });
+      router.push('/user/login');
+      return;
+    }
 
     try {
       const promises = wishList.map(product =>
@@ -190,7 +204,7 @@ export default function WishList() {
 
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <button
-                    onClick={() => dispatch(clearWishlist())}
+                    onClick={() => dispatch(clearWishlistAsync())}
                     className="flex-1 text-xs text-nowrap sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 font-semibold rounded-xl hover:bg-red-100 transition-colors"
                   >
                     <Trash2 size={16} />

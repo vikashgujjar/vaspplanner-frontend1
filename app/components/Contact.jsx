@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   MapPin,
@@ -15,6 +15,7 @@ import {
   Headphones,
   Globe
 } from "lucide-react";
+import { userService } from "../services/userService";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -25,6 +26,26 @@ export default function Contact() {
     message: ""
   });
   const [fileName, setFileName] = useState("");
+  const [dynamicContact, setDynamicContact] = useState({
+    email: "info@vaspplanner.com",
+    phone: "+91 9448387231",
+    address: "Bangalore, India",
+    support_hours: "Mon - Sat: 9:00 AM - 8:00 PM"
+  });
+
+  useEffect(() => {
+    async function loadContact() {
+      try {
+        const res = await userService.getContactInfo();
+        if (res?.success && res?.data) {
+          setDynamicContact(res.data);
+        }
+      } catch (err) {
+        console.error("Failed to load contact info:", err);
+      }
+    }
+    loadContact();
+  }, []);
 
   const handleFileChange = (e) => {
     if (e.target.files[0]) {
@@ -36,7 +57,7 @@ export default function Contact() {
     {
       icon: <MapPin size={24} />,
       title: "Visit Us",
-      lines: ["66 Broklyn Golden Street,", "New York, USA"],
+      lines: [dynamicContact.address || "Bangalore, India"],
       action: "Get Directions",
       link: "#",
       color: "from-pink-500 to-rose-500",
@@ -47,9 +68,9 @@ export default function Contact() {
     {
       icon: <Mail size={24} />,
       title: "Email Us",
-      lines: ["info@vaspplanner.com", "support@vaspplanner.com"],
+      lines: [dynamicContact.email || "info@vaspplanner.com"],
       action: "Send Email",
-      link: "mailto:info@vaspplanner.com",
+      link: `mailto:${dynamicContact.email || "info@vaspplanner.com"}`,
       color: "from-blue-500 to-indigo-500",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-200",
@@ -58,9 +79,9 @@ export default function Contact() {
     {
       icon: <Phone size={24} />,
       title: "Call Us",
-      lines: ["+91 9448387231", "+91 92666 88800"],
+      lines: [dynamicContact.phone || "+91 9448387231"],
       action: "Call Now",
-      link: "tel:+919448387231",
+      link: `tel:${dynamicContact.phone || "+91 9448387231"}`,
       color: "from-green-500 to-emerald-500",
       bgColor: "bg-green-50",
       borderColor: "border-green-200",
@@ -69,8 +90,8 @@ export default function Contact() {
     {
       icon: <Clock size={24} />,
       title: "Working Hours",
-      lines: ["Mon - Sat: 9:00 AM - 8:00 PM", "Sunday: 10:00 AM - 6:00 PM"],
-      action: "Book Appointment",
+      lines: [dynamicContact.support_hours || "Mon - Sat: 9:00 AM - 8:00 PM"],
+      action: "Support Hours",
       link: "#",
       color: "from-purple-500 to-violet-500",
       bgColor: "bg-purple-50",

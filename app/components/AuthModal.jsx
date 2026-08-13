@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import { Lock, Eye, EyeOff, User, Phone, Check, ArrowRight, X } from "lucide-react";
 import { toast } from "react-toastify";
+import { executePendingCartAction } from "../utils/pendingCart";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function AuthModal({ isOpen, onClose, onSuccess }) {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("login"); // 'login' or 'register'
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -37,9 +42,12 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
 
   if (!isOpen || !mounted) return null;
 
-  const handleSendOtp = async () => {
+  const handleSendOtp = async (e) => {
+    e?.preventDefault();
+    setApiErrors({});
     if (!phone || phone.length < 10) {
-      toast.warning("Please enter a valid 10-digit phone number");
+      setApiErrors({ phone: "Please enter a valid 10-digit phone number" });
+      toast.warning("Please enter a valid phone number");
       return;
     }
     setIsLoading(true);
@@ -57,7 +65,9 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
         setOtpSent(true);
         toast.success(result.message || "OTP sent successfully!");
       } else {
-        toast.error(result.message || "Failed to send OTP");
+        const { fieldErrors, summaryMessage } = parseServerErrors(result);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Failed to send OTP");
       }
     } catch (error) {
       toast.error("An error occurred while sending OTP.");
@@ -68,8 +78,10 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
-    if (!otp || otp.length < 6) {
-      toast.warning("Please enter a valid 6-digit OTP");
+    setApiErrors({});
+    if (!otp || otp.length < 4) {
+      setApiErrors({ otp: "Please enter a valid OTP" });
+      toast.warning("Please enter a valid OTP");
       return;
     }
     setIsLoading(true);
@@ -92,10 +104,16 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
         localStorage.setItem("cartNeedsSync", "true");
         localStorage.setItem("wishlistNeedsSync", "true");
         window.dispatchEvent(new Event("auth-change"));
+        
+        const handled = await executePendingCartAction(dispatch, router);
         onSuccess?.();
+        if (handled && onClose) {
+          onClose();
+        }
       } else {
-        const errorMsg = result.errors ? Object.values(result.errors).flat()[0] : result.message;
-        toast.error(errorMsg || "Verification failed");
+        const { fieldErrors, summaryMessage } = parseServerErrors(result);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Verification failed");
       }
     } catch (error) {
       toast.error("An error occurred during verification.");
@@ -106,7 +124,9 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setApiErrors({});
     if (password !== confirmPassword) {
+      setApiErrors({ password_confirmation: "Passwords do not match!" });
       toast.error("Passwords do not match!");
       return;
     }
@@ -117,7 +137,6 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
     setIsLoading(true);
 
     try {
-      // Auto-generate a guest email since backend requires it but user wants to remove the field
       const guestEmail = `${phone}@guest.giftkart.com`;
       
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -144,10 +163,16 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
         localStorage.setItem("cartNeedsSync", "true");
         localStorage.setItem("wishlistNeedsSync", "true");
         window.dispatchEvent(new Event("auth-change"));
+        
+        const handled = await executePendingCartAction(dispatch, router);
         onSuccess?.();
+        if (handled && onClose) {
+          onClose();
+        }
       } else {
-        const errorMsg = result.errors ? Object.values(result.errors).flat()[0] : result.message;
-        toast.error(errorMsg || "Registration failed");
+        const { fieldErrors, summaryMessage } = parseServerErrors(result);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Registration failed");
       }
     } catch (error) {
       toast.error("An error occurred during registration.");
@@ -221,7 +246,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
                       onChange={(e) => setPhone(e.target.value)}
                       required
                       disabled={otpSent || isLoading}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-violet-500 focus:bg-white outline-none text-sm transition-all font-medium disabled:opacity-60"
+                      className={`w-full pl-12 pr-4 py-4 bg-gray-50 border-2 rounded-2xl focus:bg-white outline-none text-sm transition-all font-medium disabled:opacity-60 ${(apiErrors.phone || apiErrors.mobile) ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                       placeholder="9876543210"
                     />
                     {otpSent && !isLoading && (
@@ -234,6 +259,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
                       </button>
                     )}
                   </div>
+                  <FieldError error={apiErrors.phone || apiErrors.mobile} />
                 </div>
 
                 {otpSent && (
@@ -247,12 +273,13 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
                         maxLength={6}
                         onChange={(e) => setOtp(e.target.value)}
                         required
-                        className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-violet-500 focus:bg-white outline-none text-sm transition-all font-bold tracking-[0.5em]"
+                        className={`w-full pl-12 pr-4 py-4 bg-gray-50 border-2 rounded-2xl focus:bg-white outline-none text-sm transition-all font-bold tracking-[0.5em] ${apiErrors.otp ? 'border-red-400 focus:border-red-500' : 'border-gray-100 focus:border-violet-500'}`}
                         placeholder="------"
                       />
                     </div>
+                    <FieldError error={apiErrors.otp} />
                     <p className="mt-2 text-[10px] text-gray-500 font-medium text-center">
-                      We've sent a 6-digit code to your phone.
+                      We've sent a code to your phone.
                     </p>
                   </div>
                 )}

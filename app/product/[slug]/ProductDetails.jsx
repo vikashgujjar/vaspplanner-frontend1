@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaPlus, FaMinus, FaStar, FaWhatsapp } from "react-icons/fa6";
 import ImageMagnifier from "../../components/ImageMagnifier";
 import Description from "./Description ";
@@ -14,6 +15,7 @@ import { toast } from 'react-toastify';
 import { addToCartAsync, removeFromCartAsync } from "../../store/cartSlice";
 import { addWishAsync, removeWishAsync } from "../../store/wishListSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { savePendingCartAction } from "../../utils/pendingCart";
 import {
   Sparkles,
   ShieldCheck,
@@ -42,6 +44,7 @@ import {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const cartList = useSelector((state) => state.cart.cartItem);
 
@@ -50,7 +53,19 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
   const [readMore, setReadMore] = useState(false);
   const [selected, setSelected] = useState("");
   const wishList = useSelector((state) => state.wish.wishlist);
-  const isWishlisted = wishList?.some((item) => String(item.id) === String(singleProduct?.id));
+  const targetProdId = singleProduct?.id || singleProduct?.uuid || singleProduct?.product_id;
+  const isWishlisted = wishList?.some((item) =>
+    String(item.id) === String(targetProdId) ||
+    String(item.uuid) === String(targetProdId) ||
+    String(item.product_id) === String(targetProdId) ||
+    String(item.product_uuid) === String(targetProdId) ||
+    (singleProduct?.uuid && (
+      String(item.id) === String(singleProduct.uuid) ||
+      String(item.uuid) === String(singleProduct.uuid) ||
+      String(item.product_id) === String(singleProduct.uuid) ||
+      String(item.product_uuid) === String(singleProduct.uuid)
+    ))
+  );
   const [offers, setOffers] = useState([]);
   const [isLoadingOffers, setIsLoadingOffers] = useState(true);
 
@@ -254,7 +269,7 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
     }
 
     if (isWishlisted) {
-      dispatch(removeWishAsync(singleProduct?.id));
+      dispatch(removeWishAsync(targetProdId));
       toast.error("Removed from wishlist", { icon: "💔" });
     } else {
       dispatch(addWishAsync(singleProduct));
@@ -636,8 +651,26 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
                 <button
                   onClick={() => {
                     if (!isLoggedIn) {
-                      toast.info("Please login to add items to your cart", { icon: "🔐" });
-                      setIsAuthModalOpen(true);
+                      toast.info("Please login to continue adding item to cart", { icon: "🔐" });
+                      savePendingCartAction({
+                        product: {
+                          ...singleProduct,
+                          id: currentProductId,
+                          variant_id: activeVariant ? (activeVariant.id || activeVariant.uuid) : null,
+                          variant_name: activeVariant ? (activeVariant.name || activeVariant.label) : null,
+                          price: unitPrice,
+                          originalPrice: unitOriginalPrice,
+                          qnty: qnty
+                        },
+                        quantity: qnty,
+                        variantId: activeVariant ? (activeVariant.id || activeVariant.uuid) : null,
+                        options: {
+                          pincode: pincode,
+                          city: detectedCity
+                        },
+                        redirectUrl: window.location.pathname
+                      });
+                      router.push("/user/login");
                       return;
                     }
 

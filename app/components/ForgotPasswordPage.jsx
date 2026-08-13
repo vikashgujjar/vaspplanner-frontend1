@@ -13,6 +13,7 @@ import {
   ArrowLeft
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { parseServerErrors, FieldError } from "../utils/serverValidation";
  
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -41,20 +42,14 @@ export default function ForgotPasswordPage() {
 
       if (result.success) {
         toast.success(result.message || "Password reset link sent to your email!");
-        setEmail(""); // Clear email on success
-        
-        // Redirect to login after 5 seconds
+        setEmail("");
         setTimeout(() => {
           router.push("/user/login");
         }, 5000);
       } else {
-        if (result.errors) {
-          setApiErrors(result.errors);
-          const firstError = Object.values(result.errors).flat()[0];
-          toast.error(firstError || "Request failed");
-        } else {
-          toast.error(result.message || "Request failed");
-        }
+        const { fieldErrors, summaryMessage } = parseServerErrors(result);
+        setApiErrors(fieldErrors);
+        toast.error(summaryMessage || "Request failed");
       }
     } catch (error) {
       console.error("Forgot password error:", error);
