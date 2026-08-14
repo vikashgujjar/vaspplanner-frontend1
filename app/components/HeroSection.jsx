@@ -150,6 +150,23 @@ export default function HeroSection({ banners: initialBanners = [] }) {
       </div>
 
       <style jsx global>{`
+        /* Pin the carousel's height via CSS from first paint so Swiper's
+           JS init (which switches grid -> single-row) can't shift content
+           below it — this is what was causing the large CLS on this page. */
+        .hero-swiper {
+          aspect-ratio: 16 / 9;
+        }
+        @media (min-width: 768px) {
+          .hero-swiper {
+            aspect-ratio: 3.6 / 1;
+          }
+        }
+        @media (min-width: 1024px) {
+          .hero-swiper {
+            aspect-ratio: 5.5 / 1;
+          }
+        }
+
         .hero-swiper:not(.swiper-initialized) .swiper-wrapper {
           display: grid !important;
           grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
