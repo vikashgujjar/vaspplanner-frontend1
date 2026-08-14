@@ -19,6 +19,7 @@ import {
   X
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -581,7 +582,7 @@ export default function PremiumHeader({ initialLayoutData }) {
             <div className="sticky top-0 bg-[#0f0f0f]/95 backdrop-blur-md z-10 border-b border-white/10">
               <div className="flex justify-between items-center p-4">
                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[46px]" />
+                  <Image src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" width={73} height={46} className="h-[46px] w-auto" />
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -841,7 +842,7 @@ export default function PremiumHeader({ initialLayoutData }) {
             {/* Mobile Menu Button */}
             {/* Logo */}
             <Link href="/" className="flex items-center flex-shrink-0">
-              <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[50px] md:h-[60px]" fetchPriority="high" />
+              <Image src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" width={95} height={60} className="h-[50px] md:h-[60px] w-auto" priority />
             </Link>
 
             {/* Location Selector - Desktop */}

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { executePendingCartAction } from "../utils/pendingCart";
 import {
@@ -176,7 +177,7 @@ export default function LoginPage() {
           <div className="max-w-md">
             {/* Logo/Brand */}
             <div className="flex items-center gap-3 mb-10">
-               <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[70px] brightness-0 invert" />
+               <Image src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" width={111} height={70} className="h-[70px] w-auto brightness-0 invert" />
             </div>
 
             {/* Heading */}
@@ -234,7 +235,7 @@ export default function LoginPage() {
           {/* Mobile Logo */}
           <div className="text-center mb-8 lg:hidden">
             <div className="inline-flex items-center gap-3 mb-4">
-               <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[60px]" />
+               <Image src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" width={95} height={60} className="h-[60px] w-auto" />
             </div>
           </div>
 

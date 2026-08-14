@@ -40,15 +40,19 @@ export default function CategorySectionSlider({ slider }) {
                         <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center w-12 min-w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-500 text-white shadow-md overflow-hidden p-1">
                                 {icon ? (
-                                    <img
-                                        src={icon}
-                                        alt={title}
-                                        className="w-full h-full object-cover rounded-lg"
-                                        onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.style.display = 'none';
-                                        }}
-                                    />
+                                    <div className="relative w-full h-full rounded-lg overflow-hidden">
+                                        <Image
+                                            src={icon}
+                                            alt={title}
+                                            fill
+                                            sizes="48px"
+                                            className="object-cover"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.style.display = 'none';
+                                            }}
+                                        />
+                                    </div>
                                 ) : (
                                     <span className="text-2xl"><FaGift /></span>
                                 )}
