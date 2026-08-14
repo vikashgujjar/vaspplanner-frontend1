@@ -5,9 +5,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
   trailingSlash: true,
-  experimental: {
-    optimizeCss: true,
-  },
   webpack: (config, { webpack, isServer }) => {
     // Next.js's own client entry (node_modules/next/dist/client/app-globals.js)
     // unconditionally requires this polyfill file — it ignores .browserslistrc
