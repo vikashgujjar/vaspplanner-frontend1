@@ -23,6 +23,25 @@ body {
   background-color: white !important;
 }
 
+/* Pin the hero carousel's height via CSS (not JS) so it has zero effect on
+   layout regardless of when/whether Swiper's JS finishes initializing —
+   this must live in a real stylesheet, not styled-jsx, since styled-jsx
+   does not render server-side in this app-router client-component setup
+   and therefore has no effect during the pre-hydration paint. */
+.hero-swiper {
+  aspect-ratio: 16 / 9;
+}
+@media (min-width: 768px) {
+  .hero-swiper {
+    aspect-ratio: 3.6 / 1;
+  }
+}
+@media (min-width: 1024px) {
+  .hero-swiper {
+    aspect-ratio: 5.5 / 1;
+  }
+}
+
 .rfm-marquee-container {
 
   overflow-y: hidden;

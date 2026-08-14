@@ -710,7 +710,7 @@ export default function PremiumHeader({ initialLayoutData }) {
             {/* Mobile Menu Button */}
             {/* Logo */}
             <Link href="/" className="flex items-center flex-shrink-0">
-              <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[50px] md:h-[60px] brightness-0 invert" />
+              <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[50px] md:h-[60px] brightness-0 invert" fetchPriority="high" />
             </Link>
 
             {/* Location Selector - Desktop */}
