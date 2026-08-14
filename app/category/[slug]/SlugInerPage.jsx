@@ -16,6 +16,8 @@ import {
   ChevronDown,
   Sparkles,
   ArrowRight,
+  ArrowUpDown,
+  Rows3,
   Play,
   Package,
   Star,
@@ -51,6 +53,7 @@ export default function SlugInerPage({
   const [viewMode, setViewMode] = useState("grid");
   const [sortedProducts, setSortedProducts] = useState(initialProducts);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [showPerPageDropdown, setShowPerPageDropdown] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [mobileFilterCount, setMobileFilterCount] = useState(0);
   const [categoryFilters, setCategoryFilters] = useState(initialFilters);
@@ -307,38 +310,68 @@ export default function SlugInerPage({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                  {/* View Toggle */}
-                  {/* <div className="hidden sm:flex items-center p-1.5 bg-gray-100 rounded-xl">
-                    <button onClick={() => setViewMode("grid")} className={`p-2.5 rounded-lg transition-all ${viewMode === "grid" ? "bg-white shadow text-violet-600" : "text-gray-400 hover:text-gray-600"}`}>
-                      <Grid3X3 size={18} />
-                    </button>
-                    <button onClick={() => setViewMode("list")} className={`p-2.5 rounded-lg transition-all ${viewMode === "list" ? "bg-white shadow text-violet-600" : "text-gray-400 hover:text-gray-600"}`}>
-                      <LayoutList size={18} />
-                    </button>
-                  </div> */}
-
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
                   {/* Sort */}
                   <div className="relative flex-1 sm:flex-none">
                     <button
-                      onClick={() => setShowSortDropdown(!showSortDropdown)}
-                      className="w-full sm:w-auto flex items-center justify-between gap-4 px-5 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-colors"
+                      onClick={() => { setShowSortDropdown(!showSortDropdown); setShowPerPageDropdown(false); }}
+                      className={`w-full sm:w-auto flex items-center gap-2.5 pl-2 pr-4 py-2 bg-white border rounded-2xl transition-all shadow-sm hover:shadow-md ${showSortDropdown ? "border-violet-300 ring-2 ring-violet-100" : "border-gray-200 hover:border-violet-200"}`}
                     >
-                      <span className="text-gray-700 font-medium">{sortOptions.find(opt => opt.value === sortBy)?.label}</span>
-                      <ChevronDown size={18} className={`text-gray-400 transition-transform ${showSortDropdown ? "rotate-180" : ""}`} />
+                      <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-violet-50 text-violet-600 flex-shrink-0">
+                        <ArrowUpDown size={15} />
+                      </span>
+                      <span className="flex flex-col items-start leading-tight">
+                        <span className="text-[10px] text-gray-400 font-medium">Sort by</span>
+                        <span className="text-sm text-gray-800 font-semibold whitespace-nowrap">{sortOptions.find(opt => opt.value === sortBy)?.label}</span>
+                      </span>
+                      <ChevronDown size={16} className={`text-gray-400 transition-transform ml-auto sm:ml-1 ${showSortDropdown ? "rotate-180" : ""}`} />
                     </button>
 
                     {showSortDropdown && (
                       <>
                         <div className="fixed inset-0 z-40" onClick={() => setShowSortDropdown(false)} />
-                        <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl border border-gray-100 shadow-xl shadow-gray-200/50 z-50 overflow-hidden py-2">
+                        <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/50 z-50 overflow-hidden py-2">
                           {sortOptions.map((option) => (
                             <button
                               key={option.value}
                               onClick={() => { setSortBy(option.value); setShowSortDropdown(false); }}
-                              className={`w-full px-4 py-3 text-left transition-colors ${sortBy === option.value ? "bg-violet-50 text-violet-600 font-semibold" : "text-gray-700 hover:bg-gray-50"}`}
+                              className={`w-full px-4 py-3 text-left text-sm transition-colors ${sortBy === option.value ? "bg-violet-50 text-violet-600 font-semibold" : "text-gray-700 hover:bg-gray-50"}`}
                             >
                               {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Page Length Selector */}
+                  <div className="relative hidden md:flex-1 sm:flex-none">
+                    <button
+                      onClick={() => { setShowPerPageDropdown(!showPerPageDropdown); setShowSortDropdown(false); }}
+                      className={`w-full sm:w-auto flex items-center gap-2.5 pl-2 pr-4 py-2 bg-white border rounded-2xl transition-all shadow-sm hover:shadow-md ${showPerPageDropdown ? "border-violet-300 ring-2 ring-violet-100" : "border-gray-200 hover:border-violet-200"}`}
+                    >
+                      <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-violet-50 text-violet-600 flex-shrink-0">
+                        <Rows3 size={15} />
+                      </span>
+                      <span className="flex flex-col items-start leading-tight">
+                        <span className="text-[10px] text-gray-400 font-medium">Show</span>
+                        <span className="text-sm text-gray-800 font-semibold whitespace-nowrap">{perPage} / page</span>
+                      </span>
+                      <ChevronDown size={16} className={`text-gray-400 transition-transform ml-auto sm:ml-1 ${showPerPageDropdown ? "rotate-180" : ""}`} />
+                    </button>
+
+                    {showPerPageDropdown && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={() => setShowPerPageDropdown(false)} />
+                        <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/50 z-50 overflow-hidden py-2">
+                          {[5, 10, 20].map((n) => (
+                            <button
+                              key={n}
+                              onClick={() => { handlePerPageChange(n); setShowPerPageDropdown(false); }}
+                              className={`w-full px-4 py-3 text-left text-sm transition-colors ${perPage === n ? "bg-violet-50 text-violet-600 font-semibold" : "text-gray-700 hover:bg-gray-50"}`}
+                            >
+                              {n} per page
                             </button>
                           ))}
                         </div>
@@ -349,29 +382,18 @@ export default function SlugInerPage({
                   {/* Mobile Filter Trigger */}
                   <button
                     onClick={() => setShowFilterModal(true)}
-                    className="lg:hidden relative flex items-center gap-2 px-5 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-colors"
+                    className="lg:hidden relative flex items-center gap-2.5 pl-2 pr-4 py-2 bg-white border border-gray-200 hover:border-violet-200 rounded-2xl transition-all shadow-sm hover:shadow-md flex-shrink-0"
                   >
-                    <SlidersHorizontal size={18} className="text-violet-600" />
-                    <span className="text-gray-700 font-medium">Filter</span>
+                    <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-violet-50 text-violet-600">
+                      <SlidersHorizontal size={15} />
+                    </span>
+                    <span className="text-sm text-gray-800 font-semibold">Filter</span>
                     {mobileFilterCount > 0 && (
-                      <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                      <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
                         {mobileFilterCount}
                       </span>
                     )}
                   </button>
-
-                  {/* Page Length Selector */}
-                  <div className="relative flex-1 sm:flex-none">
-                    <select
-                      value={perPage}
-                      onChange={(e) => handlePerPageChange(parseInt(e.target.value))}
-                      className="w-full sm:w-auto px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-colors text-gray-700 font-medium cursor-pointer focus:outline-none"
-                    >
-                      <option value="5">5 per page</option>
-                      <option value="10">10 per page</option>
-                      <option value="20">20 per page</option>
-                    </select>
-                  </div>
                 </div>
               </div>
 
