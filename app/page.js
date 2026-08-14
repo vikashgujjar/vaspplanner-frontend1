@@ -1,16 +1,23 @@
 import React from "react";
+import dynamic from "next/dynamic";
+// Above-the-fold sections: loaded eagerly so they're ready immediately for LCP.
 import HeroSection from "./components/HeroSection";
-import ProductAyurved from "./components/ProductAyurved";
-import WhyGifting from "./components/WhyGifting";
-import OfferPorductValid from "./components/OfferPorductValid";
-import CakeCategory from "./components/CakeCategory";
-import VASPPlanner from "./components/VASPPlanner";
-import Testmonails from "./components/Testmonails";
 import CategoriesSlider from "./components/Shop";
-import VideoSection from "./components/VideoSection";
-import CategorySectionSlider from "./components/CategorySectionSlider";
-import CategoryGridShowcase from "./components/CategoryGridShowcase";
-import MobileOfferSection from "./components/MobileOfferSection";
+
+// Below-the-fold sections: still server-rendered (dynamic() defaults to
+// ssr: true, so content and SEO are unaffected), but split into separate
+// JS chunks instead of one monolithic bundle that all hydrates in a single
+// blocking burst — this is what drives Total Blocking Time down.
+const ProductAyurved = dynamic(() => import("./components/ProductAyurved"));
+const WhyGifting = dynamic(() => import("./components/WhyGifting"));
+const OfferPorductValid = dynamic(() => import("./components/OfferPorductValid"));
+const CakeCategory = dynamic(() => import("./components/CakeCategory"));
+const VASPPlanner = dynamic(() => import("./components/VASPPlanner"));
+const Testmonails = dynamic(() => import("./components/Testmonails"));
+const VideoSection = dynamic(() => import("./components/VideoSection"));
+const CategorySectionSlider = dynamic(() => import("./components/CategorySectionSlider"));
+const CategoryGridShowcase = dynamic(() => import("./components/CategoryGridShowcase"));
+const MobileOfferSection = dynamic(() => import("./components/MobileOfferSection"));
 
 import {
   fetchStories,
