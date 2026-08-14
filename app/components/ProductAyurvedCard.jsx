@@ -463,12 +463,12 @@ export default function ProductAyurvedCard({ product }) {
               {/* Title */}
               <h3
                 title={heading || name || title}
-                className="font-semibold text-xs md:text-sm text-gray-800 line-clamp-2 md:group-hover/title:line-clamp-none leading-snug mb-1 md:mb-2 min-h-[2.4rem] transition-all duration-200"
+                className="font-semibold text-xs md:text-sm text-gray-800 line-clamp-2  leading-snug mb-1 md:mb-2 min-h-[2.4rem] transition-all duration-200"
                 style={{
                   display: '-webkit-box',
-                  WebkitLineClamp: isHovered ? 'unset' : 2,
+                  WebkitLineClamp: isHovered ? 2 : 2,
                   WebkitBoxOrient: 'vertical',
-                  overflow: isHovered ? 'visible' : 'hidden',
+                  overflow: isHovered ? 'hidden' : 'hidden',
                   textOverflow: 'ellipsis',
                 }}
               >

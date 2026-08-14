@@ -1,8 +1,5 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import Image from "next/image";
 import {
-  ChevronRight,
   Gift,
   Users,
   Building2,
@@ -10,13 +7,11 @@ import {
   Package,
   Truck,
   Shield,
-  CheckCircle,
   Star,
   ArrowRight,
   Phone,
   Mail,
   Sparkles,
-  ChevronDown,
   Quote,
   Globe,
   Send,
@@ -26,33 +21,18 @@ import {
   Zap,
   Headphones,
   Briefcase,
-  Heart,
   Clock,
   Check
 } from "lucide-react";
+import InquiryForm from "./InquiryForm";
+import FaqAccordion from "./FaqAccordion";
+
+export const metadata = {
+  title: "Corporate Gifting | VASP Planner - Bulk Gifts for Businesses",
+  description: "Premium corporate gifting solutions for your clients, partners, and employees. Custom branding, bulk discounts, and global shipping to 50+ countries.",
+};
 
 export default function CorporateGifts() {
-  const [openFaq, setOpenFaq] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    quantity: "",
-    occasion: "",
-    message: ""
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Thank you! Our team will contact you within 24 hours.");
-  };
-
   // Gift Categories
   const corporateCategories = [
     { id: 1, name: "Luck & Prosperity", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400", emoji: "🍀" },
@@ -84,15 +64,6 @@ export default function CorporateGifts() {
     { name: "Canada", flag: "🇨🇦" },
     { name: "France", flag: "🇫🇷" },
     { name: "Japan", flag: "🇯🇵" },
-  ];
-
-  // FAQs
-  const faqs = [
-    { q: "What is the minimum order quantity for corporate gifts?", a: "Our minimum order starts at 25 units. For orders above 100 units, we offer additional bulk discounts up to 40% off." },
-    { q: "Can we add our company logo on the packaging?", a: "Absolutely! We offer complete branding solutions including custom boxes, ribbons, cards, and even product labels with your company branding." },
-    { q: "Do you deliver pan-India and internationally?", a: "Yes, we have a delivery network across 400+ cities in India and ship to 50+ countries worldwide including USA, UK, UAE, Singapore, and more." },
-    { q: "What is the delivery timeline for bulk orders?", a: "Standard bulk orders are delivered within 7-10 business days. Express delivery is available within 3-5 days at an additional charge." },
-    { q: "Do you provide GST invoices?", a: "Yes, we provide complete GST-compliant invoices for all corporate orders. We also offer credit terms for verified businesses." },
   ];
 
   // Testimonials
@@ -128,10 +99,13 @@ export default function CorporateGifts() {
       <section className="relative bg-[#0c0c0c] overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1600&auto=format&fit=crop"
-            className="absolute inset-0 w-full h-full object-cover opacity-20"
             alt="Corporate Banner"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-[#0c0c0c] via-[#0c0c0c]/95 to-[#0c0c0c]/90" />
         </div>
@@ -260,10 +234,13 @@ export default function CorporateGifts() {
             {corporateCategories.map((cat) => (
               <div key={cat.id} className="group cursor-pointer">
                 <div className="relative aspect-[4/5] sm:aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 transition-all duration-300">
-                  <img
+                  <Image
                     src={cat.image}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     alt={cat.name}
+                    fill
+                    loading="lazy"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -404,11 +381,14 @@ export default function CorporateGifts() {
 
             {/* Right Image */}
             <div className="relative order-1 lg:order-2">
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-violet-500/15 transform sm:rotate-1 hover:rotate-0 transition-transform duration-500">
-                <img
+              <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-violet-500/15 transform sm:rotate-1 hover:rotate-0 transition-transform duration-500">
+                <Image
                   src="https://images.unsplash.com/photo-1549462111-999264cb7353?q=80&w=600"
-                  className="w-full h-56 sm:h-72 md:h-80 lg:h-96 object-cover"
                   alt="Custom Gifts"
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-violet-900/20 to-transparent" />
               </div>
@@ -542,9 +522,12 @@ export default function CorporateGifts() {
 
                 {/* Author */}
                 <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
+                    width={48}
+                    height={48}
+                    loading="lazy"
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover ring-2 ring-pink-100 group-hover:ring-pink-200 transition-all"
                   />
                   <div className="min-w-0">
@@ -652,116 +635,7 @@ export default function CorporateGifts() {
 
                 {/* Right - Form */}
                 <div className="lg:col-span-3 p-5 sm:p-6 md:p-8 lg:p-10 bg-white">
-                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-                      <div>
-                        <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Your Name *</label>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 sm:py-3.5 bg-gray-50 border-2 border-gray-200 rounded-lg sm:rounded-xl text-sm sm:text-base focus:outline-none focus:border-amber-500 focus:bg-white transition-all"
-                          placeholder="John Doe"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Company *</label>
-                        <input
-                          type="text"
-                          name="company"
-                          value={formData.company}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 sm:py-3.5 bg-gray-50 border-2 border-gray-200 rounded-lg sm:rounded-xl text-sm sm:text-base focus:outline-none focus:border-amber-500 focus:bg-white transition-all"
-                          placeholder="Your Company"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-                      <div>
-                        <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Email *</label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 sm:py-3.5 bg-gray-50 border-2 border-gray-200 rounded-lg sm:rounded-xl text-sm sm:text-base focus:outline-none focus:border-amber-500 focus:bg-white transition-all"
-                          placeholder="email@company.com"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Phone *</label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 sm:py-3.5 bg-gray-50 border-2 border-gray-200 rounded-lg sm:rounded-xl text-sm sm:text-base focus:outline-none focus:border-amber-500 focus:bg-white transition-all"
-                          placeholder="+91 98765 43210"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-                      <div>
-                        <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Quantity</label>
-                        <select
-                          name="quantity"
-                          value={formData.quantity}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 sm:py-3.5 bg-gray-50 border-2 border-gray-200 rounded-lg sm:rounded-xl text-sm sm:text-base focus:outline-none focus:border-amber-500 focus:bg-white transition-all appearance-none"
-                        >
-                          <option value="">Select Range</option>
-                          <option value="25-50">25 - 50 units</option>
-                          <option value="50-100">50 - 100 units</option>
-                          <option value="100-250">100 - 250 units</option>
-                          <option value="250-500">250 - 500 units</option>
-                          <option value="500+">500+ units</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Occasion</label>
-                        <select
-                          name="occasion"
-                          value={formData.occasion}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 sm:py-3.5 bg-gray-50 border-2 border-gray-200 rounded-lg sm:rounded-xl text-sm sm:text-base focus:outline-none focus:border-amber-500 focus:bg-white transition-all appearance-none"
-                        >
-                          <option value="">Select Occasion</option>
-                          <option value="diwali">Diwali</option>
-                          <option value="new-year">New Year</option>
-                          <option value="anniversary">Company Anniversary</option>
-                          <option value="appreciation">Employee Appreciation</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">Message (Optional)</label>
-                      <textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows={3}
-                        className="w-full px-4 py-3 sm:py-3.5 bg-gray-50 border-2 border-gray-200 rounded-lg sm:rounded-xl text-sm sm:text-base focus:outline-none focus:border-amber-500 focus:bg-white transition-all resize-none"
-                        placeholder="Tell us your requirements..."
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full flex items-center justify-center gap-2 py-3.5 sm:py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-sm sm:text-base rounded-lg sm:rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all hover:-translate-y-0.5 group"
-                    >
-                      Submit Inquiry
-                      <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </form>
+                  <InquiryForm />
                 </div>
               </div>
             </div>
@@ -793,35 +667,7 @@ export default function CorporateGifts() {
             </div>
 
             {/* FAQ Accordion */}
-            <div className="space-y-3 sm:space-y-4">
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-md shadow-gray-100/50 overflow-hidden"
-                >
-                  <button
-                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                    className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="font-bold text-gray-900 pr-4 text-sm sm:text-base">{faq.q}</span>
-                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${openFaq === index
-                      ? "bg-gradient-to-br from-emerald-500 to-teal-500 rotate-180"
-                      : "bg-gray-100"
-                      }`}>
-                      <ChevronDown
-                        size={16}
-                        className={`transition-colors sm:w-5 sm:h-5 ${openFaq === index ? "text-white" : "text-gray-400"}`}
-                      />
-                    </div>
-                  </button>
-                  <div className={`overflow-hidden transition-all duration-300 ${openFaq === index ? "max-h-40" : "max-h-0"}`}>
-                    <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base leading-relaxed">
-                      {faq.a}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <FaqAccordion />
 
             {/* Still have questions CTA */}
             <div className="mt-8 sm:mt-10 text-center">
