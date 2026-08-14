@@ -24,12 +24,14 @@
     ]
   },
   "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
+    ".next/types/**/*.ts",
     ".next\\dev/types/**/*.ts",
-    ".next\\dev/types/**/*.ts"
+    ".next\\dev/types/**/*.ts",
+    "build-verify-tmp/types/**/*.ts",
+    "next-env.d.ts",
+    "build-verify-tmp2/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
