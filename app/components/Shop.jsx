@@ -108,10 +108,12 @@ export default function ShopByCategory({ initialData = [] }) {
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    if (initialData && initialData.length > 0) {
-      setCategories(mapApiToUI(initialData));
-      setLoading(false);
-    } else {
+    // initialData (SSR) already seeded `categories` via the useState
+    // initializer above — only fetch client-side when there's no SSR data,
+    // instead of redundantly re-mapping and re-setting the same data
+    // (mapApiToUI returns a new array reference every call, which would
+    // otherwise force a wasted re-render right after hydration).
+    if (!initialData || initialData.length === 0) {
       const fetchCategoriesData = async () => {
         try {
           setLoading(true);
