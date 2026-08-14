@@ -3,7 +3,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
+// Custom prev/next buttons are used via prevEl/nextEl refs, so Swiper's
+// own default nav-button CSS is never rendered — no need to import it.
 import {
   Star,
   ArrowRight,
