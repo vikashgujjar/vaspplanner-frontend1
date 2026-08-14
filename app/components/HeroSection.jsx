@@ -29,7 +29,6 @@ const BannerImage = ({ src, alt, priority }) => {
       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
       className="object-cover rounded-xl transition-transform duration-700 group-hover:scale-101"
       priority={priority}
-      loading={priority ? "eager" : "lazy"}
       quality={70}
       onError={(e) => {
         if (e.target && e.target.src !== FALLBACK_IMAGE) {
