@@ -4,11 +4,8 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 
 
-import Nav from "./components/Nav";
 import Footer from "./components/Footer";
-import FooterTopMarque from "./components/FooterTopMarque";
 import Providers from "./components/Providers";
-import TopBar from "./components/TopBar";
 import MyNav from "./components/MyNav";
 import TrackingProvider from "./components/TrackingProvider";
 import BottomfixLinks from "./components/BottomfixLinks";
