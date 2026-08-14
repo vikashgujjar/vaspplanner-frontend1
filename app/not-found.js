@@ -30,7 +30,7 @@ export default function NotFound() {
             Oops! Page Not Found
           </h2>
           <p className="text-gray-400 text-lg max-w-md mx-auto leading-relaxed">
-            It seems the page you are looking for has been moved or doesn't exist anymore. Don't worry, our best gifts are still waiting for you!
+            It seems the page you are looking for has been moved or doesn&apos;t exist anymore. Don&apos;t worry, our best gifts are still waiting for you!
           </p>
 
           {/* Action Buttons */}

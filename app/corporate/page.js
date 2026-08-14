@@ -538,7 +538,7 @@ export default function CorporateGifts() {
                 </div>
 
                 {/* Quote */}
-                <p className="text-gray-600 mb-4 sm:mb-5 leading-relaxed text-sm sm:text-base line-clamp-4">"{item.text}"</p>
+                <p className="text-gray-600 mb-4 sm:mb-5 leading-relaxed text-sm sm:text-base line-clamp-4">&quot;{item.text}&quot;</p>
 
                 {/* Author */}
                 <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
@@ -593,7 +593,7 @@ export default function CorporateGifts() {
               </span>
             </h2>
             <p className="text-gray-400 text-sm sm:text-base px-4">
-              Share your requirements and we'll get back within 24 hours
+              Share your requirements and we&apos;ll get back within 24 hours
             </p>
           </div>
 
@@ -603,7 +603,7 @@ export default function CorporateGifts() {
                 {/* Left - Info */}
                 <div className="lg:col-span-2 bg-gradient-to-br from-amber-500 to-orange-600 p-6 sm:p-8 md:p-10 text-white">
                   <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5 leading-tight">
-                    Let's Create Something Special
+                    Let&apos;s Create Something Special
                   </h3>
 
                   <p className="text-white/80 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
