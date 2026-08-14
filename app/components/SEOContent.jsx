@@ -21,7 +21,7 @@ const FAQItem = ({ index, question, answer, isOpen, onClick }) => (
             <span className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black transition-all duration-300 ${isOpen ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-400 group-hover:bg-violet-100 group-hover:text-violet-600'}`}>
                 {String(index + 1).padStart(2, "0")}
             </span>
-            <span className={`flex-1 font-bold text-base md:text-lg transition-colors ${isOpen ? 'text-violet-700' : 'text-gray-800 group-hover:text-violet-600'}`}>
+            <span className={`flex-1 font-bold text-sm md:text-base transition-colors ${isOpen ? 'text-violet-700' : 'text-gray-800 group-hover:text-violet-600'}`}>
                 {question}
             </span>
             <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-violet-600 text-white rotate-45' : 'bg-gray-100 text-gray-400 group-hover:bg-violet-100 group-hover:text-violet-600'}`}>
@@ -29,7 +29,7 @@ const FAQItem = ({ index, question, answer, isOpen, onClick }) => (
             </div>
         </button>
         <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-            <div className="pl-[4.25rem] pr-5 md:pr-6 pb-6 text-gray-600 leading-relaxed text-sm md:text-base">
+            <div className="pl-[4.25rem] pr-5 md:pr-6 pb-6 text-gray-600 leading-relaxed text-xs md:text-sm">
                 {answer}
             </div>
         </div>
@@ -77,7 +77,7 @@ export default function SEOContent({ title, faqs = [], stats }) {
                         <Sparkles size={14} />
                         Why Shop With Us
                     </span>
-                    <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight leading-tight uppercase">
+                    <h2 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight leading-tight uppercase">
                         {title || "The VASP Planner Promise"}
                     </h2>
                 </div>
@@ -96,8 +96,8 @@ export default function SEOContent({ title, faqs = [], stats }) {
                                         <div className="text-[11px] font-bold text-violet-500 tracking-widest uppercase mb-1">
                                             Step 0{idx + 1}
                                         </div>
-                                        <h4 className="font-bold text-gray-900 text-lg mb-1">{badge.text}</h4>
-                                        <p className="text-sm text-gray-500 leading-relaxed max-w-xs">{badge.desc}</p>
+                                        <h4 className="font-bold text-gray-900 text-base mb-1">{badge.text}</h4>
+                                        <p className="text-xs text-gray-500 leading-relaxed max-w-xs">{badge.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -110,7 +110,7 @@ export default function SEOContent({ title, faqs = [], stats }) {
                                     <Star size={18} fill="currentColor" />
                                 </div>
                                 <div>
-                                    <div className="text-lg font-black leading-none">{displayRating}</div>
+                                    <div className="text-base font-black leading-none">{displayRating}</div>
                                     <div className="text-[10px] text-violet-100 uppercase font-bold tracking-wider mt-1">Average Rating</div>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@ export default function SEOContent({ title, faqs = [], stats }) {
                                     <Heart size={18} fill="currentColor" />
                                 </div>
                                 <div>
-                                    <div className="text-lg font-black leading-none">{displayCustomers}</div>
+                                    <div className="text-base font-black leading-none">{displayCustomers}</div>
                                     <div className="text-[10px] text-violet-100 uppercase font-bold tracking-wider mt-1">Happy Customers</div>
                                 </div>
                             </div>
@@ -136,9 +136,9 @@ export default function SEOContent({ title, faqs = [], stats }) {
                                 <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0">
                                     <HelpCircle size={18} className="text-white" />
                                 </div>
-                                <h3 className="text-xl md:text-2xl font-bold text-white uppercase">Common Questions</h3>
+                                <h3 className="text-lg md:text-xl font-bold text-white uppercase">Common Questions</h3>
                             </div>
-                            <p className="relative text-violet-100/80 text-sm">
+                            <p className="relative text-violet-100/80 text-xs">
                                 Quick answers to frequently asked questions about our {title?.toLowerCase() || "products"}.
                             </p>
                         </div>

@@ -275,7 +275,7 @@ export default function ProductAyurvedCard({ product }) {
         
         
         .discount-badge {
-          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+          background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
           animation: float 3s ease-in-out infinite;
         }
         
@@ -294,18 +294,18 @@ export default function ProductAyurvedCard({ product }) {
         }
         
         .cart-btn:not(.bg-red-500):not(.bg-gray-400) {
-          background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+          background: linear-gradient(135deg, #5b21b6 0%, #6d28d9 50%, #7c3aed 100%);
           background-size: 200% 200%;
         }
-        
+
         .cart-btn {
           transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        
+
         .cart-btn:hover {
           background-position: 100% 100%;
           transform: scale(1.05);
-          box-shadow: 0 8px 24px -4px rgba(5, 150, 105, 0.4);
+          box-shadow: 0 8px 24px -4px rgba(124, 58, 237, 0.4);
         }
         
         .cart-btn:active {
@@ -317,7 +317,7 @@ export default function ProductAyurvedCard({ product }) {
         }
         
         .price-tag {
-          background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+          background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
         }
         
         .skeleton-loading {
@@ -360,13 +360,13 @@ export default function ProductAyurvedCard({ product }) {
         }
         
         .thumbnail-btn.active {
-          box-shadow: 0 0 0 2px #059669;
+          box-shadow: 0 0 0 2px #7c3aed;
         }
       `}</style>
 
       <div className="card-wrapper h-full">
         <div
-          className="product-card relative bg-white rounded-2xl md:rounded-3xl overflow-hidden h-full flex flex-col border border-gray-100 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.15)]"
+          className="product-card relative bg-white rounded-2xl md:rounded-3xl overflow-hidden h-auto flex flex-col border border-gray-100 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.15)]"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -450,7 +450,7 @@ export default function ProductAyurvedCard({ product }) {
 
             <Link
               href={`/product/${displaySlug}`}
-              className="flex-1 flex flex-col group/title"
+              className="flex-1 flex flex-col group/title h-auto max-h-max min-h-auto"
               title={heading || name || title}
             >
               {/* Category Label */}
@@ -470,6 +470,7 @@ export default function ProductAyurvedCard({ product }) {
                   WebkitBoxOrient: 'vertical',
                   overflow: isHovered ? 'hidden' : 'hidden',
                   textOverflow: 'ellipsis',
+                  lineHeight:'22px',
                 }}
               >
                 {heading || name || title}

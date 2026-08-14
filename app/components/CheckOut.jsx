@@ -659,66 +659,66 @@ export default function CheckOut() {
           <div className="absolute top-20 left-1/4 w-[400px] h-[400px] bg-violet-500/10 rounded-full blur-[150px]" />
           <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-amber-500/10 rounded-full blur-[120px]" />
 
-          <div className="relative z-10 pt-20 pb-24 md:pt-28 md:pb-32">
+          <div className="relative z-10 pt-12 pb-16 md:pt-16 md:pb-20">
             <div className="container mx-auto px-4 md:px-6 text-center">
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20 rounded-full mb-8">
-                <Lock size={16} className="text-violet-400" />
-                <span className="text-violet-300 text-sm font-semibold">Secure Checkout</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20 rounded-full mb-5">
+                <Lock size={14} className="text-violet-400" />
+                <span className="text-violet-300 text-xs font-semibold">Secure Checkout</span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">Checkout</h1>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">Checkout</h1>
 
-              <nav className="flex items-center justify-center gap-2 text-sm">
+              <nav className="flex items-center justify-center gap-2 text-xs">
                 <Link href="/" className="text-gray-500 hover:text-white transition-colors">Home</Link>
-                <ChevronRight size={14} className="text-gray-700" />
+                <ChevronRight size={12} className="text-gray-700" />
                 <Link href="/cart" className="text-gray-500 hover:text-white transition-colors">Cart</Link>
-                <ChevronRight size={14} className="text-gray-700" />
+                <ChevronRight size={12} className="text-gray-700" />
                 <span className="text-amber-400 font-medium">Checkout</span>
               </nav>
             </div>
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 h-12 bg-[#f8f9fa] rounded-t-[50px]" />
+          <div className="absolute bottom-0 left-0 right-0 h-8 bg-[#f8f9fa] rounded-t-[40px]" />
         </section>
 
         {/* ============================================== */}
         {/* SECTION 2: CHECKOUT FORM - LIGHT */}
         {/* ============================================== */}
-        <section className="relative py-8 md:py-12 bg-[#f8f9fa]">
+        <section className="relative py-6 md:py-8 bg-[#f8f9fa]">
           <div className="container mx-auto px-4 md:px-6 lg:px-12">
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
               {[
                 { icon: Lock, title: "Secure Checkout", desc: "256-bit SSL Encrypted", gradient: "from-emerald-500 to-teal-500", bg: "bg-emerald-50" },
                 { icon: Truck, title: "Free Shipping", desc: "On all orders", gradient: "from-blue-500 to-indigo-500", bg: "bg-blue-50" },
                 { icon: RotateCcw, title: "Easy Returns", desc: "7 days return policy", gradient: "from-amber-500 to-orange-500", bg: "bg-amber-50" },
               ].map((badge, index) => (
-                <div key={index} className="bg-white rounded-2xl p-5 flex items-center gap-4 shadow-sm border border-gray-100">
-                  <div className={`w-12 h-12 bg-gradient-to-br ${badge.gradient} rounded-xl flex items-center justify-center shadow-lg`}>
-                    <badge.icon size={22} className="text-white" />
+                <div key={index} className="bg-white rounded-2xl p-4 flex items-center gap-3 shadow-sm border border-gray-100">
+                  <div className={`w-10 h-10 bg-gradient-to-br ${badge.gradient} rounded-xl flex items-center justify-center shadow-lg flex-shrink-0`}>
+                    <badge.icon size={18} className="text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900">{badge.title}</h4>
-                    <p className="text-sm text-gray-500">{badge.desc}</p>
+                    <h4 className="font-bold text-gray-900 text-sm">{badge.title}</h4>
+                    <p className="text-xs text-gray-500">{badge.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="grid lg:grid-cols-12 gap-8 items-start">
+            <div className="grid lg:grid-cols-12 gap-6 items-start">
               {/* Billing Form */}
-              <div className="lg:col-span-7 xl:col-span-8 space-y-6">
+              <div className="lg:col-span-7 xl:col-span-8 space-y-5">
                 <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 overflow-hidden">
                   {/* Form Header */}
-                  <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6 flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                        <User size={22} className="text-white" />
+                  <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-5 flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
+                        <User size={18} className="text-white" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-white">Billing Details</h3>
-                        <p className="text-gray-400 text-sm">
+                        <h3 className="text-base font-bold text-white">Billing Details</h3>
+                        <p className="text-gray-400 text-xs">
                           {!showAddressForm && selectedAddress ? "Review your shipping information" : "Enter your shipping information"}
                         </p>
                       </div>
@@ -730,76 +730,76 @@ export default function CheckOut() {
                           setShowAddressForm(true);
                           setIsNewAddress(false);
                         }}
-                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-sm font-bold transition-all"
+                        className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold transition-all"
                       >
                         Change
                       </button>
                     )}
                   </div>
 
-                  <div className="p-6 md:p-8">
+                  <div className="p-4 md:p-6">
                     {loadingAddresses ? (
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         {/* Skeleton for Address Card */}
-                        <div className="bg-gray-50 border-2 border-gray-100 rounded-[2rem] p-8 space-y-4 animate-pulse">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gray-200 rounded-xl"></div>
+                        <div className="bg-gray-50 border-2 border-gray-100 rounded-[2rem] p-5 md:p-6 space-y-3 animate-pulse">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 bg-gray-200 rounded-xl"></div>
                             <div className="space-y-2">
-                              <div className="h-5 w-40 bg-gray-200 rounded-lg"></div>
+                              <div className="h-4 w-40 bg-gray-200 rounded-lg"></div>
                               <div className="h-3 w-20 bg-gray-200 rounded-lg"></div>
                             </div>
                           </div>
-                          <div className="space-y-3 pt-4">
-                            <div className="h-4 w-full bg-gray-200 rounded-lg"></div>
-                            <div className="h-4 w-3/4 bg-gray-200 rounded-lg"></div>
-                            <div className="h-4 w-1/2 bg-gray-200 rounded-lg"></div>
+                          <div className="space-y-2 pt-3">
+                            <div className="h-3.5 w-full bg-gray-200 rounded-lg"></div>
+                            <div className="h-3.5 w-3/4 bg-gray-200 rounded-lg"></div>
+                            <div className="h-3.5 w-1/2 bg-gray-200 rounded-lg"></div>
                           </div>
-                          <div className="pt-6 flex gap-4">
-                            <div className="h-12 flex-1 bg-gray-200 rounded-xl"></div>
-                            <div className="h-12 w-32 bg-gray-200 rounded-xl"></div>
+                          <div className="pt-4 flex gap-3">
+                            <div className="h-10 flex-1 bg-gray-200 rounded-xl"></div>
+                            <div className="h-10 w-28 bg-gray-200 rounded-xl"></div>
                           </div>
                         </div>
                         {/* Skeleton for Secondary Elements */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="h-24 bg-gray-50 rounded-2xl animate-pulse"></div>
-                          <div className="h-24 bg-gray-50 rounded-2xl animate-pulse"></div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="h-20 bg-gray-50 rounded-2xl animate-pulse"></div>
+                          <div className="h-20 bg-gray-50 rounded-2xl animate-pulse"></div>
                         </div>
                       </div>
                     ) : !showAddressForm && selectedAddress ? (
                       <div className="space-y-6">
-                        <div className="bg-gradient-to-br from-violet-50 to-indigo-50 border-2 border-violet-100 rounded-[2rem] p-8 relative overflow-hidden group">
+                        <div className="bg-gradient-to-br from-violet-50 to-indigo-50 border-2 border-violet-100 rounded-[2rem] p-5 md:p-6 relative overflow-hidden group">
                           <div className="absolute top-0 right-0 w-32 h-32 bg-violet-200/20 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-violet-300/30 transition-all duration-500" />
                           <div className="absolute bottom-0 left-0 w-24 h-24 bg-indigo-200/20 rounded-full -ml-12 -mb-12 blur-2xl" />
 
-                          <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-6">
-                            <div className="space-y-4">
+                          <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-4">
+                            <div className="space-y-3">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-violet-100 flex items-center justify-center">
-                                  <User size={18} className="text-violet-600" />
+                                <div className="w-9 h-9 bg-white rounded-xl shadow-sm border border-violet-100 flex items-center justify-center flex-shrink-0">
+                                  <User size={16} className="text-violet-600" />
                                 </div>
                                 <div>
-                                  <div className="flex items-center gap-3">
-                                    <h4 className="text-xl font-black text-gray-900 uppercase">{selectedAddress.recipient_name}</h4>
-                                    <span className="px-3 py-1 bg-violet-600 text-white text-[10px] font-black uppercase rounded-lg tracking-wider shadow-sm">
+                                  <div className="flex items-center gap-2">
+                                    <h4 className="text-base font-black text-gray-900 uppercase">{selectedAddress.recipient_name}</h4>
+                                    <span className="px-2.5 py-1 bg-violet-600 text-white text-[9px] font-black uppercase rounded-lg tracking-wider shadow-sm">
                                       {selectedAddress.label || 'HOME'}
                                     </span>
                                   </div>
                                 </div>
                               </div>
 
-                              <div className="space-y-2">
+                              <div className="space-y-1.5">
                                 <div className="flex items-start gap-3">
-                                  <MapPin size={18} className="text-violet-400 mt-1 shrink-0" />
-                                  <div className="text-gray-600 leading-relaxed font-medium">
-                                    <p className="text-lg">{selectedAddress.address_line_1}, {selectedAddress.address_line_2}</p>
+                                  <MapPin size={16} className="text-violet-400 mt-0.5 shrink-0" />
+                                  <div className="text-gray-600 leading-relaxed font-medium text-sm">
+                                    <p className="text-sm md:text-base">{selectedAddress.address_line_1}, {selectedAddress.address_line_2}</p>
                                     <p>{selectedAddress.city}, {selectedAddress.state} - {selectedAddress.pincode}</p>
-                                    <p className="text-xs uppercase tracking-widest text-violet-400 font-bold mt-1">{selectedAddress.country}</p>
+                                    <p className="text-[11px] uppercase tracking-widest text-violet-400 font-bold mt-1">{selectedAddress.country}</p>
                                   </div>
                                 </div>
 
-                                <div className="flex items-center gap-3 pt-2">
-                                  <Phone size={18} className="text-violet-400 shrink-0" />
-                                  <span className="text-gray-900 font-bold">{selectedAddress.recipient_phone}</span>
+                                <div className="flex items-center gap-3 pt-1.5">
+                                  <Phone size={16} className="text-violet-400 shrink-0" />
+                                  <span className="text-gray-900 font-bold text-sm">{selectedAddress.recipient_phone}</span>
                                 </div>
                               </div>
                             </div>
@@ -810,7 +810,7 @@ export default function CheckOut() {
                                 setShowAddressForm(true);
                                 setIsNewAddress(false);
                               }}
-                              className="md:mt-0 px-6 py-3 bg-white text-violet-600 border-2 border-violet-100 rounded-2xl text-sm font-black uppercase tracking-wider hover:bg-violet-600 hover:text-white hover:border-violet-600 transition-all shadow-sm active:scale-95"
+                              className="md:mt-0 px-5 py-2.5 bg-white text-violet-600 border-2 border-violet-100 rounded-2xl text-xs font-black uppercase tracking-wider hover:bg-violet-600 hover:text-white hover:border-violet-600 transition-all shadow-sm active:scale-95"
                             >
                               Edit Address
                             </button>
@@ -819,9 +819,9 @@ export default function CheckOut() {
 
                       </div>
                     ) : showAddressForm && !isNewAddress && addresses.length > 0 ? (
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">Select Saved Address</h4>
+                          <h4 className="text-base font-black text-gray-900 uppercase tracking-tight">Select Saved Address</h4>
                           <button
                             type="button"
                             onClick={() => {
@@ -834,7 +834,7 @@ export default function CheckOut() {
                                 longitude: "", dob: "", anniversary: ""
                               });
                             }}
-                            className="bg-violet-600 text-white px-5 py-2.5 rounded-xl text-sm font-black uppercase tracking-wider shadow-lg shadow-violet-200 hover:bg-violet-700 active:scale-95 transition-all"
+                            className="bg-violet-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-violet-200 hover:bg-violet-700 active:scale-95 transition-all"
                           >
                             + Add New
                           </button>
@@ -857,33 +857,33 @@ export default function CheckOut() {
                                   setShowAddressForm(false);
                                   populateFormWithAddress(addr);
                                 }}
-                                className={`p-6 rounded-3xl border-2 cursor-pointer transition-all relative ${isSelected
+                                className={`p-4 rounded-3xl border-2 cursor-pointer transition-all relative ${isSelected
                                   ? 'border-violet-500 bg-violet-50/50 shadow-violet-100'
                                   : 'border-gray-100 bg-white hover:border-violet-200'
                                   }`}
                               >
                                 {isSelected && (
-                                  <div className="absolute top-4 right-4 w-6 h-6 bg-violet-600 rounded-full flex items-center justify-center shadow-lg transform scale-110 animate-in zoom-in duration-300">
-                                    <Check size={14} className="text-white" strokeWidth={4} />
+                                  <div className="absolute top-3 right-3 w-5 h-5 bg-violet-600 rounded-full flex items-center justify-center shadow-lg transform scale-110 animate-in zoom-in duration-300">
+                                    <Check size={12} className="text-white" strokeWidth={4} />
                                   </div>
                                 )}
-                                <div className="flex items-center gap-2 mb-3">
-                                  <h5 className={`font-black uppercase truncate max-w-[120px] ${isSelected ? 'text-violet-900' : 'text-gray-900'}`}>{addr.recipient_name}</h5>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <h5 className={`text-sm font-black uppercase truncate max-w-[120px] ${isSelected ? 'text-violet-900' : 'text-gray-900'}`}>{addr.recipient_name}</h5>
                                   <span className={`px-2 py-0.5 text-[8px] font-black uppercase rounded tracking-tighter ${isSelected ? 'bg-violet-200 text-violet-700' : 'bg-gray-200 text-gray-700'}`}>
                                     {addr.label || 'HOME'}
                                   </span>
                                 </div>
-                                <p className={`text-sm line-clamp-2 leading-relaxed ${isSelected ? 'text-violet-700' : 'text-gray-600'}`}>{addr.address_line_1}, {addr.address_line_2}</p>
-                                <p className={`text-xs mt-2 font-bold ${isSelected ? 'text-violet-500' : 'text-gray-400'}`}>{addr.recipient_phone}</p>
+                                <p className={`text-xs line-clamp-2 leading-relaxed ${isSelected ? 'text-violet-700' : 'text-gray-600'}`}>{addr.address_line_1}, {addr.address_line_2}</p>
+                                <p className={`text-[11px] mt-1.5 font-bold ${isSelected ? 'text-violet-500' : 'text-gray-400'}`}>{addr.recipient_phone}</p>
                               </div>
                             );
                           })}
                         </div>
                       </div>
                     ) : (
-                      <form className="space-y-5">
+                      <form className="space-y-4">
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-lg font-black text-gray-900 uppercase tracking-tight">
+                          <h4 className="text-base font-black text-gray-900 uppercase tracking-tight">
                             {isNewAddress ? "Add New Shipping Address" : "Update Shipping Address"}
                           </h4>
                           {addresses.length > 0 && (
@@ -893,16 +893,16 @@ export default function CheckOut() {
                                 setShowAddressForm(true);
                                 setIsNewAddress(false);
                               }}
-                              className="text-violet-600 text-sm font-black uppercase tracking-wider hover:underline"
+                              className="text-violet-600 text-xs font-black uppercase tracking-wider hover:underline"
                             >
                               Back to Saved
                             </button>
                           )}
                         </div>
                         {/* Name Fields */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                               First Name <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -911,13 +911,13 @@ export default function CheckOut() {
                               required
                               value={formData.firstName}
                               onChange={handleInputChange}
-                              className={`w-full px-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_first_name ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
+                              className={`w-full px-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_first_name ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
                               placeholder="John"
                             />
                             {apiErrors.billing_first_name && <p className="text-red-500 text-xs mt-1">{apiErrors.billing_first_name[0]}</p>}
                           </div>
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                               Last Name <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -926,7 +926,7 @@ export default function CheckOut() {
                               required
                               value={formData.lastName}
                               onChange={handleInputChange}
-                              className={`w-full px-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_last_name ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
+                              className={`w-full px-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_last_name ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
                               placeholder="Doe"
                             />
                             {apiErrors.billing_last_name && <p className="text-red-500 text-xs mt-1">{apiErrors.billing_last_name[0]}</p>}
@@ -934,9 +934,9 @@ export default function CheckOut() {
                         </div>
 
                         {/* Contact Fields */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                               Email Address <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
@@ -947,14 +947,14 @@ export default function CheckOut() {
                                 required
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className={`w-full pl-12 pr-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_email ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
+                                className={`w-full pl-12 pr-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_email ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
                                 placeholder="john@example.com"
                               />
                             </div>
                             {apiErrors.billing_email && <p className="text-red-500 text-xs mt-1">{apiErrors.billing_email[0]}</p>}
                           </div>
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                               Phone Number <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
@@ -965,7 +965,7 @@ export default function CheckOut() {
                                 required
                                 value={formData.phone}
                                 onChange={handleInputChange}
-                                className={`w-full pl-12 pr-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_phone ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
+                                className={`w-full pl-12 pr-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_phone ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
                                 placeholder="+91 98765 43210"
                               />
                               {apiErrors.billing_phone && <p className="text-red-500 text-xs mt-1">{apiErrors.billing_phone[0]}</p>}
@@ -974,9 +974,9 @@ export default function CheckOut() {
                         </div>
 
                         {/* Personal Dates */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                               Date of Birth (Optional)
                             </label>
                             <div className="relative">
@@ -987,12 +987,12 @@ export default function CheckOut() {
                                 value={formData.dob}
                                 onClick={(e) => e.target.showPicker && e.target.showPicker()}
                                 onChange={handleInputChange}
-                                className="w-full pl-12 pr-5 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all cursor-pointer"
+                                className="w-full pl-12 pr-5 py-3 bg-gray-50 border-2 text-sm border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all cursor-pointer"
                               />
                             </div>
                           </div>
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                               Anniversary Date (Optional)
                             </label>
                             <div className="relative">
@@ -1003,25 +1003,25 @@ export default function CheckOut() {
                                 value={formData.anniversary}
                                 onClick={(e) => e.target.showPicker && e.target.showPicker()}
                                 onChange={handleInputChange}
-                                className="w-full pl-12 pr-5 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all cursor-pointer"
+                                className="w-full pl-12 pr-5 py-3 bg-gray-50 border-2 text-sm border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all cursor-pointer"
                               />
                             </div>
                           </div>
                         </div>
 
                         {/* Address Fields */}
-                        <div className="mb-6">
-                          <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                              <MapPin size={18} className="text-violet-600" />
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                              <MapPin size={16} className="text-violet-600" />
                               Shipping Address
                             </h4>
-                            <div className="flex items-center gap-3">
-                              <div className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100">
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 text-[11px] font-bold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100">
                                 {isDetectingLocation ? (
                                   <div className="w-3 h-3 border-2 border-emerald-500/30 border-t-emerald-600 rounded-full animate-spin" />
                                 ) : (
-                                  <Check size={12} />
+                                  <Check size={11} />
                                 )}
                                 {isDetectingLocation ? "Detecting Address..." : "Location Detected"}
                               </div>
@@ -1039,7 +1039,7 @@ export default function CheckOut() {
 
                           {/* Map Preview */}
                           {mapCoords && (
-                            <div className="mb-6 rounded-2xl overflow-hidden border-2 border-gray-100 h-48 relative shadow-inner animate-in fade-in slide-in-from-top-4 duration-700">
+                            <div className="mb-4 rounded-2xl overflow-hidden border-2 border-gray-100 h-36 relative shadow-inner animate-in fade-in slide-in-from-top-4 duration-700">
                               <iframe
                                 width="100%"
                                 height="100%"
@@ -1058,9 +1058,9 @@ export default function CheckOut() {
                           )}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                               House/Flat No. <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
@@ -1071,14 +1071,14 @@ export default function CheckOut() {
                                 required
                                 value={formData.houseNo}
                                 onChange={handleInputChange}
-                                className={`w-full pl-12 pr-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_house_no ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
+                                className={`w-full pl-12 pr-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_house_no ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
                                 placeholder="123"
                               />
                               {apiErrors.billing_house_no && <p className="text-red-500 text-xs mt-1">{apiErrors.billing_house_no[0]}</p>}
                             </div>
                           </div>
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Landmark</label>
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">Landmark</label>
                             <div className="relative">
                               <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                               <input
@@ -1086,7 +1086,7 @@ export default function CheckOut() {
                                 name="landmark"
                                 value={formData.landmark}
                                 onChange={handleInputChange}
-                                className="w-full pl-12 pr-5 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
+                                className="w-full pl-12 pr-5 py-3 bg-gray-50 border-2 text-sm border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all"
                                 placeholder="Near City Mall"
                               />
                             </div>
@@ -1094,7 +1094,7 @@ export default function CheckOut() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                             Street Address <span className="text-red-500">*</span>
                           </label>
                           <input
@@ -1103,15 +1103,15 @@ export default function CheckOut() {
                             required
                             value={formData.street}
                             onChange={handleInputChange}
-                            className={`w-full px-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_street_address ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
+                            className={`w-full px-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_street_address ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
                             placeholder="Enter your street address"
                           />
                           {apiErrors.billing_street_address && <p className="text-red-500 text-xs mt-1">{apiErrors.billing_street_address[0]}</p>}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Country <span className="text-red-500">*</span></label>
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">Country <span className="text-red-500">*</span></label>
                             <select
                               name="country"
                               value={formData.countryId}
@@ -1128,7 +1128,7 @@ export default function CheckOut() {
                                   city: ""
                                 }));
                               }}
-                              className={`w-full px-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_country ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all disabled:opacity-50`}
+                              className={`w-full px-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_country ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all disabled:opacity-50`}
                               disabled={loadingLocations.countries}
                               required
                             >
@@ -1141,7 +1141,7 @@ export default function CheckOut() {
                           </div>
 
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">State <span className="text-red-500">*</span></label>
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">State <span className="text-red-500">*</span></label>
                             <select
                               name="state"
                               value={formData.stateId}
@@ -1156,7 +1156,7 @@ export default function CheckOut() {
                                   city: ""
                                 }));
                               }}
-                              className={`w-full px-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_state ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all disabled:opacity-50`}
+                              className={`w-full px-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_state ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all disabled:opacity-50`}
                               disabled={loadingLocations.states || !formData.countryId}
                               required
                             >
@@ -1169,9 +1169,9 @@ export default function CheckOut() {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">City <span className="text-red-500">*</span></label>
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">City <span className="text-red-500">*</span></label>
                             <select
                               name="city"
                               value={formData.cityId}
@@ -1180,7 +1180,7 @@ export default function CheckOut() {
                                 const name = cities.find(c => c.id == id)?.name || "";
                                 setFormData(prev => ({ ...prev, cityId: id, city: name }));
                               }}
-                              className={`w-full px-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_city ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all disabled:opacity-50`}
+                              className={`w-full px-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_city ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all disabled:opacity-50`}
                               disabled={loadingLocations.cities || !formData.stateId}
                               required
                             >
@@ -1193,7 +1193,7 @@ export default function CheckOut() {
                           </div>
 
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Pincode <span className="text-red-500">*</span></label>
+                            <label className="block text-xs font-semibold text-gray-700 mb-1.5">Pincode <span className="text-red-500">*</span></label>
                             <input
                               type="text"
                               name="pincode"
@@ -1201,7 +1201,7 @@ export default function CheckOut() {
                               pattern="[0-9]{6}"
                               value={formData.pincode}
                               onChange={handleInputChange}
-                              className={`w-full px-5 py-4 bg-gray-50 border-2 ${apiErrors.billing_pincode ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
+                              className={`w-full px-5 py-3 bg-gray-50 border-2 text-sm ${apiErrors.billing_pincode ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all`}
                               placeholder="400001"
                             />
                             {apiErrors.billing_pincode && <p className="text-red-500 text-xs mt-1">{apiErrors.billing_pincode[0]}</p>}
@@ -1220,13 +1220,13 @@ export default function CheckOut() {
 
                         {/* Order Notes */}
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-2">Order Notes (Optional)</label>
+                          <label className="block text-xs font-semibold text-gray-700 mb-1.5">Order Notes (Optional)</label>
                           <textarea
                             name="notes"
                             rows="4"
                             value={formData.notes}
                             onChange={handleInputChange}
-                            className="w-full px-5 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all resize-none"
+                            className="w-full px-5 py-3 bg-gray-50 border-2 text-sm border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 focus:bg-white transition-all resize-none"
                             placeholder="Notes about your order, e.g. special notes for delivery"
                           />
                         </div>
@@ -1238,18 +1238,18 @@ export default function CheckOut() {
                               type="button"
                               onClick={handleSaveNewAddress}
                               disabled={loadingAddresses}
-                              className="w-full py-5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-violet-200 hover:shadow-violet-300 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3"
+                              className="w-full py-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-black uppercase tracking-widest text-sm rounded-2xl shadow-xl shadow-violet-200 hover:shadow-violet-300 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3"
                             >
                               {loadingAddresses ? (
                                 <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                               ) : (
                                 <>
-                                  <Check size={20} />
+                                  <Check size={18} />
                                   Save and Use this Address
                                 </>
                               )}
                             </button>
-                            <p className="text-center text-[10px] text-gray-400 font-bold uppercase mt-3 tracking-widest">
+                            <p className="text-center text-[10px] text-gray-400 font-bold uppercase mt-2.5 tracking-widest">
                               Your address will be saved securely to your profile
                             </p>
                           </div>
@@ -1261,27 +1261,27 @@ export default function CheckOut() {
               </div>
 
               {/* Order Summary Sidebar */}
-              <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6 space-y-6">
+              <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6 space-y-5">
                 {/* Order Summary */}
                 <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 overflow-hidden">
-                  <div className="bg-gradient-to-r from-violet-600 to-purple-600 p-6 text-white">
-                    <h4 className="font-bold text-xl">Order Summary</h4>
+                  <div className="bg-gradient-to-r from-violet-600 to-purple-600 p-5 text-white">
+                    <h4 className="font-bold text-lg">Order Summary</h4>
                   </div>
 
-                  <div className="p-6 space-y-5">
+                  <div className="p-5 space-y-4">
                     {/* Cart Items */}
-                    <div className="space-y-3 max-h-56 overflow-y-auto custom-scrollbar pr-2">
+                    <div className="space-y-2.5 max-h-56 overflow-y-auto custom-scrollbar pr-2">
                       {cartList.map((item) => (
-                        <div key={item.id} className="group relative flex items-center gap-3 pb-3 border-b border-gray-100">
-                          <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
+                        <div key={item.id} className="group relative flex items-center gap-3 pb-2.5 border-b border-gray-100">
+                          <div className="w-14 h-14 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
                             <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h5 className="text-sm font-bold text-gray-900 line-clamp-1">{item.title}</h5>
-                            <p className="text-xs text-gray-500">Qty: {item.qnty}</p>
+                            <h5 className="text-xs font-bold text-gray-900 line-clamp-1">{item.title}</h5>
+                            <p className="text-[11px] text-gray-500">Qty: {item.qnty}</p>
                           </div>
                           <div className="flex flex-col items-end gap-1">
-                            <span className="font-bold text-gray-900">₹{item.price * item.qnty}</span>
+                            <span className="font-bold text-gray-900 text-sm">₹{item.price * item.qnty}</span>
                             <button
                               onClick={() => {
                                 dispatch(removeFromCartAsync(item.id));
@@ -1290,7 +1290,7 @@ export default function CheckOut() {
                               className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all p-1"
                               title="Remove item"
                             >
-                              <Trash2 size={14} />
+                              <Trash2 size={13} />
                             </button>
                           </div>
                         </div>
@@ -1298,44 +1298,44 @@ export default function CheckOut() {
                     </div>
 
                     {/* Coupon Section */}
-                    <div className="pt-4 border-t border-gray-100">
+                    <div className="pt-3 border-t border-gray-100">
                       {!appliedCoupon ? (
                         !showCouponInput ? (
                           <button
                             onClick={() => setShowCouponInput(true)}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-4 border-2 border-dashed border-violet-300 rounded-xl text-violet-600 font-semibold hover:bg-violet-50 transition-all"
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-violet-300 rounded-xl text-violet-600 font-semibold text-sm hover:bg-violet-50 transition-all"
                           >
                             <Tag size={18} />
                             Have a Coupon Code?
                           </button>
                         ) : (
-                          <div className="space-y-3">
+                          <div className="space-y-2.5">
                             <div className="flex gap-2">
                               <div className="relative flex-1">
-                                <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                                <Tag className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                                 <input
                                   type="text"
                                   value={couponCode}
                                   onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                                   placeholder="Enter code"
-                                  className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 transition-all uppercase text-sm"
+                                  className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-violet-500 transition-all uppercase text-sm"
                                 />
                               </div>
                               <button
                                 onClick={handleApplyCoupon}
-                                className="px-6 py-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+                                className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-purple-600 text-white font-bold text-sm rounded-xl hover:shadow-lg transition-all"
                               >
                                 Apply
                               </button>
                             </div>
                             {couponError && (
-                              <p className="text-xs text-red-500 flex items-center gap-1"><X size={14} />{couponError}</p>
+                              <p className="text-xs text-red-500 flex items-center gap-1"><X size={13} />{couponError}</p>
                             )}
 
                             {/* Available Coupons */}
-                            <div className="bg-violet-50 p-4 rounded-xl border border-violet-100">
-                              <p className="text-xs font-bold text-violet-900 mb-2">🎁 Available Coupons:</p>
-                              <div className="space-y-2">
+                            <div className="bg-violet-50 p-3 rounded-xl border border-violet-100">
+                              <p className="text-xs font-bold text-violet-900 mb-1.5">🎁 Available Coupons:</p>
+                              <div className="space-y-1.5">
                                 {availableCoupons.map((coupon) => (
                                   <div key={coupon.code} className="flex items-center justify-between text-xs bg-white p-2 rounded-lg">
                                     <span className="font-mono font-bold text-violet-700">{coupon.code}</span>
@@ -1349,35 +1349,35 @@ export default function CheckOut() {
                           </div>
                         )
                       ) : (
-                        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-4">
-                          <div className="flex items-center justify-between mb-2">
+                        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-3.5">
+                          <div className="flex items-center justify-between mb-1.5">
                             <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
-                                <Check size={14} className="text-white" />
+                              <div className="w-7 h-7 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                                <Check size={13} className="text-white" />
                               </div>
-                              <span className="font-mono font-bold text-emerald-900">{appliedCoupon.code}</span>
+                              <span className="font-mono font-bold text-emerald-900 text-sm">{appliedCoupon.code}</span>
                             </div>
                             <button onClick={handleRemoveCoupon} className="text-red-500 hover:text-red-700 transition-colors">
-                              <X size={18} />
+                              <X size={16} />
                             </button>
                           </div>
-                          <p className="text-sm text-emerald-700">🎉 Coupon applied! You saved ₹{couponDiscount}</p>
+                          <p className="text-xs text-emerald-700">🎉 Coupon applied! You saved ₹{couponDiscount}</p>
                         </div>
                       )}
                     </div>
 
                     {/* Price Summary */}
-                    <div className="space-y-3 pt-4">
+                    <div className="space-y-2.5 pt-3 text-sm">
                       <div className="flex justify-between text-gray-600">
                         <span>Subtotal ({cartList.length} items)</span>
                         <span className="font-bold text-gray-900">₹{subtotal}</span>
                       </div>
-                      <div className="flex justify-between text-emerald-600 font-bold bg-emerald-50 px-4 py-3 rounded-xl border border-emerald-100">
+                      <div className="flex justify-between text-emerald-600 font-bold bg-emerald-50 px-3 py-2.5 rounded-xl border border-emerald-100">
                         <span>Savings</span>
                         <span>- ₹{savings}</span>
                       </div>
                       {appliedCoupon && (
-                        <div className="flex justify-between text-violet-600 font-bold bg-violet-50 px-4 py-3 rounded-xl border border-violet-200">
+                        <div className="flex justify-between text-violet-600 font-bold bg-violet-50 px-3 py-2.5 rounded-xl border border-violet-200">
                           <span>Coupon ({appliedCoupon.code})</span>
                           <span>- ₹{couponDiscount}</span>
                         </div>
@@ -1397,28 +1397,28 @@ export default function CheckOut() {
                     {/* Total */}
                     <div className="flex justify-between items-center">
                       <div>
-                        <p className="text-xs text-gray-500 font-semibold uppercase">Total Amount</p>
-                        <p className="text-sm text-emerald-600 font-bold">You save ₹{savings + couponDiscount}</p>
+                        <p className="text-[11px] text-gray-500 font-semibold uppercase">Total Amount</p>
+                        <p className="text-xs text-emerald-600 font-bold">You save ₹{savings + couponDiscount}</p>
                       </div>
-                      <span className="text-4xl font-black text-gray-900">₹{total}</span>
+                      <span className="text-2xl md:text-3xl font-black text-gray-900">₹{total}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Payment Methods */}
                 <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 overflow-hidden">
-                  <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-5">
-                    <h4 className="font-bold text-lg text-white flex items-center gap-2">
-                      <CreditCard size={20} /> Payment Method
+                  <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-4">
+                    <h4 className="font-bold text-base text-white flex items-center gap-2">
+                      <CreditCard size={18} /> Payment Method
                     </h4>
                   </div>
 
-                  <div className="p-5 space-y-3">
+                  <div className="p-4 space-y-2.5">
                     {paymentMethods.map((method) => (
 
                       <label
                         key={method.id}
-                        className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedPayment === method.id
+                        className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${selectedPayment === method.id
                           ? 'border-violet-500 bg-violet-50'
                           : 'border-gray-200 hover:border-violet-300'
                           }`}
@@ -1431,13 +1431,13 @@ export default function CheckOut() {
                           onChange={(e) => setSelectedPayment(e.target.value)}
                           className="sr-only"
                         />
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${selectedPayment === method.id ? 'border-violet-500 bg-violet-500' : 'border-gray-300'
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selectedPayment === method.id ? 'border-violet-500 bg-violet-500' : 'border-gray-300'
                           }`}>
-                          {selectedPayment === method.id && <Check size={14} className="text-white" />}
+                          {selectedPayment === method.id && <Check size={12} className="text-white" />}
                         </div>
-                        <span className="text-2xl">{method.emoji}</span>
+                        <span className="text-xl">{method.emoji}</span>
                         <div className="flex-1">
-                          <div className={`font-bold ${selectedPayment === method.id ? 'text-violet-700' : 'text-gray-900'}`}>
+                          <div className={`font-bold text-sm ${selectedPayment === method.id ? 'text-violet-700' : 'text-gray-900'}`}>
                             {method.label}
                           </div>
                           <div className="text-xs text-gray-500">{method.description}</div>
@@ -1449,20 +1449,20 @@ export default function CheckOut() {
                     <button
                       onClick={handlePlaceOrder}
                       disabled={isSubmitting}
-                      className="w-full mt-4 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:hover:translate-y-0"
+                      className="w-full mt-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-2xl font-bold text-base shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:hover:translate-y-0"
                     >
                       {isSubmitting ? (
                         <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
                       ) : (
                         <>
-                          <Lock size={18} />
+                          <Lock size={16} />
                           Place Order ₹{total}
-                          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </>
                       )}
                     </button>
 
-                    <p className="text-center text-xs text-gray-400 mt-4">
+                    <p className="text-center text-xs text-gray-400 mt-3">
                       By placing order, you agree to our Terms & Conditions
                     </p>
                   </div>

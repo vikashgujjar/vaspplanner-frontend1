@@ -60,12 +60,12 @@ const VASPPlanner = ({ initialData = null }) => {
         </div>
 
         {/* Heading */}
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold uppercase tracking-wider mb-4 text-white">
+        <h2 className="text-2xl md:text-3xl font-extrabold uppercase tracking-wider mb-4 text-white">
           {plannerData.title || "HOME PAGE UPDATE"}
         </h2>
 
         {/* Description */}
-        <p className="text-gray-400 text-xs md:text-sm max-w-4xl mx-auto leading-relaxed mb-10">
+        <p className="text-gray-400 max-w-4xl mx-auto leading-relaxed mb-10">
           {plannerData.text}
         </p>
 

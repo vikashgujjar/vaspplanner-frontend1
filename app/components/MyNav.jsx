@@ -4,7 +4,9 @@ import {
   Briefcase,
   Building2,
   ChevronDown,
+  Facebook,
   Heart,
+  Instagram,
   LogOut,
   MapPin,
   Menu,
@@ -23,6 +25,38 @@ import { toast } from "react-toastify";
 import { fetchHomeLayout, searchProducts, getCachedSearchResult, preloadProductSearchIndex } from "../services/productService";
 import { setError, setLocation, setPincode, setStatus } from "../store/locationSlice";
 
+// The backend's category `icon` field is empty for every category right now,
+// so pick a distinctive emoji from the category name instead of falling
+// back to the same generic gift box for all of them.
+const getCategoryIcon = (name = "") => {
+  const n = name.toLowerCase();
+  if (n.includes("wedding")) return "💍";
+  if (n.includes("haldi")) return "🌼";
+  if (n.includes("birthday")) return "🎂";
+  if (n.includes("festival")) return "🎉";
+  if (n.includes("corporate")) return "🏢";
+  if (n.includes("cake")) return "🍰";
+  if (n.includes("anniversary")) return "💐";
+  if (n.includes("baby")) return "👶";
+  if (n.includes("flower")) return "🌸";
+  if (n.includes("chocolate")) return "🍫";
+  if (n.includes("plant")) return "🌱";
+  if (n.includes("jewel")) return "💎";
+  if (n.includes("personal")) return "✨";
+  if (n.includes("hamper")) return "🧺";
+  if (n.includes("candle")) return "🕯️";
+  if (n.includes("perfume") || n.includes("fragrance")) return "🌺";
+  if (n.includes("toy")) return "🧸";
+  if (n.includes("decor") || n.includes("home")) return "🏠";
+  if (n.includes("kid") || n.includes("children")) return "🧒";
+  if (n.includes("valentine") || n.includes("romantic") || n.includes("love")) return "❤️";
+  if (n.includes("diwali")) return "🪔";
+  if (n.includes("christmas")) return "🎄";
+  if (n.includes("rakhi") || n.includes("raksha")) return "🎗️";
+  if (n.includes("all product")) return "🛍️";
+  return "🎁";
+};
+
 export default function PremiumHeader({ initialLayoutData }) {
   const [navCategories, setNavCategories] = useState(initialLayoutData?.navigation?.slice(0, 10) || []);
   const [loading, setLoading] = useState(!initialLayoutData);
@@ -33,7 +67,6 @@ export default function PremiumHeader({ initialLayoutData }) {
   const [searchFocused, setSearchFocused] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState(null);
   const [expandedMenus, setExpandedMenus] = useState({});
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchCategories, setSearchCategories] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -420,7 +453,7 @@ export default function PremiumHeader({ initialLayoutData }) {
                   className="flex items-center gap-3 p-2 bg-white/5 rounded-xl hover:bg-white/10 transition-all group"
                 >
                   <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center group-hover:bg-amber-500/10">
-                    <span className="text-lg">{cat.icon || "🎁"}</span>
+                    <span className="text-lg">{cat.icon || getCategoryIcon(cat.name)}</span>
                   </div>
                   <span className="text-sm text-gray-300 group-hover:text-amber-300 font-medium">{cat.name}</span>
                 </Link>
@@ -512,7 +545,7 @@ export default function PremiumHeader({ initialLayoutData }) {
     const sidebarMenuItems = navCategories.map(cat => ({
       id: cat.slug,
       title: cat.name,
-      icon: cat.icon || "🎁",
+      icon: cat.icon || getCategoryIcon(cat.name),
       link: `/category/${cat.slug}`,
       hasSubmenu: cat.sub_categories?.length > 0,
       submenu: cat.sub_categories?.map(sub => ({
@@ -533,143 +566,241 @@ export default function PremiumHeader({ initialLayoutData }) {
 
     return (
       <div
-        className={`${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} duration-300 transition-transform fixed bg-black/70 backdrop-blur-sm inset-0 z-[999] flex justify-start lg:hidden`}
+        className={`${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} duration-300 transition-transform fixed bg-black/80 backdrop-blur-md inset-0 z-[999] flex justify-start lg:hidden`}
         onClick={(e) => {
           if (e.target === e.currentTarget) setIsMobileMenuOpen(false);
         }}
       >
-        <div className="w-[85%] sm:w-[75%] md:w-[60%] bg-[#0f0f0f] h-full overflow-y-auto shadow-2xl border-r border-white/10">
-          {/* Mobile Menu Header */}
-          <div className="sticky top-0 bg-[#0f0f0f]/95 backdrop-blur-md z-10 border-b border-white/10">
-            <div className="flex justify-between items-center p-4">
-              <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[50px] brightness-0 invert" />
-              </Link>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-gray-400 hover:text-white p-2 hover:bg-white/10 rounded-full transition-all"
-              >
-                <X size={24} />
-              </button>
-            </div>
+        <div className="relative w-[85%] sm:w-[75%] md:w-[60%] bg-[#0f0f0f] h-full overflow-y-auto shadow-2xl border-r border-white/10">
+          {/* Ambient decorative glows */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-            <div className="px-4 pb-4 space-y-3">
-              <Link href={isLoggedIn ? "/user/profile/" : "/user/login/"}>
+          <div className="relative z-10">
+            {/* Mobile Menu Header */}
+            <div className="sticky top-0 bg-[#0f0f0f]/95 backdrop-blur-md z-10 border-b border-white/10">
+              <div className="flex justify-between items-center p-4">
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                  <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[46px]" />
+                </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-black py-3.5 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30"
+                  className="text-gray-400 hover:text-white hover:rotate-90 p-2 hover:bg-white/10 rounded-full transition-all duration-300"
                 >
-                  <User size={20} />
-                  <span>{isLoggedIn ? "Account" : "Login / Sign Up"}</span>
+                  <X size={22} />
                 </button>
-              </Link>
+              </div>
+            </div>
+
+            {/* Account Card */}
+            <div className="px-4 pt-4">
+              {isLoggedIn ? (
+                <div className="flex items-center gap-3 bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-transparent border border-amber-500/20 rounded-2xl p-3">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-black font-black text-lg flex-shrink-0 shadow-lg shadow-amber-500/30">
+                    {(userEmail || "U").charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-semibold text-sm truncate">Welcome back!</p>
+                    <p className="text-gray-500 text-xs truncate">{userEmail || "Member"}</p>
+                  </div>
+                  <Link
+                    href="/user/profile/"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-amber-400 hover:text-amber-300 p-2 hover:bg-white/5 rounded-lg transition-all flex-shrink-0"
+                    aria-label="View profile"
+                  >
+                    <ArrowRight size={16} />
+                  </Link>
+                </div>
+              ) : (
+                <Link href="/user/login/" onClick={() => setIsMobileMenuOpen(false)}>
+                  <div className="relative overflow-hidden bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 rounded-2xl p-4 flex items-center gap-3 shadow-lg shadow-amber-500/20 group">
+                    <div className="absolute inset-0 bg-white/20 -translate-x-full group-active:translate-x-full transition-transform duration-700" />
+                    <div className="w-10 h-10 rounded-xl bg-black/10 flex items-center justify-center flex-shrink-0">
+                      <User size={20} className="text-black" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-black font-bold text-sm">Login / Sign Up</p>
+                      <p className="text-black/70 text-[11px]">Unlock rewards &amp; faster checkout</p>
+                    </div>
+                    <ArrowRight size={18} className="text-black" />
+                  </div>
+                </Link>
+              )}
               {isLoggedIn && (
                 <button
                   onClick={handleLogout}
-                  className="w-full bg-white/5 border border-white/10 text-white py-3.5 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all hover:bg-red-500/10 hover:border-red-500/30 group"
+                  className="w-full mt-2 flex items-center justify-center gap-2 text-gray-500 hover:text-red-400 text-xs font-medium py-2 transition-colors"
                 >
-                  <LogOut size={20} className="group-hover:text-red-400 transition-colors" />
-                  <span className="group-hover:text-red-400 transition-colors">Logout</span>
+                  <LogOut size={14} />
+                  Logout
                 </button>
               )}
             </div>
-          </div>
 
-          <div className="px-4 py-4">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 px-2">
-              <span className="w-1 h-4 bg-gradient-to-b from-amber-400 to-amber-600 rounded-full"></span>
-              SHOP
-            </h3>
+            {/* Quick Actions */}
+            <div className="px-4 pt-4 pb-2 grid grid-cols-3 gap-2">
+              <Link
+                href="/wishlist"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative flex flex-col items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl py-3 transition-all"
+              >
+                <Heart size={18} className="text-gray-300" />
+                <span className="text-[10px] text-gray-400 font-medium">Wishlist</span>
+                {mounted && wishListItemCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 bg-amber-500 text-black text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                    {wishListItemCount}
+                  </span>
+                )}
+              </Link>
+              <Link
+                href="/cart"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative flex flex-col items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl py-3 transition-all"
+              >
+                <ShoppingCart size={18} className="text-gray-300" />
+                <span className="text-[10px] text-gray-400 font-medium">Cart</span>
+                {mounted && cartItemCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 bg-amber-500 text-black text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                    {cartItemCount}
+                  </span>
+                )}
+              </Link>
+              <Link
+                href="/track-order"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex flex-col items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl py-3 transition-all"
+              >
+                <Truck size={18} className="text-gray-300" />
+                <span className="text-[10px] text-gray-400 font-medium">Track</span>
+              </Link>
+            </div>
 
-            <nav>
-              <ul className="space-y-1">
-                {sidebarMenuItems.map((item) => (
-                  <li key={item.id}>
-                    {!item.hasSubmenu ? (
-                      <Link
-                        href={item.link}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center justify-between p-3 hover:bg-white/5 rounded-xl transition-all group border border-transparent hover:border-amber-500/20"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl">{item.icon}</span>
-                          <span className="text-gray-300 font-medium group-hover:text-amber-300 transition-colors">
-                            {item.title}
-                          </span>
-                        </div>
-                        <ArrowRight className="text-gray-600 group-hover:text-amber-400 transition-colors" size={16} />
-                      </Link>
-                    ) : (
-                      <div>
-                        <button
-                          onClick={() => toggleSubmenu(item.id)}
-                          className="w-full flex items-center justify-between p-3 hover:bg-white/5 rounded-xl transition-all group border border-transparent hover:border-amber-500/20"
+            <div className="px-4 py-4">
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 px-2">
+                <span className="w-1 h-4 bg-gradient-to-b from-amber-400 to-amber-600 rounded-full"></span>
+                SHOP
+              </h3>
+
+              <nav>
+                <ul className="space-y-1">
+                  {sidebarMenuItems.map((item) => (
+                    <li key={item.id}>
+                      {!item.hasSubmenu ? (
+                        <Link
+                          href={item.link}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="relative flex items-center justify-between p-3 pl-4 hover:bg-white/5 rounded-xl transition-all group overflow-hidden"
                         >
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-amber-400 rounded-r-full group-hover:h-2/3 transition-all duration-300" />
                           <div className="flex items-center gap-3">
-                            <span className="text-xl">{item.icon}</span>
+                            <div className="w-9 h-9 rounded-lg bg-white/5 group-hover:bg-amber-500/10 flex items-center justify-center text-lg transition-colors flex-shrink-0">
+                              {item.icon}
+                            </div>
                             <span className="text-gray-300 font-medium group-hover:text-amber-300 transition-colors">
                               {item.title}
                             </span>
                           </div>
-                          <ChevronDown
-                            className={`text-gray-500 transition-all duration-300 ${expandedMenus[item.id] ? "rotate-180 text-amber-400" : ""}`}
-                            size={16}
-                          />
-                        </button>
+                          <ArrowRight className="text-gray-600 group-hover:text-amber-400 group-hover:translate-x-1 transition-all" size={16} />
+                        </Link>
+                      ) : (
+                        <div>
+                          <button
+                            onClick={() => toggleSubmenu(item.id)}
+                            className="relative w-full flex items-center justify-between p-3 pl-4 hover:bg-white/5 rounded-xl transition-all group overflow-hidden"
+                          >
+                            <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-r-full bg-amber-400 transition-all duration-300 ${expandedMenus[item.id] ? "h-2/3" : "h-0 group-hover:h-2/3"}`} />
+                            <div className="flex items-center gap-3">
+                              <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-colors flex-shrink-0 ${expandedMenus[item.id] ? "bg-amber-500/10" : "bg-white/5 group-hover:bg-amber-500/10"}`}>
+                                {item.icon}
+                              </div>
+                              <span className="text-gray-300 font-medium group-hover:text-amber-300 transition-colors">
+                                {item.title}
+                              </span>
+                            </div>
+                            <ChevronDown
+                              className={`text-gray-500 transition-all duration-300 ${expandedMenus[item.id] ? "rotate-180 text-amber-400" : ""}`}
+                              size={16}
+                            />
+                          </button>
 
-                        <div className={`overflow-hidden transition-all duration-300 ${expandedMenus[item.id] ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"}`}>
-                          <ul className="ml-11 space-y-1 border-l-2 border-amber-500/20 pl-4 py-1">
-                            {item.submenu.map((subItem, index) => (
-                              <li key={index}>
-                                <Link
-                                  href={subItem.link}
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block py-2.5 px-3 text-sm text-gray-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-lg transition-all"
-                                >
-                                  {subItem.title}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
+                          <div className={`overflow-hidden transition-all duration-300 ${expandedMenus[item.id] ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"}`}>
+                            <ul className="ml-11 space-y-1 border-l-2 border-amber-500/20 pl-4 py-1">
+                              {item.submenu.map((subItem, index) => (
+                                <li key={index}>
+                                  <Link
+                                    href={subItem.link}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="block py-2.5 px-3 text-sm text-gray-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-lg transition-all"
+                                  >
+                                    {subItem.title}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+
+            <div className="border-t border-white/10 my-3 mx-4"></div>
+
+            <div className="px-4 py-3">
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 px-2">
+                <span className="w-1 h-4 bg-gray-600 rounded-full"></span>
+                MORE
+              </h3>
+              <ul className="space-y-1">
+                {additionalLinks.map((item, index) => (
+                  <li key={index}>
+                    <Link
+                      href={item.link}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="relative flex items-center gap-3 p-3 pl-4 hover:bg-white/5 rounded-xl transition-all group overflow-hidden"
+                    >
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-amber-400 rounded-r-full group-hover:h-2/3 transition-all duration-300" />
+                      <div className="w-9 h-9 rounded-lg bg-white/5 group-hover:bg-amber-500/10 flex items-center justify-center text-base transition-colors flex-shrink-0">
+                        {item.icon}
                       </div>
-                    )}
+                      <span className="text-gray-300 font-medium group-hover:text-amber-300 transition-colors flex-1">
+                        {item.title}
+                      </span>
+                      <ArrowRight className="text-gray-600 group-hover:text-amber-400 group-hover:translate-x-1 transition-all" size={16} />
+                    </Link>
                   </li>
                 ))}
               </ul>
-            </nav>
-          </div>
+            </div>
 
-          <div className="border-t border-white/10 my-3 mx-4"></div>
-
-          <div className="px-4 py-3">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 px-2">
-              <span className="w-1 h-4 bg-gray-600 rounded-full"></span>
-              MORE
-            </h3>
-            <ul className="space-y-1">
-              {additionalLinks.map((item, index) => (
-                <li key={index}>
-                  <Link
-                    href={item.link}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl transition-all group border border-transparent hover:border-amber-500/20"
-                  >
-                    <span className="text-lg">{item.icon}</span>
-                    <span className="text-gray-300 font-medium group-hover:text-amber-300 transition-colors flex-1">
-                      {item.title}
-                    </span>
-                    <ArrowRight className="text-gray-600 group-hover:text-amber-400 transition-colors" size={16} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="border-t border-white/10 px-4 py-6 mt-8">
-            <p className="text-xs text-gray-600 text-center">
-              © 2024 VASP Planner. All rights reserved.
-            </p>
+            <div className="border-t border-white/10 px-4 py-6 mt-4">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <a
+                  href="https://www.facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-amber-500/20 flex items-center justify-center text-gray-500 hover:text-amber-400 transition-all"
+                >
+                  <Facebook size={14} />
+                </a>
+                <a
+                  href="https://www.instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-amber-500/20 flex items-center justify-center text-gray-500 hover:text-amber-400 transition-all"
+                >
+                  <Instagram size={14} />
+                </a>
+              </div>
+              <p className="text-xs text-gray-600 text-center">
+                © 2024 VASP Planner. All rights reserved.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -706,11 +837,11 @@ export default function PremiumHeader({ initialLayoutData }) {
       {/* Main Header */}
       <div className="border-b border-white/10">
         <div className="container mx-auto px-4">
-          <div className={`flex items-center justify-between gap-4 ${!OnScroll ? 'py-1' : 'py-3'}`}>
+          <div className={`relative flex items-center justify-between gap-4 ${!OnScroll ? 'py-1' : 'py-3'}`}>
             {/* Mobile Menu Button */}
             {/* Logo */}
             <Link href="/" className="flex items-center flex-shrink-0">
-              <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[50px] md:h-[60px] brightness-0 invert" fetchPriority="high" />
+              <img src="/img/Ayutramartlogo.webp" alt="VASP Planner Logo" className="h-[50px] md:h-[60px]" fetchPriority="high" />
             </Link>
 
             {/* Location Selector - Desktop */}
@@ -798,6 +929,17 @@ export default function PremiumHeader({ initialLayoutData }) {
             {/* Right Actions */}
             <div className="flex items-center gap-2 md:gap-4">
 
+              {/* Location Selector - Compact Mobile (left of hamburger) */}
+              <button
+                onClick={() => setIsLocationOpen(!isLocationOpen)}
+                className="lg:hidden flex items-center justify-center p-2 hover:bg-white/5 rounded-lg transition-all"
+                aria-label="Select Delivery Location"
+              >
+                <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center">
+                  <MapPin size={20} className="text-amber-400" />
+                </div>
+              </button>
+
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden text-gray-300 hover:text-amber-400 transition-colors p-2 hover:bg-white/5 rounded-lg"
@@ -807,20 +949,10 @@ export default function PremiumHeader({ initialLayoutData }) {
                 </div>
               </button>
 
-              {/* Mobile Search Toggle */}
-              <button
-                onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
-                className="md:hidden text-gray-300 hover:text-amber-400 transition-colors p-2 hover:bg-white/5 rounded-lg"
-              >
-                <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center group-hover:bg-amber-500/10 transition-colors mb-1">
-                  <Search size={22} />
-                </div>
-              </button>
-
               {/* Same Day Delivery */}
               <Link
                 href="/category/same-day"
-                className="hidden min-[500px]:max-[650px]:flex sm:flex md:flex flex-col items-center group transition-all p-2 hover:bg-white/5 rounded-xl"
+                className="hidden md:flex flex-col items-center group transition-all p-2 hover:bg-white/5 rounded-xl"
               >
                 <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center group-hover:bg-amber-500/10 transition-colors mb-1">
                   <Truck size={20} className="text-gray-400 group-hover:text-amber-400 transition-colors" />
@@ -925,8 +1057,36 @@ export default function PremiumHeader({ initialLayoutData }) {
             </div>
           </div>
 
-          {/* Mobile Search Bar - Expandable */}
-          <div className={`md:hidden overflow-hidden transition-all duration-300 ${mobileSearchOpen ? "max-h-[500px] pb-4" : "max-h-0"}`}>
+            {/* Location Dropdown Panel - Mobile (anchored to the whole header row so it can't overflow off the small trigger icon) */}
+            {isLocationOpen && (
+              <div className="lg:hidden">
+                <div className="fixed inset-0 z-10" onClick={() => setIsLocationOpen(false)} />
+                <div className="absolute top-full left-4 right-4 -mt-16 bg-[#1a1a1a] shadow-2xl rounded-xl p-4 border border-white/10 z-20">
+                  <h3 className="text-sm font-bold mb-1 text-white">Select Delivery Location</h3>
+                  <p className="text-xs text-gray-500 mb-3">Enter your area to check delivery options</p>
+                  <div className="mb-3">
+                    <input
+                      type="text"
+                      placeholder="Enter pincode or city"
+                      value={pincodeInput}
+                      onChange={(e) => setPincodeInput(e.target.value)}
+                      onKeyDown={handleManualLocationSubmit}
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent text-sm text-white placeholder:text-gray-500 transition-all"
+                    />
+                  </div>
+                  <button
+                    onClick={() => handleDetectLocation()}
+                    disabled={locationState.status === "loading"}
+                    className="w-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-black py-2.5 rounded-lg transition-all text-sm font-semibold shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {locationState.status === "loading" ? "Detecting..." : "Detect My Location"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+          {/* Mobile Search Bar - Always visible below the header */}
+          <div className="md:hidden pb-4">
             <div className="relative w-full" ref={searchRefMobile}>
               <form onSubmit={handleSearchSubmit} className="relative w-full">
                 <input

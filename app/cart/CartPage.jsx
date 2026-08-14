@@ -110,20 +110,20 @@ export default function CartPage() {
                     <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-amber-500/10 rounded-full blur-[120px]" />
                 </div>
 
-                <div className="relative z-10 bg-gradient-to-b from-white/[0.08] to-white/[0.02] backdrop-blur-xl p-10 md:p-14 rounded-3xl border border-white/10 text-center max-w-lg w-full">
-                    <div className="w-24 h-24 bg-gradient-to-br from-violet-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-violet-500/30">
-                        <ShoppingCart size={40} className="text-white" />
+                <div className="relative z-10 bg-gradient-to-b from-white/[0.08] to-white/[0.02] backdrop-blur-xl p-8 md:p-10 rounded-3xl border border-white/10 text-center max-w-lg w-full">
+                    <div className="w-20 h-20 bg-gradient-to-br from-violet-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-violet-500/30">
+                        <ShoppingCart size={34} className="text-white" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Your Cart is Empty</h2>
-                    <p className="text-gray-400 mb-10 leading-relaxed">
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Your Cart is Empty</h2>
+                    <p className="text-gray-400 text-sm mb-8 leading-relaxed">
                         Looks like you haven't added anything to your cart yet. Explore our Ayurvedic collection and find what's best for you!
                     </p>
                     <Link
                         href="/category/all-products"
-                        className="inline-flex items-center gap-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all hover:-translate-y-1 group"
+                        className="inline-flex items-center gap-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white px-8 py-4 rounded-2xl font-bold text-base shadow-2xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all hover:-translate-y-1 group"
                     >
                         Explore Products
-                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
             </div>
@@ -142,34 +142,34 @@ export default function CartPage() {
                         <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-amber-500/10 rounded-full blur-[120px]" />
                     </div>
 
-                    <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-12 py-8 pb-12 md:py-12">
+                    <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-12 py-6 pb-9 md:py-8">
                         {/* Breadcrumb */}
-                        <nav className="flex items-center gap-2 text-sm mb-6">
+                        <nav className="flex items-center gap-2 text-xs mb-4">
                             <Link href="/" className="text-gray-500 hover:text-white transition-colors">Home</Link>
-                            <ChevronRight size={14} className="text-gray-700" />
+                            <ChevronRight size={12} className="text-gray-700" />
                             <span className="text-amber-400 font-medium">Shopping Cart</span>
                         </nav>
 
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl shadow-violet-500/30">
-                                    <ShoppingCart size={24} className="text-white" />
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                            <div className="flex items-center gap-3">
+                                <div className="w-11 h-11 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center shadow-xl shadow-violet-500/30">
+                                    <ShoppingCart size={20} className="text-white" />
                                 </div>
                                 <div>
-                                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white">
+                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white">
                                         Shopping Cart
                                     </h1>
-                                    <p className="text-gray-500">{cartList.length} items in your cart</p>
+                                    <p className="text-gray-500 text-sm">{cartList.length} items in your cart</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                <button className="flex items-center gap-2 px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-all">
-                                    <Share2 size={16} />
+                            <div className="flex items-center gap-2">
+                                <button className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-all text-sm">
+                                    <Share2 size={14} />
                                     <span className="font-medium">Share</span>
                                 </button>
-                                <button className="flex items-center gap-2 px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-all">
-                                    <Download size={16} />
+                                <button className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-all text-sm">
+                                    <Download size={14} />
                                     <span className="font-medium">Download PDF</span>
                                 </button>
                             </div>
@@ -183,33 +183,33 @@ export default function CartPage() {
                 {/* ============================================== */}
                 {/* SECTION 2: CART CONTENT - LIGHT */}
                 {/* ============================================== */}
-                <section className="relative py-8 md:py-12 bg-[#f8f9fa]">
+                <section className="relative py-6 md:py-8 bg-[#f8f9fa]">
                     <div className="container mx-auto px-4 md:px-6 lg:px-12">
 
                         {/* Free Shipping Banner */}
-                        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-4 md:p-5 flex items-center gap-4 mb-8 shadow-sm">
-                            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/25 flex-shrink-0">
-                                <Truck size={22} className="text-white" />
+                        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-3 md:p-4 flex items-center gap-3 mb-6 shadow-sm">
+                            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/25 flex-shrink-0">
+                                <Truck size={18} className="text-white" />
                             </div>
                             <div className="flex-1">
-                                <h4 className="text-emerald-900 font-bold">🎉 Your order qualifies for FREE Shipping!</h4>
-                                <p className="text-emerald-700 text-sm">Choose this option at checkout. See details</p>
+                                <h4 className="text-emerald-900 font-bold text-sm">🎉 Your order qualifies for FREE Shipping!</h4>
+                                <p className="text-emerald-700 text-xs">Choose this option at checkout. See details</p>
                             </div>
                         </div>
 
-                        <div className="grid lg:grid-cols-12 gap-8 items-start w-full">
+                        <div className="grid lg:grid-cols-12 gap-6 items-start w-full">
                             {/* Cart Items */}
-                            <div className="lg:col-span-7 xl:col-span-8 space-y-6 min-w-0 w-full">
+                            <div className="lg:col-span-7 xl:col-span-8 space-y-5 min-w-0 w-full">
                                 {/* Cart Items Card */}
                                 <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 overflow-hidden">
-                                    <div className="p-6 md:p-8 space-y-6">
+                                    <div className="p-4 md:p-6 space-y-5">
                                         {cartList.map((item, index) => (
                                             <div
                                                 key={item.id}
-                                                className={`flex flex-col sm:flex-row gap-5 ${index !== cartList.length - 1 ? 'border-b border-gray-100 pb-6' : ''}`}
+                                                className={`flex flex-col sm:flex-row gap-4 ${index !== cartList.length - 1 ? 'border-b border-gray-100 pb-5' : ''}`}
                                             >
                                                 {/* Product Image */}
-                                                <div className="relative w-full sm:w-36 md:w-44 h-44 sm:h-36 md:h-44 bg-gray-50 rounded-2xl overflow-hidden group border-2 border-gray-100 flex-shrink-0">
+                                                <div className="relative w-full sm:w-28 md:w-36 h-36 sm:h-28 md:h-36 bg-gray-50 rounded-2xl overflow-hidden group border-2 border-gray-100 flex-shrink-0">
                                                     <Image
                                                         src={item.img || "/placeholder.png"}
                                                         alt={item.title}
@@ -224,48 +224,48 @@ export default function CartPage() {
                                                 </div>
 
                                                 {/* Product Details */}
-                                                <div className="flex-1 space-y-4">
-                                                    <div className="flex flex-col sm:flex-row justify-between gap-3">
+                                                <div className="flex-1 space-y-3">
+                                                    <div className="flex flex-col sm:flex-row justify-between gap-2">
                                                         <div className="flex-1">
-                                                            <h3 className="text-lg font-bold text-gray-900 leading-tight hover:text-violet-600 cursor-pointer transition-colors line-clamp-2">
+                                                            <h3 className="text-sm md:text-base font-bold text-gray-900 leading-tight hover:text-violet-600 cursor-pointer transition-colors line-clamp-2">
                                                                 {item.title}
                                                             </h3>
-                                                            <div className="flex flex-wrap items-center gap-2 mt-2">
-                                                                <span className="flex items-center gap-1 text-xs font-bold px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full">
-                                                                    <Check size={12} /> In Stock
+                                                            <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                                                                <span className="flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full">
+                                                                    <Check size={11} /> In Stock
                                                                 </span>
                                                                 <span className="text-gray-300">|</span>
-                                                                <span className="text-xs text-gray-500">Fulfilled by VASP Planner</span>
+                                                                <span className="text-[11px] text-gray-500">Fulfilled by VASP Planner</span>
                                                             </div>
                                                         </div>
 
                                                         {/* Price */}
                                                         <div className="flex sm:flex-col items-center sm:items-end gap-1 flex-shrink-0">
-                                                            <span className="text-xl md:text-2xl font-black text-gray-900 leading-none">₹{item.price?.toLocaleString()}</span>
+                                                            <span className="text-base md:text-lg font-black text-gray-900 leading-none">₹{item.price?.toLocaleString()}</span>
                                                             {(Number(item.base_price || item.originalPrice) > Number(item.price)) && (
-                                                                <span className="text-xs md:text-sm text-gray-400 line-through">₹{Number(item.base_price || item.originalPrice).toLocaleString()}</span>
+                                                                <span className="text-[11px] md:text-xs text-gray-400 line-through">₹{Number(item.base_price || item.originalPrice).toLocaleString()}</span>
                                                             )}
                                                         </div>
                                                     </div>
 
                                                     {/* Product Meta */}
-                                                    <div className="grid grid-cols-2 gap-3 text-sm">
+                                                    <div className="grid grid-cols-2 gap-2 text-sm">
                                                         {(item.variant_name || item.name?.includes('Edition')) && (
                                                             <div className="flex flex-col">
-                                                                <span className="text-gray-500 text-[10px] md:text-xs">Variant</span>
-                                                                <span className="font-semibold text-gray-800 text-xs md:text-sm">{item.variant_name || 'Standard'}</span>
+                                                                <span className="text-gray-500 text-[10px]">Variant</span>
+                                                                <span className="font-semibold text-gray-800 text-xs">{item.variant_name || 'Standard'}</span>
                                                             </div>
                                                         )}
                                                         <div className="flex flex-col">
-                                                            <span className="text-gray-500 text-[10px] md:text-xs">Fulfilled By</span>
-                                                            <span className="font-semibold text-gray-800 text-xs md:text-sm">VASP Planner</span>
+                                                            <span className="text-gray-500 text-[10px]">Fulfilled By</span>
+                                                            <span className="font-semibold text-gray-800 text-xs">VASP Planner</span>
                                                         </div>
                                                     </div>
 
                                                     {/* Actions */}
-                                                    <div className="flex flex-wrap items-center gap-3">
+                                                    <div className="flex flex-wrap items-center gap-2">
                                                         {/* Quantity */}
-                                                        <div className="flex items-center bg-gray-100 rounded-xl p-1.5">
+                                                        <div className="flex items-center bg-gray-100 rounded-xl p-1">
                                                             <button
                                                                 onClick={() => {
                                                                     if (item.qnty <= 1) {
@@ -275,16 +275,16 @@ export default function CartPage() {
                                                                         dispatch(updateCartQuantityAsync({ productId: item.id, qnty: item.qnty - 1, type: 'decrement' }));
                                                                     }
                                                                 }}
-                                                                className="w-9 h-9 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-violet-50 hover:text-violet-600 transition-all active:scale-90"
+                                                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-violet-50 hover:text-violet-600 transition-all active:scale-90"
                                                             >
-                                                                <Minus size={14} />
+                                                                <Minus size={13} />
                                                             </button>
-                                                            <span className="w-10 text-center font-bold text-gray-900">{item.qnty}</span>
+                                                            <span className="w-8 text-center font-bold text-gray-900 text-sm">{item.qnty}</span>
                                                             <button
                                                                 onClick={() => dispatch(updateCartQuantityAsync({ productId: item.id, qnty: item.qnty + 1, type: 'increment' }))}
-                                                                className="w-9 h-9 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-violet-50 hover:text-violet-600 transition-all active:scale-90"
+                                                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white shadow-sm hover:bg-violet-50 hover:text-violet-600 transition-all active:scale-90"
                                                             >
-                                                                <Plus size={14} />
+                                                                <Plus size={13} />
                                                             </button>
                                                         </div>
 
@@ -293,9 +293,9 @@ export default function CartPage() {
                                                                 dispatch(removeFromCartAsync(item.id));
                                                                 toast.error("Removed from cart!", { icon: "🗑️" });
                                                             }}
-                                                            className="flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-50 rounded-xl font-semibold text-sm transition-all"
+                                                            className="flex items-center gap-1.5 px-3 py-2 text-red-500 hover:bg-red-50 rounded-xl font-semibold text-xs transition-all"
                                                         >
-                                                            <Trash2 size={14} /> Delete
+                                                            <Trash2 size={13} /> Delete
                                                         </button>
                                                     </div>
                                                 </div>
@@ -305,23 +305,23 @@ export default function CartPage() {
                                 </div>
 
                                 {/* Frequently Bought Together */}
-                                <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-4 sm:p-6 md:p-8 w-full max-w-full overflow-hidden">
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                                <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-4 sm:p-5 md:p-6 w-full max-w-full overflow-hidden">
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                <Sparkles size={18} className="text-white" />
+                                            <div className="w-9 h-9 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                                <Sparkles size={16} className="text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="text-lg md:text-xl font-bold text-gray-900">Frequently Bought Together</h3>
-                                                <p className="text-sm text-gray-500">Save up to 25%</p>
+                                                <h3 className="text-base md:text-lg font-bold text-gray-900">Frequently Bought Together</h3>
+                                                <p className="text-xs text-gray-500">Save up to 25%</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 self-end sm:self-auto">
-                                            <button ref={prevRef} className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-violet-500 hover:text-white rounded-xl transition-all flex-shrink-0">
-                                                <ChevronLeft size={18} />
+                                            <button ref={prevRef} className="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-violet-500 hover:text-white rounded-xl transition-all flex-shrink-0">
+                                                <ChevronLeft size={16} />
                                             </button>
-                                            <button ref={nextRef} className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-violet-500 hover:text-white rounded-xl transition-all flex-shrink-0">
-                                                <ChevronRight size={18} />
+                                            <button ref={nextRef} className="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-violet-500 hover:text-white rounded-xl transition-all flex-shrink-0">
+                                                <ChevronRight size={16} />
                                             </button>
                                         </div>
                                     </div>
@@ -359,7 +359,7 @@ export default function CartPage() {
                                                         const inCart = cartList.some(c => String(c.id) === String(product.id) || String(c.product_id) === String(product.id) || String(c.variant_id) === String(product.id));
                                                         if (!inCart) toggleProductSelection(product.id);
                                                     }}
-                                                    className={`relative bg-gray-50 rounded-2xl border-2 p-4 transition-all ${cartList.some(c => String(c.id) === String(product.id) || String(c.product_id) === String(product.id) || String(c.variant_id) === String(product.id))
+                                                    className={`relative bg-gray-50 rounded-2xl border-2 p-3 transition-all ${cartList.some(c => String(c.id) === String(product.id) || String(c.product_id) === String(product.id) || String(c.variant_id) === String(product.id))
                                                         ? 'border-emerald-200 bg-emerald-50/50'
                                                         : selectedProducts.includes(product.id)
                                                             ? 'border-violet-500 bg-violet-50/50 shadow-lg shadow-violet-500/10'
@@ -384,22 +384,22 @@ export default function CartPage() {
                                                     )}
 
                                                     {/* Image */}
-                                                    <div className="relative w-full h-36 rounded-xl overflow-hidden mb-3 bg-white border border-gray-200">
+                                                    <div className="relative w-full h-28 rounded-xl overflow-hidden mb-2.5 bg-white border border-gray-200">
                                                         <Image src={product.img} alt={product.heading} fill className="object-cover" />
                                                     </div>
 
                                                     {/* Details */}
-                                                    <h5 className="font-bold text-gray-900 text-sm line-clamp-2 mb-2">{product.heading}</h5>
-                                                    <div className="flex items-center gap-1 mb-2">
+                                                    <h5 className="font-bold text-gray-900 text-xs line-clamp-2 mb-1.5">{product.heading}</h5>
+                                                    <div className="flex items-center gap-1 mb-1.5">
                                                         {[...Array(5)].map((_, i) => (
-                                                            <Star key={i} size={12} className="text-amber-400 fill-amber-400" />
+                                                            <Star key={i} size={11} className="text-amber-400 fill-amber-400" />
                                                         ))}
-                                                        <span className="text-xs text-gray-500 ml-1">({product.rating || "4.5"})</span>
+                                                        <span className="text-[11px] text-gray-500 ml-1">({product.rating || "4.5"})</span>
                                                     </div>
                                                     <div className="flex items-center justify-between">
                                                         <div>
-                                                            <span className="font-black text-gray-900">₹{product.price}</span>
-                                                            <span className="text-xs text-gray-400 line-through ml-2">₹{product.originalPrice || product.price + 200}</span>
+                                                            <span className="font-black text-gray-900 text-sm">₹{product.price}</span>
+                                                            <span className="text-[11px] text-gray-400 line-through ml-2">₹{product.originalPrice || product.price + 200}</span>
                                                         </div>
                                                         {cartList.some(c => String(c.id) === String(product.id) || String(c.product_id) === String(product.id) || String(c.variant_id) === String(product.id)) ? (
                                                             <button
@@ -424,10 +424,10 @@ export default function CartPage() {
 
                                     {/* Add Selected */}
                                     {selectedProducts.length > 0 && (
-                                        <div className="mt-6 bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="mt-5 bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-200 rounded-2xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
                                             <div className="text-center sm:text-left">
-                                                <p className="font-bold text-gray-900">{selectedProducts.length} item{selectedProducts.length > 1 ? 's' : ''} selected</p>
-                                                <p className="text-sm text-gray-600">
+                                                <p className="font-bold text-gray-900 text-sm">{selectedProducts.length} item{selectedProducts.length > 1 ? 's' : ''} selected</p>
+                                                <p className="text-xs text-gray-600">
                                                     Total: <span className="font-bold text-violet-600">₹{selectedProductsTotal}</span>
                                                     <span className="text-gray-400 line-through ml-2">₹{selectedProductsTotal + (selectedProducts.length * 200)}</span>
                                                 </p>
@@ -466,25 +466,25 @@ export default function CartPage() {
                             </div>
 
                             {/* Sidebar */}
-                            <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6 space-y-6 min-w-0 w-full">
+                            <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-6 space-y-5 min-w-0 w-full">
                                 {/* Order Summary */}
                                 <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 overflow-hidden">
-                                    <div className="bg-gradient-to-r from-violet-600 to-purple-600 p-6 text-white">
+                                    <div className="bg-gradient-to-r from-violet-600 to-purple-600 p-5 text-white">
                                         <div className="flex items-center justify-between">
-                                            <h4 className="font-bold text-xl">Order Summary</h4>
-                                            <ShoppingCart size={24} className="opacity-50" />
+                                            <h4 className="font-bold text-lg">Order Summary</h4>
+                                            <ShoppingCart size={20} className="opacity-50" />
                                         </div>
                                     </div>
 
-                                    <div className="p-6 space-y-5">
-                                        <div className="space-y-3">
+                                    <div className="p-5 space-y-4">
+                                        <div className="space-y-2.5 text-sm">
                                             <div className="flex justify-between text-gray-600">
                                                 <span>Items ({cartList.length})</span>
                                                 <span className="font-bold text-gray-900">₹{totalOriginalPrice}</span>
                                             </div>
-                                            <div className="flex justify-between text-emerald-600 font-bold bg-emerald-50 px-4 py-3 rounded-xl border border-emerald-100">
+                                            <div className="flex justify-between text-emerald-600 font-bold bg-emerald-50 px-3 py-2.5 rounded-xl border border-emerald-100">
                                                 <span className="flex items-center gap-2">
-                                                    <BadgePercent size={16} /> Savings
+                                                    <BadgePercent size={14} /> Savings
                                                 </span>
                                                 <span>- ₹{savings}</span>
                                             </div>
@@ -502,33 +502,33 @@ export default function CartPage() {
 
                                         <div className="flex justify-between items-center">
                                             <div>
-                                                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Total Amount</p>
-                                                <p className="text-sm text-emerald-600 font-bold">You save ₹{savings}</p>
+                                                <p className="text-[11px] text-gray-500 font-semibold uppercase tracking-wide">Total Amount</p>
+                                                <p className="text-xs text-emerald-600 font-bold">You save ₹{savings}</p>
                                             </div>
-                                            <span className="text-4xl font-black text-gray-900">₹{subtotal}</span>
+                                            <span className="text-2xl md:text-3xl font-black text-gray-900">₹{subtotal}</span>
                                         </div>
 
                                         <button
                                             onClick={handleCheckoutClick}
-                                            className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all hover:-translate-y-1 group"
+                                            className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white py-4 rounded-2xl font-bold text-base shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all hover:-translate-y-1 group"
                                         >
                                             Checkout Now
-                                            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                         </button>
 
-                                        <p className="text-center text-xs text-gray-400">
+                                        <p className="text-center text-[11px] text-gray-400">
                                             By proceeding, you agree to our Terms of Service and Privacy Policy.
                                         </p>
                                     </div>
 
                                     {/* Coins Reward */}
-                                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-100 p-5 flex items-center gap-4">
-                                        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md border border-amber-200">
-                                            <Coins size={28} className="text-amber-500" />
+                                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-100 p-4 flex items-center gap-3">
+                                        <div className="w-11 h-11 bg-white rounded-2xl flex items-center justify-center shadow-md border border-amber-200">
+                                            <Coins size={22} className="text-amber-500" />
                                         </div>
                                         <div>
-                                            <h5 className="font-bold text-gray-900">🎁 Reward Unlock!</h5>
-                                            <p className="text-sm text-gray-600">
+                                            <h5 className="font-bold text-gray-900 text-sm">🎁 Reward Unlock!</h5>
+                                            <p className="text-xs text-gray-600">
                                                 Earn <span className="text-amber-600 font-bold">{totalCoins} VASP Coins</span> on this purchase
                                             </p>
                                         </div>
@@ -536,11 +536,11 @@ export default function CartPage() {
                                 </div>
 
                                 {/* Security Badge */}
-                                <div className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4 shadow-sm">
-                                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                                        <Lock size={22} className="text-gray-500" />
+                                <div className="bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-3 shadow-sm">
+                                    <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <Lock size={18} className="text-gray-500" />
                                     </div>
-                                    <p className="text-sm text-gray-500 leading-tight flex-1">
+                                    <p className="text-xs text-gray-500 leading-tight flex-1">
                                         <span className="font-bold text-gray-700">100% Secure Checkout</span> with 256-bit SSL Encryption. Your data is always protected.
                                     </p>
                                 </div>

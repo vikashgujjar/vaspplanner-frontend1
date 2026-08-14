@@ -105,7 +105,7 @@ const VideoSection = ({ initialData = [] }) => {
               return (
                 <div
                   key={videoId}
-                  className="flex-shrink-0 w-[280px] snap-start"
+                  className="flex-shrink-0 w-[calc((100%-16px)/2)] sm:w-[280px] snap-start"
                 >
                   <div
                     className="relative rounded-2xl overflow-hidden shadow-lg bg-gray-900 h-[400px] cursor-pointer group"

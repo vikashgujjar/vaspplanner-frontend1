@@ -98,7 +98,7 @@ const WhyGifting = ({ initialData = [] }) => {
                 </div>
 
                 {/* Features Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
                     {features.map((feature, index) => (
                         <div
                             key={feature.uuid}

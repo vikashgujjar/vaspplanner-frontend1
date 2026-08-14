@@ -52,21 +52,22 @@ export default function ProductAyurved({ initialData = [] }) {
     }, []);
 
     const occasionIcons = {
-        'birthday': { icon: <Gift />, color: 'bg-pink-500', iconColor: 'text-pink-500', bgLight: 'bg-pink-50' },
-        'anniversary': { icon: <Heart />, color: 'bg-purple-500', iconColor: 'text-purple-500', bgLight: 'bg-purple-50' },
-        'wedding': { icon: <Heart />, color: 'bg-rose-500', iconColor: 'text-rose-500', bgLight: 'bg-rose-50' },
-        'celebration': { icon: <Cake />, color: 'bg-blue-500', iconColor: 'text-blue-500', bgLight: 'bg-blue-50' },
-        'festival': { icon: <Sparkles />, color: 'bg-amber-500', iconColor: 'text-amber-500', bgLight: 'bg-amber-50' },
-        'corporate': { icon: <Briefcase />, color: 'bg-indigo-500', iconColor: 'text-indigo-500', bgLight: 'bg-indigo-50' }
+        'birthday': { icon: <Gift />, color: 'bg-pink-500', iconColor: 'text-pink-500', ringColor: 'ring-pink-300', bgLight: 'bg-pink-50', gradient: 'from-pink-500 to-pink-600' },
+        'anniversary': { icon: <Heart />, color: 'bg-purple-500', iconColor: 'text-purple-500', ringColor: 'ring-purple-300', bgLight: 'bg-purple-50', gradient: 'from-purple-500 to-purple-600' },
+        'wedding': { icon: <Heart />, color: 'bg-rose-500', iconColor: 'text-rose-500', ringColor: 'ring-rose-300', bgLight: 'bg-rose-50', gradient: 'from-rose-500 to-rose-600' },
+        'celebration': { icon: <Cake />, color: 'bg-blue-500', iconColor: 'text-blue-500', ringColor: 'ring-blue-300', bgLight: 'bg-blue-50', gradient: 'from-blue-500 to-blue-600' },
+        'festival': { icon: <Sparkles />, color: 'bg-amber-500', iconColor: 'text-amber-500', ringColor: 'ring-amber-300', bgLight: 'bg-amber-50', gradient: 'from-amber-500 to-amber-600' },
+        'corporate': { icon: <Briefcase />, color: 'bg-indigo-500', iconColor: 'text-indigo-500', ringColor: 'ring-indigo-300', bgLight: 'bg-indigo-50', gradient: 'from-indigo-500 to-indigo-600' }
     };
 
-    const defaultIconProps = { icon: <Gift />, color: 'bg-emerald-500', iconColor: 'text-emerald-500', bgLight: 'bg-emerald-50' };
+    const defaultIconProps = { icon: <Gift />, color: 'bg-emerald-500', iconColor: 'text-emerald-500', ringColor: 'ring-emerald-300', bgLight: 'bg-emerald-50', gradient: 'from-emerald-500 to-emerald-600' };
 
     const occasions = apiData.map(occ => {
         const iconData = occasionIcons[occ.name.toLowerCase()] || defaultIconProps;
         return {
             id: occ.name,
             label: occ.name,
+            count: occ.products?.length || 0,
             ...iconData
         };
     });
@@ -151,36 +152,51 @@ export default function ProductAyurved({ initialData = [] }) {
 
                 <>
                         {/* Mobile/Tablet: Horizontal Tabs */}
-                        <div className='flex items-center justify-center mb-6 lg:hidden'>
-                            <div className="max-w-full inline-block mx-auto">
-                                <div className="bg-slate-50/50 backdrop-blur-md p-2 rounded-3xl border border-slate-200/60 shadow-xl shadow-slate-200/40">
-                                    <div className="flex flex-nowrap items-center justify-start gap-2 overflow-x-auto no-scrollbar p-1">
-                                        {occasions.map((occasion) => {
-                                            const isActive = activeOccasion === occasion.id;
-                                            return (
-                                                <button
-                                                    key={occasion.id}
-                                                    onClick={() => setActiveOccasion(occasion.id)}
-                                                    className={`
-                                                        flex items-center gap-3 px-5 py-3 rounded-2xl transition-all duration-300 ease-out
-                                                        ${isActive
-                                                            ? `${occasion.color} text-white shadow-lg`
-                                                            : `bg-white hover:bg-slate-100 text-slate-600 border border-transparent`
-                                                        }
-                                                    `}
+                        <div className="relative mb-8 lg:hidden -mx-4 px-4">
+                            <div className="flex flex-nowrap items-stretch gap-4 overflow-x-auto no-scrollbar py-2 scroll-smooth snap-x snap-proximity">
+                                {occasions.map((occasion) => {
+                                    const isActive = activeOccasion === occasion.id;
+                                    return (
+                                        <button
+                                            key={occasion.id}
+                                            onClick={() => setActiveOccasion(occasion.id)}
+                                            className={`relative flex-shrink-0 w-[108px] snap-start overflow-hidden rounded-3xl transition-all duration-300 ease-out ${isActive
+                                                ? `bg-gradient-to-br ${occasion.gradient} shadow-xl shadow-gray-400/20 scale-[1.03]`
+                                                : `bg-white border border-gray-100 shadow-sm hover:scale-[1.02] hover:shadow-md`
+                                                }`}
+                                        >
+                                            {/* Decorative corner glow */}
+                                            <span className={`absolute -top-5 -right-5 w-16 h-16 rounded-full blur-2xl transition-opacity duration-300 ${isActive ? 'bg-white/30 opacity-100' : 'opacity-0'}`} />
+
+                                            <div className="relative flex flex-col items-center gap-2 px-3 py-4">
+                                                <span
+                                                    className={`flex items-center justify-center w-11 h-11 rounded-2xl text-xl transition-all duration-300 ${isActive
+                                                        ? 'bg-white/25 text-white backdrop-blur-sm'
+                                                        : `${occasion.bgLight} ${occasion.iconColor}`
+                                                        }`}
                                                 >
-                                                    <span className={`text-xl transition-transform duration-300 ${isActive ? 'scale-110' : 'grayscale-[0.5]'}`}>
-                                                        {occasion.icon}
+                                                    {occasion.icon}
+                                                </span>
+                                                <span className={`text-xs font-bold tracking-tight text-center leading-tight ${isActive ? 'text-white' : 'text-gray-700'}`}>
+                                                    {occasion.label}
+                                                </span>
+                                                {occasion.count > 0 && (
+                                                    <span className={`text-[10px] font-medium ${isActive ? 'text-white/70' : 'text-gray-400'}`}>
+                                                        {occasion.count} picks
                                                     </span>
-                                                    <span className={`text-sm font-bold tracking-tight whitespace-nowrap`}>
-                                                        {occasion.label}
-                                                    </span>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                                                )}
+                                            </div>
+
+                                            {isActive && (
+                                                <span className="absolute bottom-0 left-0 right-0 h-1 bg-white/40" />
+                                            )}
+                                        </button>
+                                    );
+                                })}
                             </div>
+                            {/* Scroll hint fades */}
+                            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-gray-50 to-transparent" />
+                            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-gray-50 to-transparent" />
                         </div>
 
                         {/* Desktop: Two Column Layout */}
@@ -221,7 +237,7 @@ export default function ProductAyurved({ initialData = [] }) {
                             {/* Right Side: Products */}
                             <div className="lg:col-span-10">
                                 <div className="relative">
-                                    <div className="flex items-center justify-between mb-6">
+                                    <div className="flex sm:flex-nowrap flex-wrap items-center justify-between mb-6">
                                         <div className="flex items-center gap-3">
                                             <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${activeOccasionData?.color || 'bg-pink-500'} text-white shadow-md`}>
                                                 <span className="text-2xl">
@@ -277,7 +293,7 @@ export default function ProductAyurved({ initialData = [] }) {
                                                 filteredProducts.map((elm, index) => (
                                                     <div
                                                         key={index}
-                                                        className="flex-shrink-0 w-[calc((100%-12px)/1.5)] min-[500px]:max-[650px]:w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
+                                                        className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
                                                     >
                                                         <ProductAyurvedCard product={elm} />
                                                     </div>

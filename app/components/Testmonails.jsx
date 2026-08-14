@@ -142,12 +142,9 @@ export default function SuccessStory({ initialData = null }) {
               loop={true}
               modules={[Navigation, Autoplay]}
               spaceBetween={12}
-              slidesPerView={1.1}
+              slidesPerView={1}
               centeredSlides={false}
               breakpoints={{
-                400: { slidesPerView: 1.2, spaceBetween: 12 },
-                500: { slidesPerView: 1.4, spaceBetween: 14 },
-                640: { slidesPerView: 1.6, spaceBetween: 16 },
                 768: { slidesPerView: 1.8, spaceBetween: 16 },
                 1024: { slidesPerView: 2, spaceBetween: 20 },
                 1280: { slidesPerView: 2.2, spaceBetween: 20 },

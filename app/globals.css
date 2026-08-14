@@ -1,5 +1,202 @@
 @import "tailwindcss";
 
+/* Sitewide font-size scale, shifted down one step across the whole scale
+   (text-base is left alone as the body-text floor) so every text-* utility —
+   including responsive variants like md:text-2xl — renders at the same
+   denser scale used on the cart page, across every component, on both
+   mobile and desktop, without editing each file individually. */
+@theme {
+  --text-xs: 0.6875rem;
+  --text-xs--line-height: calc(1 / 0.6875);
+  --text-sm: 0.75rem;
+  --text-sm--line-height: calc(1.25 / 0.75);
+  --text-lg: 1rem;
+  --text-lg--line-height: calc(1.5 / 1);
+  --text-xl: 1.125rem;
+  --text-xl--line-height: calc(1.75 / 1.125);
+  --text-2xl: 1.25rem;
+  --text-2xl--line-height: calc(1.75 / 1.25);
+  --text-3xl: 1.5rem;
+  --text-3xl--line-height: calc(2 / 1.5);
+  --text-4xl: 1.875rem;
+  --text-4xl--line-height: calc(2.25 / 1.875);
+  --text-5xl: 2.25rem;
+  --text-5xl--line-height: calc(2.5 / 2.25);
+  --text-6xl: 3rem;
+  --text-6xl--line-height: 1;
+  --text-7xl: 3.75rem;
+  --text-7xl--line-height: 1;
+}
+
+/* Two-color accent palette: every other chromatic Tailwind color family is
+   aliased to amber or violet (warm hues -> amber, cool hues -> violet), so
+   every existing bg-pink-500 / text-blue-600 / border-emerald-400 / etc.
+   class across the whole app renders as one of the two brand colors without
+   editing each component. Neutrals (white/black/gray/slate/zinc/stone) are
+   left untouched as the structural foundation. `red` is deliberately left
+   unaliased too — it's used for delete/remove and error states, and
+   collapsing it into amber/violet would make destructive actions visually
+   indistinguishable from normal ones. */
+@theme {
+  /* Warm accents aliased to amber */
+  --color-yellow-50: var(--color-amber-50);
+  --color-yellow-100: var(--color-amber-100);
+  --color-yellow-200: var(--color-amber-200);
+  --color-yellow-300: var(--color-amber-300);
+  --color-yellow-400: var(--color-amber-400);
+  --color-yellow-500: var(--color-amber-500);
+  --color-yellow-600: var(--color-amber-600);
+  --color-yellow-700: var(--color-amber-700);
+  --color-yellow-800: var(--color-amber-800);
+  --color-yellow-900: var(--color-amber-900);
+  --color-yellow-950: var(--color-amber-950);
+
+  --color-orange-50: var(--color-amber-50);
+  --color-orange-100: var(--color-amber-100);
+  --color-orange-200: var(--color-amber-200);
+  --color-orange-300: var(--color-amber-300);
+  --color-orange-400: var(--color-amber-400);
+  --color-orange-500: var(--color-amber-500);
+  --color-orange-600: var(--color-amber-600);
+  --color-orange-700: var(--color-amber-700);
+  --color-orange-800: var(--color-amber-800);
+  --color-orange-900: var(--color-amber-900);
+  --color-orange-950: var(--color-amber-950);
+
+  --color-rose-50: var(--color-amber-50);
+  --color-rose-100: var(--color-amber-100);
+  --color-rose-200: var(--color-amber-200);
+  --color-rose-300: var(--color-amber-300);
+  --color-rose-400: var(--color-amber-400);
+  --color-rose-500: var(--color-amber-500);
+  --color-rose-600: var(--color-amber-600);
+  --color-rose-700: var(--color-amber-700);
+  --color-rose-800: var(--color-amber-800);
+  --color-rose-900: var(--color-amber-900);
+  --color-rose-950: var(--color-amber-950);
+
+  --color-pink-50: var(--color-amber-50);
+  --color-pink-100: var(--color-amber-100);
+  --color-pink-200: var(--color-amber-200);
+  --color-pink-300: var(--color-amber-300);
+  --color-pink-400: var(--color-amber-400);
+  --color-pink-500: var(--color-amber-500);
+  --color-pink-600: var(--color-amber-600);
+  --color-pink-700: var(--color-amber-700);
+  --color-pink-800: var(--color-amber-800);
+  --color-pink-900: var(--color-amber-900);
+  --color-pink-950: var(--color-amber-950);
+
+  /* Cool accents aliased to violet */
+  --color-indigo-50: var(--color-violet-50);
+  --color-indigo-100: var(--color-violet-100);
+  --color-indigo-200: var(--color-violet-200);
+  --color-indigo-300: var(--color-violet-300);
+  --color-indigo-400: var(--color-violet-400);
+  --color-indigo-500: var(--color-violet-500);
+  --color-indigo-600: var(--color-violet-600);
+  --color-indigo-700: var(--color-violet-700);
+  --color-indigo-800: var(--color-violet-800);
+  --color-indigo-900: var(--color-violet-900);
+  --color-indigo-950: var(--color-violet-950);
+
+  --color-emerald-50: var(--color-violet-50);
+  --color-emerald-100: var(--color-violet-100);
+  --color-emerald-200: var(--color-violet-200);
+  --color-emerald-300: var(--color-violet-300);
+  --color-emerald-400: var(--color-violet-400);
+  --color-emerald-500: var(--color-violet-500);
+  --color-emerald-600: var(--color-violet-600);
+  --color-emerald-700: var(--color-violet-700);
+  --color-emerald-800: var(--color-violet-800);
+  --color-emerald-900: var(--color-violet-900);
+  --color-emerald-950: var(--color-violet-950);
+
+  --color-blue-50: var(--color-violet-50);
+  --color-blue-100: var(--color-violet-100);
+  --color-blue-200: var(--color-violet-200);
+  --color-blue-300: var(--color-violet-300);
+  --color-blue-400: var(--color-violet-400);
+  --color-blue-500: var(--color-violet-500);
+  --color-blue-600: var(--color-violet-600);
+  --color-blue-700: var(--color-violet-700);
+  --color-blue-800: var(--color-violet-800);
+  --color-blue-900: var(--color-violet-900);
+  --color-blue-950: var(--color-violet-950);
+
+  --color-purple-50: var(--color-violet-50);
+  --color-purple-100: var(--color-violet-100);
+  --color-purple-200: var(--color-violet-200);
+  --color-purple-300: var(--color-violet-300);
+  --color-purple-400: var(--color-violet-400);
+  --color-purple-500: var(--color-violet-500);
+  --color-purple-600: var(--color-violet-600);
+  --color-purple-700: var(--color-violet-700);
+  --color-purple-800: var(--color-violet-800);
+  --color-purple-900: var(--color-violet-900);
+  --color-purple-950: var(--color-violet-950);
+
+  --color-green-50: var(--color-violet-50);
+  --color-green-100: var(--color-violet-100);
+  --color-green-200: var(--color-violet-200);
+  --color-green-300: var(--color-violet-300);
+  --color-green-400: var(--color-violet-400);
+  --color-green-500: var(--color-violet-500);
+  --color-green-600: var(--color-violet-600);
+  --color-green-700: var(--color-violet-700);
+  --color-green-800: var(--color-violet-800);
+  --color-green-900: var(--color-violet-900);
+  --color-green-950: var(--color-violet-950);
+
+  --color-teal-50: var(--color-violet-50);
+  --color-teal-100: var(--color-violet-100);
+  --color-teal-200: var(--color-violet-200);
+  --color-teal-300: var(--color-violet-300);
+  --color-teal-400: var(--color-violet-400);
+  --color-teal-500: var(--color-violet-500);
+  --color-teal-600: var(--color-violet-600);
+  --color-teal-700: var(--color-violet-700);
+  --color-teal-800: var(--color-violet-800);
+  --color-teal-900: var(--color-violet-900);
+  --color-teal-950: var(--color-violet-950);
+
+  --color-cyan-50: var(--color-violet-50);
+  --color-cyan-100: var(--color-violet-100);
+  --color-cyan-200: var(--color-violet-200);
+  --color-cyan-300: var(--color-violet-300);
+  --color-cyan-400: var(--color-violet-400);
+  --color-cyan-500: var(--color-violet-500);
+  --color-cyan-600: var(--color-violet-600);
+  --color-cyan-700: var(--color-violet-700);
+  --color-cyan-800: var(--color-violet-800);
+  --color-cyan-900: var(--color-violet-900);
+  --color-cyan-950: var(--color-violet-950);
+
+  --color-lime-50: var(--color-violet-50);
+  --color-lime-100: var(--color-violet-100);
+  --color-lime-200: var(--color-violet-200);
+  --color-lime-300: var(--color-violet-300);
+  --color-lime-400: var(--color-violet-400);
+  --color-lime-500: var(--color-violet-500);
+  --color-lime-600: var(--color-violet-600);
+  --color-lime-700: var(--color-violet-700);
+  --color-lime-800: var(--color-violet-800);
+  --color-lime-900: var(--color-violet-900);
+  --color-lime-950: var(--color-violet-950);
+
+  --color-sky-50: var(--color-violet-50);
+  --color-sky-100: var(--color-violet-100);
+  --color-sky-200: var(--color-violet-200);
+  --color-sky-300: var(--color-violet-300);
+  --color-sky-400: var(--color-violet-400);
+  --color-sky-500: var(--color-violet-500);
+  --color-sky-600: var(--color-violet-600);
+  --color-sky-700: var(--color-violet-700);
+  --color-sky-800: var(--color-violet-800);
+  --color-sky-900: var(--color-violet-900);
+  --color-sky-950: var(--color-violet-950);
+}
+
 h1,
 h2,
 h3,
@@ -193,7 +390,7 @@ blockquote:after {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #7dc243;
+  background-color: #8b5cf6;
 }
 
 .widget-title:before {

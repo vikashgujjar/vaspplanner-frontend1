@@ -66,6 +66,7 @@ const Footer = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [pageInsights, setPageInsights] = useState(null);
+  const [isAboutExpanded, setIsAboutExpanded] = useState(false);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -184,11 +185,11 @@ const Footer = () => {
                   </h2>
                   {pageInsights?.content ? (
                     <p
-                      className="text-gray-400 leading-relaxed mb-8 max-w-full mx-auto"
+                      className={`text-gray-400 leading-relaxed mb-3 max-w-full mx-auto ${isAboutExpanded ? '' : 'line-clamp-3'}`}
                       dangerouslySetInnerHTML={{ __html: pageInsights.content }}
                     />
                   ) : (
-                    <p className="text-gray-400 leading-relaxed mb-8 max-w-full mx-auto">
+                    <p className={`text-gray-400 leading-relaxed mb-3 max-w-full mx-auto ${isAboutExpanded ? '' : 'line-clamp-3'}`}>
                       VASP Planner is India's most loved online gifting platform, bringing you fresh flowers,
                       delicious cakes, and personalized gifts for every occasion. Whether it's a birthday,
                       anniversary, or a 'just because' moment, we deliver joy right to your doorstep.
@@ -196,6 +197,13 @@ const Footer = () => {
                       across major cities in India.
                     </p>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => setIsAboutExpanded((prev) => !prev)}
+                    className="text-amber-400 text-sm font-semibold hover:text-amber-300 transition-colors mb-8 inline-block"
+                  >
+                    {isAboutExpanded ? "Read Less" : "Read More"}
+                  </button>
                 </div>
               </div>
             </div>

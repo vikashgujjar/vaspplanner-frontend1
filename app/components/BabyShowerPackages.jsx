@@ -43,7 +43,7 @@ export default function BabyShowerPackages() {
                 {/* Products Section */}
                 <div className="relative">
                     {/* Section Header */}
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex sm:flex-nowrap flex-wrap items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500 text-white shadow-md">
                                 <span className="text-2xl">
@@ -100,7 +100,7 @@ export default function BabyShowerPackages() {
                                         products.slice(0, 8).map((elm, index) => (
                                             <div
                                                 key={index}
-                                                className="flex-shrink-0 w-[calc((100%-12px)/1.5)] min-[500px]:max-[650px]:w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
+                                                className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
                                             >
                                                 <ProductAyurvedCard product={elm} showViewMore={false} />
                                             </div>

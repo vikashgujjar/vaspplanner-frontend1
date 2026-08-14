@@ -125,7 +125,7 @@ export default function MyCart({ cart, setCart }) {
             <Link
               href="/category/all-products"
               onClick={() => setCart(false)}
-              className="group relative overflow-hidden uppercase font-semibold text-white px-8 py-3.5 rounded-lg bg-gradient-to-r from-[#53a14f] to-[#4a9347] hover:from-[#4a9347] hover:to-[#53a14f] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="group relative overflow-hidden uppercase font-semibold text-white px-8 py-3.5 rounded-lg bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <span className="relative z-10">Start Shopping</span>
               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
@@ -372,7 +372,7 @@ export default function MyCart({ cart, setCart }) {
                           </div>
                           <Link
                             href={`/product/${product.slug || product.title.toLowerCase().replace(/&/g, "and").replace(/,/g, "").split(" ").join("-")}`}
-                            className="text-white text-xs w-full py-2 text-center flex items-center justify-center rounded-md bg-[#53a14f] hover:bg-[#4a9347] transition-all duration-300 font-medium shadow-sm"
+                            className="text-white text-xs w-full py-2 text-center flex items-center justify-center rounded-md bg-[#7c3aed] hover:bg-[#6d28d9] transition-all duration-300 font-medium shadow-sm"
                           >
                             <ShoppingCart size={16} className="mr-1" />
                             <span>Add to Cart</span>
@@ -408,7 +408,7 @@ export default function MyCart({ cart, setCart }) {
 
               <div className="flex items-center gap-3 justify-between">
                 {/* Checkout Button */}
-                <button onClick={handleCheckoutClick} className="cursor-pointer w-full flex-auto group px-2 relative overflow-hidden uppercase font-bold text-xs md:text-base text-white py-3.5 rounded-lg bg-gradient-to-r from-[#53a14f] to-[#4a9347] hover:from-[#4a9347] hover:to-[#53a14f] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                <button onClick={handleCheckoutClick} className="cursor-pointer w-full flex-auto group px-2 relative overflow-hidden uppercase font-bold text-xs md:text-base text-white py-3.5 rounded-lg bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                   <span className="relative z-10 flex text-nowrap items-center justify-center gap-2">
                     <ShoppingCart size={20} />
                     Proceed to Checkout
@@ -417,7 +417,7 @@ export default function MyCart({ cart, setCart }) {
                 </button>
                 {/* Checkout Button */}
                 <Link href="/cart" onClick={() => setCart(false)} className="cursor-pointer w-full flex-auto">
-                  <button className="group px-2 relative overflow-hidden w-full uppercase font-bold text-xs md:text-base text-white py-3.5 rounded-lg bg-gradient-to-r from-[#53a14f] to-[#4a9347] hover:from-[#4a9347] hover:to-[#53a14f] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                  <button className="group px-2 relative overflow-hidden w-full uppercase font-bold text-xs md:text-base text-white py-3.5 rounded-lg bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                     <span className="relative z-10 flex items-center justify-center gap-2">
                       <ShoppingCart size={20} />
                       View Cart

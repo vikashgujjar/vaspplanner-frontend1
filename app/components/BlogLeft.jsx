@@ -18,7 +18,7 @@ const BlogLeft = () => {
               <label className="sr-only">Search for:</label>
               <input
                 type="search"
-                className="bg-transparent h-12 p-1.5 pl-4 border border-gray-200 focus:border-[#7dc243] focus:outline-none w-full block outline-none transition duration-500"
+                className="bg-transparent h-12 p-1.5 pl-4 border border-gray-200 focus:border-[#8b5cf6] focus:outline-none w-full block outline-none transition duration-500"
                 placeholder="Search..."
               />
               <button
@@ -126,7 +126,7 @@ const BlogLeft = () => {
             ].map(({ month, year }, index, arr) => (
               <li
                 key={index}
-                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[#7dc243] before:content-['']  ${index !== arr.length - 1
+                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[#8b5cf6] before:content-['']  ${index !== arr.length - 1
                   ? "border-b border-[#efefef] mb-2.5"
                   : ""
                   }`}
@@ -164,7 +164,7 @@ const BlogLeft = () => {
             ].map(({ category, count }, index, arr) => (
               <li
                 key={index}
-                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[#7dc243] before:content-['']  ${index !== arr.length - 1
+                className={`relative pb-2.5  pl-[18px] before:absolute before:left-0 before:top-2 before:w-[7px] before:h-[7px] before:bg-[#8b5cf6] before:content-['']  ${index !== arr.length - 1
                   ? "border-b border-[#efefef] mb-2.5"
                   : ""
                   }`}

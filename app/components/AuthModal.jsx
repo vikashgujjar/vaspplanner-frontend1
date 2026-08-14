@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Lock, Eye, EyeOff, User, Phone, Check, ArrowRight, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { executePendingCartAction } from "../utils/pendingCart";
+import { parseServerErrors, FieldError } from "../utils/serverValidation";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -26,6 +27,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }) {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   const [mounted, setMounted] = useState(false);
+  const [apiErrors, setApiErrors] = useState({});
 
   useEffect(() => {
     setMounted(true);

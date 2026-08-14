@@ -346,19 +346,6 @@ export default function SlugInerPage({
                     )}
                   </div>
 
-                  {/* Page Length Selector */}
-                  <div className="relative flex-1 sm:flex-none">
-                    <select
-                      value={perPage}
-                      onChange={(e) => handlePerPageChange(parseInt(e.target.value))}
-                      className="w-full sm:w-auto px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-colors text-gray-700 font-medium cursor-pointer focus:outline-none"
-                    >
-                      <option value="5">5 per page</option>
-                      <option value="10">10 per page</option>
-                      <option value="20">20 per page</option>
-                    </select>
-                  </div>
-
                   {/* Mobile Filter Trigger */}
                   <button
                     onClick={() => setShowFilterModal(true)}
@@ -372,6 +359,19 @@ export default function SlugInerPage({
                       </span>
                     )}
                   </button>
+
+                  {/* Page Length Selector */}
+                  <div className="relative flex-1 sm:flex-none">
+                    <select
+                      value={perPage}
+                      onChange={(e) => handlePerPageChange(parseInt(e.target.value))}
+                      className="w-full sm:w-auto px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-colors text-gray-700 font-medium cursor-pointer focus:outline-none"
+                    >
+                      <option value="5">5 per page</option>
+                      <option value="10">10 per page</option>
+                      <option value="20">20 per page</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 

@@ -44,7 +44,7 @@ export default function CakeCategory({ initialData = [] }) {
                 {/* Products Section */}
                 <div className="relative">
                     {/* Section Header */}
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex sm:flex-nowrap flex-wrap items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-orange-500 text-white shadow-md">
                                 <span className="text-2xl">
@@ -77,7 +77,7 @@ export default function CakeCategory({ initialData = [] }) {
                         {loading ? (
                             <div className="flex gap-6 overflow-hidden pb-6">
                                 {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className="flex-shrink-0 w-[calc((100%-12px)/1.5)] min-[500px]:max-[650px]:w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)]">
+                                    <div key={i} className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)]">
                                         <div className="aspect-[4/5] bg-white rounded-2xl animate-pulse flex flex-col p-4 space-y-4">
                                             <div className="w-full h-3/4 bg-gray-100 rounded-xl" />
                                             <div className="h-4 w-3/4 bg-gray-100 rounded" />
@@ -109,7 +109,7 @@ export default function CakeCategory({ initialData = [] }) {
                                         products.slice(0, 8).map((elm, index) => (
                                             <div
                                                 key={index}
-                                                className="flex-shrink-0 w-[calc((100%-12px)/1.5)] min-[500px]:max-[650px]:w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
+                                                className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
                                             >
                                                 <ProductAyurvedCard product={elm} showViewMore={false} />
                                             </div>

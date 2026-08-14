@@ -386,8 +386,8 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
                 <Link href="/category/all-products" className="hover:text-amber-400 transition-colors">
                   Products
                 </Link>
-                <ChevronRight size={14} className="text-amber-500" />
-                <span className="text-amber-400">{singleProduct?.title}</span>
+                {/* <ChevronRight size={14} className="text-amber-500" />
+                <span className="text-amber-400">{singleProduct?.title}</span> */}
               </div>
             </div>
           </div>
@@ -1086,12 +1086,12 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
             autoplay={{ delay: 5000, disableOnInteraction: false }}
             loop={true}
             modules={[Autoplay]}
-            spaceBetween={24}
-            slidesPerView={1}
+            spaceBetween={16}
+            slidesPerView={2}
             breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-              1280: { slidesPerView: 4 },
+              640: { slidesPerView: 2, spaceBetween: 24 },
+              1024: { slidesPerView: 3, spaceBetween: 24 },
+              1280: { slidesPerView: 4, spaceBetween: 24 },
             }}
             className="pb-12"
           >

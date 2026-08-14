@@ -36,7 +36,7 @@ export default function CategorySectionSlider({ slider }) {
             <div className="relative container mx-auto px-4 md:px-6 lg:px-12">
                 <div className="relative">
                     {/* Section Header */}
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex sm:flex-nowrap flex-wrap items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center w-12 min-w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-500 text-white shadow-md overflow-hidden p-1">
                                 {icon ? (
@@ -65,7 +65,7 @@ export default function CategorySectionSlider({ slider }) {
 
                         <Link
                             href={categoryLink}
-                            className="text-xs md:text-sm font-semibold text-gray-700 hover:text-amber-600 flex items-center gap-1 transition-colors group"
+                            className="text-xs md:text-sm font-semibold text-gray-700 hover:text-amber-600 items-center gap-1 transition-colors group hidden md:flex"
                         >
                             View All <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </Link>
@@ -91,13 +91,13 @@ export default function CategorySectionSlider({ slider }) {
                     {/* Horizontal Product Slider */}
                     <div
                         ref={scrollContainerRef}
-                        className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 pt-2 snap-x snap-mandatory min-h-[420px]"
+                        className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 pt-2 snap-x snap-mandatory"
                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
                         {products.map((product, idx) => (
                             <div
                                 key={product.uuid || product.id || idx}
-                                className="min-w-[240px] max-w-[240px] sm:min-w-[280px] sm:max-w-[280px] snap-start"
+                                className="flex-shrink-0 w-[calc((100%-16px)/2)] sm:min-w-[280px] sm:max-w-[280px] snap-start"
                             >
                                 <ProductAyurvedCard product={product} />
                             </div>

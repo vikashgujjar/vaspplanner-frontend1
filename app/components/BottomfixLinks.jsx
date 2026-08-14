@@ -93,10 +93,10 @@ export default function BottomfixLinks() {
             <div className="relative -mt-16 flex flex-col items-center">
               <Link
                 href="/cart"
-                className="relative flex items-center justify-center w-[60px] h-[60px] bg-gradient-to-br from-pink-600 via-pink-500 to-pink-400 rounded-full shadow-[0_15px_40px_rgba(83,161,79,0.5)] hover:shadow-[0_18px_45px_rgba(83,161,79,0.6)] transition-all hover:scale-110 active:scale-95 border-[6px] border-white group"
+                className="relative flex items-center justify-center w-[60px] h-[60px] bg-gradient-to-br from-emerald-600 via-emerald-500 to-emerald-400 rounded-full shadow-[0_15px_40px_rgba(5,150,105,0.5)] hover:shadow-[0_18px_45px_rgba(5,150,105,0.6)] transition-all hover:scale-110 active:scale-95 border-[6px] border-white group"
               >
                 {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-pink/20 to-pink/20 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-emerald-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
                 <FaShoppingCart size={22} className="text-white relative z-10 group-hover:scale-110 transition-transform" />
                 {isMounted && cartLengthTotal > 0 && (
                   <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs font-black w-4 h-4 rounded-full flex items-center justify-center shadow-[0_6px_16px_rgba(239,68,68,0.5)] ring-4 ring-white z-20 animate-bounce">
@@ -104,7 +104,7 @@ export default function BottomfixLinks() {
                   </span>
                 )}
                 {/* Pulse Ring */}
-                <div className="absolute inset-0 rounded-full border-2 border-pink/30 animate-ping"></div>
+                <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-ping"></div>
               </Link>
             </div>
 

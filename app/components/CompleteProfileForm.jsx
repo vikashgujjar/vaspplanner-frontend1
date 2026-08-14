@@ -48,7 +48,7 @@ export default function CompleteProfileForm({ setCompleteProfileForm }) {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-4 overflow-y-auto">
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl my-8 max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#53a14f] to-[#4a9347] p-6 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] p-6 flex items-center justify-between">
           <div>
             <h5 className="text-2xl lg:text-3xl font-bold text-white">
               Complete Your Profile
@@ -82,7 +82,7 @@ export default function CompleteProfileForm({ setCompleteProfileForm }) {
                     <FiUser className="text-5xl text-gray-400" />
                   )}
                 </div>
-                <label className="absolute bottom-0 right-0 bg-gradient-to-r from-[#53a14f] to-[#4a9347] text-white p-3 rounded-full cursor-pointer shadow-lg hover:shadow-xl transition-all transform hover:scale-110">
+                <label className="absolute bottom-0 right-0 bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] text-white p-3 rounded-full cursor-pointer shadow-lg hover:shadow-xl transition-all transform hover:scale-110">
                   <FiCamera className="text-lg" />
                   <input
                     type="file"
@@ -333,7 +333,7 @@ export default function CompleteProfileForm({ setCompleteProfileForm }) {
               </button>
               <button
                 type="submit"
-                className="flex-1 px-6 py-3.5 bg-gradient-to-r from-[#53a14f] to-[#4a9347] text-white font-semibold rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+                className="flex-1 px-6 py-3.5 bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] text-white font-semibold rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-0.5"
               >
                 Save Profile
               </button>
