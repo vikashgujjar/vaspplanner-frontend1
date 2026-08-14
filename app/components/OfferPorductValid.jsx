@@ -1,52 +1,30 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { FaChevronLeft, FaChevronRight, FaGift, FaRing, FaCakeCandles, FaThumbsUp } from 'react-icons/fa6';
+import { FaChevronLeft, FaChevronRight, FaGift } from 'react-icons/fa6';
 import { fetchProductsByCategory } from '../services/productService';
 import ProductAyurvedCard from './ProductAyurvedCard';
 
 export default function OfferPorductValid() {
-  const [activeOccasion, setActiveOccasion] = useState('Birthday');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollContainerRef = useRef(null);
 
-  const occasions = [
-    { id: 'Birthday', label: 'Birthday', icon: <FaGift />, color: 'bg-pink-500', iconColor: 'text-pink-500', bgLight: 'bg-pink-50' },
-    { id: 'Anniversary', label: 'Anniversary', icon: <FaRing />, color: 'bg-purple-500', iconColor: 'text-purple-500', bgLight: 'bg-purple-50' },
-    { id: 'Wedding', label: 'Wedding', icon: <FaRing />, color: 'bg-rose-500', iconColor: 'text-rose-500', bgLight: 'bg-rose-50' },
-    { id: 'Celebration', label: 'Celebration', icon: <FaCakeCandles />, color: 'bg-blue-500', iconColor: 'text-blue-500', bgLight: 'bg-blue-50' },
-    { id: 'Festival', label: 'Festival', icon: <FaGift />, color: 'bg-amber-500', iconColor: 'text-amber-500', bgLight: 'bg-amber-50' },
-    { id: 'Corporate', label: 'Corporate', icon: <FaThumbsUp />, color: 'bg-indigo-500', iconColor: 'text-indigo-500', bgLight: 'bg-indigo-50' }
-  ];
-
-  const [cache, setCache] = useState({});
-
   useEffect(() => {
     const fetchProducts = async () => {
-      // If data is already in cache, use it
-      if (cache[activeOccasion.toLowerCase()]) {
-        setProducts(cache[activeOccasion.toLowerCase()]);
-        setLoading(false);
-        return;
-      }
-
       setLoading(true);
       try {
-        const data = await fetchProductsByCategory(activeOccasion.toLowerCase());
-        const fetchedProducts = data.products || [];
-        setProducts(fetchedProducts);
-        // Persist to local cache for subsequent switches
-        setCache(prev => ({ ...prev, [activeOccasion.toLowerCase()]: fetchedProducts }));
+        const data = await fetchProductsByCategory('birthday');
+        setProducts(data.products || []);
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        console.error("Failed to fetch offer products:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [activeOccasion]);
+  }, []);
 
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
@@ -58,8 +36,6 @@ export default function OfferPorductValid() {
     }
   };
 
-  const activeOccasionData = occasions.find(occ => occ.id === activeOccasion);
-
   return (
     <div className="relative py-8 lg:py-8 bg-white">
       <div className="relative container mx-auto px-4 md:px-6 lg:px-12">
@@ -69,17 +45,17 @@ export default function OfferPorductValid() {
           {/* Section Header */}
           <div className="flex sm:flex-nowrap flex-wrap items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${activeOccasionData?.color} text-white shadow-md`}>
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-pink-500 text-white shadow-md">
                 <span className="text-2xl">
-                  {activeOccasionData?.icon}
+                  <FaGift />
                 </span>
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  {activeOccasionData?.label} Collection
+                  Birthday Collection
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {loading ? 'Fetching products...' : `${products.length} handpicked products`}
+                  {loading ? 'Fetching products...' : `${Math.min(products.length, 8)} handpicked products`}
                 </p>
               </div>
             </div>
@@ -124,7 +100,7 @@ export default function OfferPorductValid() {
                     products.slice(0, 8).map((elm, index) => (
                       <div
                         key={index}
-                        className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
+                        className="flex-shrink-0 w-[calc((100%-16px)/2)] sm:min-w-[280px] sm:max-w-[280px] snap-start"
                       >
                         <ProductAyurvedCard product={elm} showViewMore={false} />
                       </div>

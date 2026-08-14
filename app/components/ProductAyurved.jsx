@@ -287,7 +287,7 @@ export default function ProductAyurved({ initialData = [] }) {
 
                                         <div
                                             ref={scrollContainerRef}
-                                            className="flex gap-6 overflow-x-auto no-scrollbar pb-6 scroll-smooth snap-x snap-mandatory min-h-[420px]"
+                                            className="flex gap-6 overflow-x-auto no-scrollbar pb-6 scroll-smooth snap-x snap-mandatory"
                                         >
                                             {filteredProducts.length > 0 ? (
                                                 filteredProducts.map((elm, index) => (

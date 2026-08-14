@@ -55,7 +55,7 @@ export default function BirthdayBalloon() {
                                     Birthday Balloon Decoration
                                 </h3>
                                 <p className="text-sm text-gray-500">
-                                    {loading ? 'Fetching products...' : `${products.length} handpicked products`}
+                                    {loading ? 'Fetching products...' : `${Math.min(products.length, 8)} handpicked products`}
                                 </p>
                             </div>
                         </div>

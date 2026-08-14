@@ -56,7 +56,7 @@ export default function CakeCategory({ initialData = [] }) {
                                     Cake Collection
                                 </h3>
                                 <p className="text-sm text-gray-500">
-                                    {loading ? 'Fetching products...' : `${products.length} handpicked products`}
+                                    {loading ? 'Fetching products...' : `${Math.min(products.length, 8)} handpicked products`}
                                 </p>
                             </div>
                         </div>
@@ -77,7 +77,7 @@ export default function CakeCategory({ initialData = [] }) {
                         {loading ? (
                             <div className="flex gap-6 overflow-hidden pb-6">
                                 {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)]">
+                                    <div key={i} className="flex-shrink-0 w-[calc((100%-16px)/2)] sm:min-w-[280px] sm:max-w-[280px] snap-start">
                                         <div className="aspect-[4/5] bg-white rounded-2xl animate-pulse flex flex-col p-4 space-y-4">
                                             <div className="w-full h-3/4 bg-gray-100 rounded-xl" />
                                             <div className="h-4 w-3/4 bg-gray-100 rounded" />
@@ -103,13 +103,13 @@ export default function CakeCategory({ initialData = [] }) {
                                 </button>
                                 <div
                                     ref={scrollContainerRef}
-                                    className="flex gap-6 overflow-x-auto no-scrollbar pb-6 scroll-smooth snap-x snap-mandatory min-h-[420px]"
+                                    className="flex gap-6 overflow-x-auto no-scrollbar pb-6 scroll-smooth snap-x snap-mandatory"
                                 >
                                     {products.length > 0 ? (
                                         products.slice(0, 8).map((elm, index) => (
                                             <div
                                                 key={index}
-                                                className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
+                                                className="flex-shrink-0 w-[calc((100%-16px)/2)] sm:min-w-[280px] sm:max-w-[280px] snap-start"
                                             >
                                                 <ProductAyurvedCard product={elm} showViewMore={false} />
                                             </div>

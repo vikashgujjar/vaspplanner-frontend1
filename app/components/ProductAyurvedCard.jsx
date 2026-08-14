@@ -478,14 +478,14 @@ export default function ProductAyurvedCard({ product }) {
             </Link>
 
             {/* Price & Cart Section */}
-            <div className="flex items-end justify-between gap-3 pt-3 border-t border-gray-100/80">
-              <div className="space-y-1">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-lg md:text-2xl font-bold text-gray-900">
+            <div className="flex items-end justify-between gap-2 pt-3 border-t border-gray-100/80">
+              <div className="space-y-1 min-w-0 flex-1">
+                <div className="flex items-baseline gap-1.5 flex-wrap">
+                  <span className="text-base md:text-2xl font-bold text-gray-900 whitespace-nowrap">
                     ₹{price?.toLocaleString()}
                   </span>
                   {discount > 0 && (
-                    <span className="line-through text-xs md:text-sm text-gray-400 font-medium">
+                    <span className="line-through text-[10px] md:text-sm text-gray-400 font-medium whitespace-nowrap">
                       ₹{originalPrice?.toLocaleString()}
                     </span>
                   )}
@@ -501,41 +501,42 @@ export default function ProductAyurvedCard({ product }) {
 
               {/* Quantity Stepper (+ -) or Add to Cart Button */}
               {mounted && cartQuantity > 0 ? (
-                <div 
+                <div
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                  className="inline-flex items-center bg-emerald-50 border-2 border-emerald-500 rounded-xl overflow-hidden shadow-sm"
+                  className="inline-flex items-center bg-emerald-50 border-2 border-emerald-500 rounded-xl overflow-hidden shadow-sm flex-shrink-0"
                 >
                   <button
                     onClick={handleDecrement}
-                    className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center text-emerald-800 hover:bg-emerald-200 transition-colors font-bold active:scale-90"
+                    className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center text-emerald-800 hover:bg-emerald-200 transition-colors font-bold active:scale-90"
                     aria-label="Decrease quantity"
                   >
-                    <Minus size={14} />
+                    <Minus size={13} />
                   </button>
-                  <span className="w-7 md:w-8 text-center text-xs md:text-sm font-black text-emerald-900 select-none">
+                  <span className="w-5 md:w-8 text-center text-xs md:text-sm font-black text-emerald-900 select-none">
                     {cartQuantity}
                   </span>
                   <button
                     onClick={handleIncrement}
-                    className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center text-emerald-800 hover:bg-emerald-200 transition-colors font-bold active:scale-90"
+                    className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center text-emerald-800 hover:bg-emerald-200 transition-colors font-bold active:scale-90"
                     aria-label="Increase quantity"
                   >
-                    <Plus size={14} />
+                    <Plus size={13} />
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={handleAddToCart}
                   disabled={product?._rawData?.stock_status === 'out_of_stock' || product?._rawData?.stock === 0}
-                  className={`cart-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl shadow-md text-white text-xs md:text-sm font-bold transition-all duration-300 flex items-center gap-1.5 active:scale-95 ${
+                  className={`cart-btn flex-shrink-0 w-9 h-9 md:w-auto md:px-5 md:py-2.5 rounded-full md:rounded-xl shadow-md text-white text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center md:gap-1.5 active:scale-95 ${
                     (product?._rawData?.stock_status === 'out_of_stock' || product?._rawData?.stock === 0)
                       ? "bg-gray-400 cursor-not-allowed grayscale"
                       : "bg-emerald-600 hover:bg-emerald-700 hover:shadow-emerald-600/30"
                   }`}
                   aria-label="Add to cart"
                 >
-                  <ShoppingBag size={16} />
-                  <span>Add</span>
+                  <ShoppingBag size={15} className="md:hidden" />
+                  <ShoppingBag size={16} className="hidden md:block" />
+                  <span className="hidden md:inline">Add</span>
                 </button>
               )}
             </div>

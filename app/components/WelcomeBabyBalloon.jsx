@@ -55,7 +55,7 @@ export default function WelcomeBabyBalloon() {
                                     Welcome Baby Balloon Decoration
                                 </h3>
                                 <p className="text-sm text-gray-500">
-                                    {loading ? 'Fetching products...' : `${products.length} handpicked products`}
+                                    {loading ? 'Fetching products...' : `${Math.min(products.length, 8)} handpicked products`}
                                 </p>
                             </div>
                         </div>
@@ -100,7 +100,7 @@ export default function WelcomeBabyBalloon() {
                                         products.slice(0, 8).map((elm, index) => (
                                             <div
                                                 key={index}
-                                                className="flex-shrink-0 w-[calc((100%-24px)/2)] sm:w-[calc((100%-24px)/2.5)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] snap-start"
+                                                className="flex-shrink-0 w-[calc((100%-16px)/2)] sm:min-w-[280px] sm:max-w-[280px] snap-start"
                                             >
                                                 <ProductAyurvedCard product={elm} showViewMore={false} />
                                             </div>

@@ -1086,29 +1086,36 @@ export default function PremiumHeader({ initialLayoutData }) {
               </div>
             )}
 
-          {/* Mobile Search Bar - Always visible below the header */}
-          <div className="md:hidden pb-4">
-            <div className="relative w-full" ref={searchRefMobile}>
-              <form onSubmit={handleSearchSubmit} className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="Search for gifts, cakes, flowers..."
-                  value={searchQuery}
-                  onFocus={() => setSearchFocused(true)}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full py-3 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/50 text-sm text-white placeholder:text-gray-500"
-                />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <button
-                    type="submit"
-                    aria-label="Search"
-                    className="w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center cursor-pointer hover:from-amber-500 hover:to-amber-700 transition-all"
-                  >
-                    <Search className="text-black" size={14} />
-                  </button>
-                </div>
-              </form>
-              <SearchDropdown />
+          {/* Mobile Search Bar - Hidden once the page is scrolled.
+              Uses a grid-rows 0fr/1fr transition instead of max-height: the
+              browser interpolates against the content's real height, so it
+              collapses/expands smoothly no matter the exact content size —
+              a plain max-height guess (e.g. max-h-24) snaps instead of
+              gliding whenever it doesn't match the actual rendered height. */}
+          <div className={`md:hidden grid transition-[grid-template-rows,opacity] duration-300 ease-out ${OnScroll ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+            <div className="overflow-hidden">
+              <div className="relative w-full pb-4" ref={searchRefMobile}>
+                <form onSubmit={handleSearchSubmit} className="relative w-full">
+                  <input
+                    type="text"
+                    placeholder="Search for gifts, cakes, flowers..."
+                    value={searchQuery}
+                    onFocus={() => setSearchFocused(true)}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full py-3 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/50 text-sm text-white placeholder:text-gray-500"
+                  />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <button
+                      type="submit"
+                      aria-label="Search"
+                      className="w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center cursor-pointer hover:from-amber-500 hover:to-amber-700 transition-all"
+                    >
+                      <Search className="text-black" size={14} />
+                    </button>
+                  </div>
+                </form>
+                <SearchDropdown />
+              </div>
             </div>
           </div>
         </div>

@@ -211,7 +211,7 @@ export default function SlugInerPage({
         <div className="absolute top-20 left-[10%] w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-[120px]" />
         <div className="absolute bottom-20 right-[10%] w-[350px] h-[350px] bg-rose-500/8 rounded-full blur-[100px]" />
 
-        <div className="relative z-10 pt-6 pb-10 md:pt-6 md:pb-10">
+        <div className="relative z-10 pt-6 pb-16 md:pt-6 md:pb-10">
           <div className="container mx-auto px-4 md:px-6">
             {/* Breadcrumb */}
             <nav className="flex items-center justify-center gap-2 text-sm mb-10">
@@ -253,7 +253,7 @@ export default function SlugInerPage({
         </div>
 
         {/* Bottom Curve */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-[#f8f9fa] rounded-t-[50px]" />
+        <div className="absolute bottom-0 left-0 right-0 h-8 md:h-16 bg-[#f8f9fa] rounded-t-[30px] md:rounded-t-[50px]" />
       </section>
 
       {/* ============================================== */}
@@ -310,7 +310,7 @@ export default function SlugInerPage({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                <div className="flex flex-wrap min-[420px]:flex-nowrap items-center gap-2.5 w-full sm:w-auto">
                   {/* Sort */}
                   <div className="relative flex-1 sm:flex-none">
                     <button
@@ -382,7 +382,7 @@ export default function SlugInerPage({
                   {/* Mobile Filter Trigger */}
                   <button
                     onClick={() => setShowFilterModal(true)}
-                    className="lg:hidden relative flex items-center gap-2.5 pl-2 pr-4 py-2 bg-white border border-gray-200 hover:border-violet-200 rounded-2xl transition-all shadow-sm hover:shadow-md flex-shrink-0"
+                    className="lg:hidden relative w-full min-[420px]:w-auto flex items-center gap-2.5 pl-2 pr-4 py-2 bg-white border border-gray-200 hover:border-violet-200 rounded-2xl transition-all shadow-sm hover:shadow-md flex-shrink-0"
                   >
                     <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-violet-50 text-violet-600">
                       <SlidersHorizontal size={15} />
