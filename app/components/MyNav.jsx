@@ -81,9 +81,9 @@ export default function PremiumHeader({ initialLayoutData }) {
     if (savedLocation) {
       dispatch(setLocation(savedLocation));
       if (savedPincode) dispatch(setPincode(savedPincode));
-    } else {
-      setIsLocationOpen(true);
     }
+    // No saved location: leave the dropdown closed (button already shows
+    // "Select Location") instead of auto-opening it as an interstitial.
 
     return () => {
       window.removeEventListener("auth-change", handleAuthChange);
