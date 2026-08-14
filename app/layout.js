@@ -44,6 +44,19 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://admin.vaspplanner.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://admin.vaspplanner.com" />
+        {/* Montserrat's Google-Fonts subset covering the currency range (includes ₹) isn't
+            auto-preloaded by next/font, so it's discovered late via CSS. Preloading it directly
+            closes that chain. NOTE: this filename is content-hashed and WILL change on the next
+            font-related rebuild — if this stops matching, re-check the hash in the deployed
+            `_next/static/css/*.css` file that declares the Montserrat @font-face for unicode-range
+            u+20a0-20ab,u+20ad-20c0 and update the href below. */}
+        <link
+          rel="preload"
+          href="/_next/static/media/1f173e5e25f3efee-s.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${montserrat.variable} antialiased overflow-x-hidden`}
