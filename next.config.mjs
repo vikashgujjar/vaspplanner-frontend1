@@ -5,6 +5,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
   trailingSlash: true,
+  experimental: {
+    // Inlines above-the-fold CSS per page and defers the rest via a
+    // preload+swap <link>, instead of shipping the whole global stylesheet
+    // as one render-blocking request. Requires the `critters` package.
+    optimizeCss: true,
+  },
   webpack: (config, { webpack, isServer }) => {
     // Next.js's own client entry (node_modules/next/dist/client/app-globals.js)
     // unconditionally requires this polyfill file — it ignores .browserslistrc
