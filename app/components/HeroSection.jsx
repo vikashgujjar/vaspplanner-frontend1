@@ -95,8 +95,6 @@ export default function HeroSection({ banners: initialBanners = [] }) {
             slidesPerView={1}
             roundLengths={true}
             loop={true}
-            observer={true}
-            observeParents={true}
             resizeObserver={true}
             autoplay={{
               delay: 4000,

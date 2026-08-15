@@ -126,8 +126,6 @@ export default function SuccessStory({ initialData = null }) {
                 prevEl: prevRef.current,
                 nextEl: nextRef.current,
               }}
-              observer={true}
-              observeParents={true}
               resizeObserver={true}
               onBeforeInit={(swiper) => {
                 if (swiper && swiper.params && swiper.params.navigation) {
