@@ -206,10 +206,10 @@ export default function CartPage() {
                                         {cartList.map((item, index) => (
                                             <div
                                                 key={item.id}
-                                                className={`flex flex-col sm:flex-row gap-4 ${index !== cartList.length - 1 ? 'border-b border-gray-100 pb-5' : ''}`}
+                                                className={`flex flex-row gap-3 sm:gap-4 ${index !== cartList.length - 1 ? 'border-b border-gray-100 pb-5' : ''}`}
                                             >
                                                 {/* Product Image */}
-                                                <div className="relative w-full sm:w-28 md:w-36 h-36 sm:h-28 md:h-36 bg-gray-50 rounded-2xl overflow-hidden group border-2 border-gray-100 flex-shrink-0">
+                                                <div className="relative w-24 h-24 sm:w-28 md:w-36 sm:h-28 md:h-36 bg-gray-50 rounded-2xl overflow-hidden group border-2 border-gray-100 flex-shrink-0">
                                                     <Image
                                                         src={item.img || "/placeholder.png"}
                                                         alt={item.title}
@@ -256,10 +256,10 @@ export default function CartPage() {
                                                                 <span className="font-semibold text-gray-800 text-xs">{item.variant_name || 'Standard'}</span>
                                                             </div>
                                                         )}
-                                                        <div className="flex flex-col">
+                                                        {/* <div className="flex flex-col">
                                                             <span className="text-gray-500 text-[10px]">Fulfilled By</span>
                                                             <span className="font-semibold text-gray-800 text-xs">VASP Planner</span>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
 
                                                     {/* Actions */}

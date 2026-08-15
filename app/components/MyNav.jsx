@@ -1040,7 +1040,7 @@ export default function PremiumHeader({ initialLayoutData }) {
                   </span>
                 </Link>
 
-                {isLoggedIn && (
+                {/* {isLoggedIn && (
                   <button
                     onClick={handleLogout}
                     aria-label="Logout from account"
@@ -1053,7 +1053,7 @@ export default function PremiumHeader({ initialLayoutData }) {
                       Logout
                     </span>
                   </button>
-                )}
+                )} */}
               </div>
             </div>
           </div>
