@@ -275,7 +275,7 @@ export default function ProductAyurvedCard({ product }) {
         
         
         .discount-badge {
-          background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+          background: linear-gradient(135deg, #d93a7a 0%, #ab2159 100%);
           animation: float 3s ease-in-out infinite;
         }
         
@@ -294,7 +294,7 @@ export default function ProductAyurvedCard({ product }) {
         }
         
         .cart-btn:not(.bg-red-500):not(.bg-gray-400) {
-          background: linear-gradient(135deg, #5b21b6 0%, #6d28d9 50%, #7c3aed 100%);
+          background: linear-gradient(135deg, #8c1d49 0%, #ab2159 50%, #C82C6B 100%);
           background-size: 200% 200%;
         }
 
@@ -305,7 +305,7 @@ export default function ProductAyurvedCard({ product }) {
         .cart-btn:hover {
           background-position: 100% 100%;
           transform: scale(1.05);
-          box-shadow: 0 8px 24px -4px rgba(124, 58, 237, 0.4);
+          box-shadow: 0 8px 24px -4px rgba(200, 44, 107, 0.4);
         }
         
         .cart-btn:active {
@@ -317,7 +317,7 @@ export default function ProductAyurvedCard({ product }) {
         }
         
         .price-tag {
-          background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+          background: linear-gradient(135deg, #fef1f6 0%, #fbdfea 100%);
         }
         
         .skeleton-loading {
@@ -360,7 +360,7 @@ export default function ProductAyurvedCard({ product }) {
         }
         
         .thumbnail-btn.active {
-          box-shadow: 0 0 0 2px #7c3aed;
+          box-shadow: 0 0 0 2px #C82C6B;
         }
       `}</style>
 

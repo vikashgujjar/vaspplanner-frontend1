@@ -142,7 +142,7 @@ export default function CartPage() {
                         <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-amber-500/10 rounded-full blur-[120px]" />
                     </div>
 
-                    <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-12 py-6 pb-9 md:py-8">
+                    <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-12 pt-6 md:pt-8 pb-16">
                         {/* Breadcrumb */}
                         <nav className="flex items-center gap-2 text-xs mb-4">
                             <Link href="/" className="text-gray-500 hover:text-white transition-colors">Home</Link>

@@ -541,7 +541,7 @@ export default function CheckOut() {
                 email: formData.email,
                 contact: formData.phone
               },
-              theme: { color: "#7c3aed" },
+              theme: { color: "#C82C6B" },
               handler: async function (paymentResponse) {
                 try {
                   const verifyRes = await userService.verifyRazorpayPayment({
@@ -1475,8 +1475,8 @@ export default function CheckOut() {
         <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #a78bfa; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #f094b9; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #e46297; }
       `}</style>
       </div>
       <AuthModal

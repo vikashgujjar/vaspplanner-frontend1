@@ -201,12 +201,12 @@ export default function HeroSection({ banners: initialBanners = [] }) {
         .hero-swiper .swiper-pagination-bullet {
           width: 8px;
           height: 8px;
-          background: #d4145a !important;
+          background: #C82C6B !important;
           opacity: 0.3;
         }
 
         .hero-swiper .swiper-pagination-bullet-active {
-          background: #d4145a;
+          background: #C82C6B;
           opacity: 1;
           width: 24px;
           border-radius: 4px;

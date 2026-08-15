@@ -409,7 +409,7 @@ const ProductDetails = ({ slug, singleProduct, relatedProducts = [] }) => {
             {/* Left Side: Image Gallery */}
             <div className="w-full lg:w-[50%]">
               {/* Thumbnails */}
-              <div className="w-full sticky top-30 flex flex-col md:flex-row gap-6">
+              <div className="w-full sticky top-38 flex flex-col md:flex-row gap-6">
                 <div className="flex md:flex-col gap-3 order-2 md:order-1">
                   {singleProduct?.inerimgList?.map((elm, index) => (
                     <button

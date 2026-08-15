@@ -80,11 +80,11 @@ export default function ProductType({ selectedValues, onChange, filterData }) {
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #c4b5fd;
+          background: #f094b9;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #a78bfa;
+          background: #e46297;
         }
       `}</style>
     </div>
