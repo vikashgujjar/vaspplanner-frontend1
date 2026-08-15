@@ -5,9 +5,7 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 
-// Import Swiper styles (navigation is disabled below, so its CSS isn't loaded)
-import "swiper/css";
-import "swiper/css/pagination";
+// swiper/css and swiper/css/pagination are imported globally in app/globals.css
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

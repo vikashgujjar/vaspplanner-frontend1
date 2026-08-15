@@ -12,7 +12,7 @@ import {
 import VASPPlannerData from "../VASPPlannerData";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import "swiper/css";
+// swiper/css is imported globally in app/globals.css
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

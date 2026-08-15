@@ -3,7 +3,7 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import "swiper/css";
+// swiper/css is imported globally in app/globals.css
 import { TbDeviceVisionProFilled } from "react-icons/tb";
 import { IoEarthSharp } from "react-icons/io5";
 import { BsCupHot } from "react-icons/bs";

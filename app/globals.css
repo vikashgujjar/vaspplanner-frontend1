@@ -1,4 +1,14 @@
 @import "tailwindcss";
+/* Swiper is used across many components (hero, cart, testimonials, store
+   locator, bottom-nav cart, etc.), several of which are server-rendered on
+   every route. Each component used to import these itself, which made
+   webpack emit a separate small CSS chunk per unique combination of
+   modules used — several extra render-blocking requests on top of this
+   file. Importing them here once merges them all into this single
+   stylesheet instead. */
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/effect-coverflow";
 
 /* Sitewide font-size scale, shifted down one step across the whole scale
    (text-base is left alone as the body-text floor) so every text-* utility —
